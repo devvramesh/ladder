@@ -1,0 +1,11 @@
+EMPLOYERS:
+id, username, email, phone, profile_image, name, about, logistics, location
+
+EMPLOYEES:
+id, username, email, phone, location, qualifications, about, name, profile_image, looking_for
+
+POSTS:
+post_id, employer_id, job_title, description, qualifications, logistics, job_image
+
+FAVORITES
+user_id, id_of_favorite, favorite_type
