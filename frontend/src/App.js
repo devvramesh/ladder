@@ -7,6 +7,7 @@ import { Switch, Route } from 'react-router-dom';
 import Home from './components/homepage';
 import Signup from './components/signup';
 
+
 const Main = () => {
   return (
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
