@@ -1,0 +1,9 @@
+To start frontend:
+cd frontend
+npm start
+(updates automatically upon changes)
+
+To start backend:
+cd backend
+node app.js
+(must ^C and restart upon changing app.js)
