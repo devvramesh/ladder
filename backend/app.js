@@ -7,12 +7,25 @@ const jsonParser = bodyParser.json();
 
 app.use(cors());
 
-post = (route, fn) => app.post(route, jsonParser, fn)
+// NOTE(jake): set this to true to print out request bodies when they arrive
+const DEBUG = true;
+
+post = (route, callback) => {
+  return app.post(route, jsonParser, (req, res) => {
+    if (DEBUG) {
+      console.log('---------------------------------------------');
+      console.log(`DEBUG: [route: ${route}]`);
+      console.log("Request body:");
+      console.log(req.body);
+    }
+    const result = callback(req, res);
+    console.log('---------------------------------------------');
+    return result;
+  });
+};
 
 post('/api/login', (req, res) => {
-  console.log("in API call");
-  res.send(JSON.stringify({data:'Hello World!'}));
-  console.log("sent");
+  // TODO: implement login!!
 });
 
 post('/api/signup', (req, res) => {
@@ -24,6 +37,7 @@ post('/api/search', (req, res) => {
   res.send(JSON.stringify({data:'Hello World!'}));
 });
 
-app.listen(3001, () =>
-  console.log('Listening on port 3001\n-------------------'),
-);
+app.listen(3001, () => {
+  console.log('Listening on port 3001');
+  console.log('---------------------------------------------');
+});

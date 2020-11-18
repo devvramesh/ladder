@@ -1,6 +1,6 @@
 import React from "react";
 import Navbar from "./navbar"
-import {makeBackendRequest} from "../util"
+import {makeBackendRequest, getUrlParams} from "../util"
 
 export default class Search extends React.Component {
   constructor(props) {
@@ -12,9 +12,12 @@ export default class Search extends React.Component {
   }
 
   componentDidMount() {
+    // get URL params (i.e. /search?query=roofer) --> {query: "roofer"}
+    const params = getUrlParams(this);
+
     makeBackendRequest(
       '/api/search',
-      {firstParam: 'yourValue', secondParam: 'yourOtherValue'}
+      params
     )
     .then(
       (result) => {
