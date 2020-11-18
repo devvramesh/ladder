@@ -34,7 +34,14 @@ post('/api/signup', (req, res) => {
 
 post('/api/search', (req, res) => {
   // TODO: implement search!!
-  res.send(JSON.stringify({data:'Hello World!'}));
+
+  dummy_results = [
+    {name: "Alice", location: "Kingston", job: "Electrician"},
+    {name: "Bob", location: "Providence", job: "Roofer"},
+    {name: "Charlie", location: "Providence", job: "Construction Worker"}
+  ]
+
+  res.send(JSON.stringify({searchResults: dummy_results}));
 });
 
 app.listen(3001, () => {

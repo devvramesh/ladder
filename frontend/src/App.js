@@ -11,9 +11,9 @@ import Search from './components/search';
 const Main = () => {
   return (<Switch>
     {/* The Switch decides which component to show based on the current URL. */}
-    <Route exact="exact" path='/' component={Home}></Route>
-    <Route exact="exact" path='/signup' component={Signup}></Route>
-    <Route exact="exact" path='/search' component={Search}></Route>
+    <Route exact path='/' component={Home}></Route>
+    <Route exact path='/signup' component={Signup}></Route>
+    <Route exact path='/search' component={Search}></Route>
   </Switch>);
 }
 
