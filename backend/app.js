@@ -1,27 +1,29 @@
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser')
+
 const app = express();
+const jsonParser = bodyParser.json();
 
 app.use(cors());
 
-app.get('/', (req, res) => {
-  console.log("welcome to the server")
-});
+post = (route, fn) => app.post(route, jsonParser, fn)
 
-app.get('/api/login', (req, res) => {
+post('/api/login', (req, res) => {
   console.log("in API call");
   res.send(JSON.stringify({data:'Hello World!'}));
   console.log("sent");
 });
 
-app.get('/api/signup', (req, res) => {
+post('/api/signup', (req, res) => {
   // TODO: implement signup!!
 });
 
-app.get('/api/search', (req, res) => {
+post('/api/search', (req, res) => {
   // TODO: implement search!!
+  res.send(JSON.stringify({data:'Hello World!'}));
 });
 
 app.listen(3001, () =>
-  console.log('Example app listening on port 3001!'),
+  console.log('Listening on port 3001\n-------------------'),
 );

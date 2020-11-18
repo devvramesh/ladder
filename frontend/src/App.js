@@ -6,6 +6,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import Home from './components/homepage';
 import Signup from './components/signup';
+import Search from './components/search';
 
 
 const Main = () => {
@@ -13,7 +14,7 @@ const Main = () => {
     <Switch> {/* The Switch decides which component to show based on the current URL.*/}
       <Route exact path='/' component={Home}></Route>
       <Route exact path='/signup' component={Signup}></Route>
-      <Route exact path='/view_profile' component={Home}></Route>
+      <Route exact path='/search' component={Search}></Route>
     </Switch>
   );
 }

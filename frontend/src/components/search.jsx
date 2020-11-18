@@ -1,17 +1,21 @@
 import React from "react";
+import Navbar from "./navbar"
 import {makeBackendRequest} from "../util"
 
-export default class Signup extends React.Component {
+export default class Search extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = {data: "not ready yet!"};
+    this.state = {
+      data: "not ready yet!"
+    };
   }
 
   componentDidMount() {
-    console.log("fetching")
-    makeBackendRequest("http://localhost:3001/api/login")
-    .then(res => res.json())
+    makeBackendRequest(
+      '/api/search',
+      {firstParam: 'yourValue', secondParam: 'yourOtherValue'}
+    )
     .then(
       (result) => {
         console.log("fetched!");
@@ -24,8 +28,7 @@ export default class Signup extends React.Component {
     )
   }
 
-
   render() {
-    return (<div>Sign-up Page! Welcome! {this.state.data}</div>)
+    return (<div><Navbar></Navbar></div>)
   }
 }
