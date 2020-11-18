@@ -7,3 +7,17 @@ To start backend:
 cd backend
 node app.js
 (must ^C and restart upon changing app.js)
+
+
+11/18 UPDATE (jake):
+
+Frontend:
+- Added util.jsx for utility functions/components. Already put some stuff in there so it's definitely worth checking out. Note that Get...() are hooks and require functional components (see login_button.jsx)
+- Pretty close to finishing search page, favorites shouldn't be too difficult after that.
+
+Backend
+- Added db.js for some database stuff (sqlite3). Feel free to change anything. Nothing I wrote uses it yet, but I have a working method to initialize a DB upon launching the backend.
+- Added util.js for helpers and stuff, not too much is in there yet.
+
+General:
+- Found Auth0 library (auth0.com), incorporated it for authentication. It handles everything (email, password, name, account type) and is customizable so we could always change it. Test it by clicking the Login button on the "navbar" (which i put on the homepage for now). Let me know whether or not you like it. Many of the components in the navbar are responsive to the results of the authentication, so we now have decent ways to get the current user info (account type, name, email, etc).

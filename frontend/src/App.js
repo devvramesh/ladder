@@ -2,7 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
 import Home from './components/homepage';
 import Signup from './components/signup';
@@ -19,7 +20,11 @@ const Main = () => {
 
 function App() {
   return (<div className="App">
-    <Main></Main>
+    <BrowserRouter>
+      <Auth0ProviderWithHistory>
+        <Main></Main>
+      </Auth0ProviderWithHistory>
+    </BrowserRouter>
   </div>);
 }
 
