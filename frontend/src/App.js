@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
-import {BrowserRouter, Switch, Route} from 'react-router-dom';
+import {BrowserRouter, Switch, Route, withRouter} from 'react-router-dom';
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
 import Home from './components/homepage';
@@ -18,14 +18,12 @@ const Main = () => {
   </Switch>);
 }
 
-function App() {
+export default function App() {
   return (<div className="App">
+  <Auth0ProviderWithHistory>
     <BrowserRouter>
-      <Auth0ProviderWithHistory>
         <Main></Main>
-      </Auth0ProviderWithHistory>
     </BrowserRouter>
+    </Auth0ProviderWithHistory>
   </div>);
 }
-
-export default App;

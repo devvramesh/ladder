@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import {Link, Redirect,} from "react-router-dom";
+import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 
 export default class Search extends React.Component {
@@ -12,7 +12,7 @@ export default class Search extends React.Component {
     let searchType = params.category;
     if (searchType) {
       searchType = searchType.toLowerCase();
-      if (searchType !== "employee" && searchType !== "employer") {
+      if (searchType !== "employee" && searchType !== "job") {
         searchType = "invalid";
       }
     } else {
@@ -21,6 +21,10 @@ export default class Search extends React.Component {
 
     this.searchType = searchType;
     this.isValid = (searchType !== "invalid")
+
+    if (!this.isValid) {
+      window.location.href = ('/search?category=employee');
+    }
 
     this.state = {
       currSelectedIndex: 0,
@@ -44,20 +48,23 @@ export default class Search extends React.Component {
   }
 
   displayPreview = (entry) => {
-    return (<div>[Sidebar entry]</div>)
+    return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
   }
 
   render() {
     console.log('rendering')
+    const params = getUrlParams(this);
+
     if (!this.isValid) {
-      return (<div>invalid search</div>);
+      return (<div>Invalid search</div>)
     }
     console.log('rendering valid')
     console.log(this.state)
     return (<div>
-      <Navbar searchType={this.searchType}></Navbar>
+      <Navbar searchType={this.searchType} initialSearchBarText={params.query}></Navbar>
+      <h2>Search Results</h2>
       <Sidebar entries={this.state.searchResults} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
-      <div className="border">[Current selected index: {this.state.currSelectedIndex}]</div>
+      <div className="border">[Current selected index: {this.state.currSelectedIndex}] Item: {JSON.stringify(this.state.searchResults[this.state.currSelectedIndex])}</div>
     </div>)
   }
 }

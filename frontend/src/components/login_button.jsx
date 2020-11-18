@@ -17,7 +17,6 @@ const LoginButton = (props) => {
     if (!_accountType) {
       return;
     }
-
     _accountType.then(setAccountType)
   }, [_accountType]);
 
