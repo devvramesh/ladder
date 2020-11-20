@@ -95,13 +95,15 @@ post('/api/account_type', (req, res) => {
   });
 });
 
-// Serve fronted
-app.use(express.static(path.join(__dirname, 'frontend/build')))
+if (process.env.RUN_MODE === "HEROKU") {
+  // Serve frontend
+  app.use(express.static('../frontend/build')))
 
-// 404 --> homepage
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/frontend/build/index.html'))
-})
+  // 404 --> homepage
+  app.get('*', (req, res) => {
+    res.sendFile('../frontend/build/index.html'))
+  })
+}
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
