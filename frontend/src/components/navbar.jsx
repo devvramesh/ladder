@@ -9,10 +9,18 @@ import querystring from "querystring"
 //    searchType:   either "employee" or "job"
 //    initialSearchBarText: placeholder for searchbar
 export default class Navbar extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      searchType: this.props.searchType
+    }
+  }
+
   doSearch = () => {
     console.log(document.getElementById('searchInput'))
     window.location.href = (
-      `/search?category=${this.props.searchType}&query=${encodeURI(document.getElementById('searchInput').value)}
+      `/search?category=${this.state.searchType}&query=${encodeURI(document.getElementById('searchInput').value)}
       `)
   }
 
@@ -26,17 +34,17 @@ export default class Navbar extends React.Component {
     return (<div className="">
       [Search Bar] <input id="searchInput" type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput}></input>
     <button onClick={this.doSearch}>&#x1F50D;</button>
-      search type:{this.props.searchType}
+      search type:{this.state.searchType}
       <button>[Filter button (TODO)]</button>
       {this.createAlternateSearchButton()}
     </div>)
   }
 
   createAlternateSearchButton = () => {
-      const altSearchType = (this.props.searchType === "employee") ? "job" : "employee";
+      const altSearchType = (this.state.searchType === "employee") ? "job" : "employee";
 
       const goToAltSearch = () => {
-        window.location.href = `/search?category=${altSearchType}`
+        this.setState({searchType: altSearchType})
       }
 
       return (
@@ -56,7 +64,6 @@ export default class Navbar extends React.Component {
       </div>
       {this.createSearchBar()}
       <div>[Profile picture of current user, otherwise login/signup button (TODO)]</div>
-      <LoginButton redirectUri={window.location.href}></LoginButton>
       <AuthenticationButton></AuthenticationButton>
     </div>)
   }
