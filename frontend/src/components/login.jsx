@@ -14,15 +14,9 @@ export default class Login extends React.Component {
         return (
             <div>
                 Still figuring out how to use Auth0 api together with custom styled login
-                <input placeholder="Name"/>
                 <input type="email" placeholder="Email"/>
                 <input type="password" placeholder="Password"/>
-                <div>
-                    <input type="radio" /> Employee
-
-                    <input type="radio" /> Employer
-                </div>
-                <input type="button" value="Sign Up" />
+                <input type="button" value="Log In" />
                 <Link to="/signup">
                     Sign up instead
                 </Link>
