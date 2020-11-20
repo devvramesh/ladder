@@ -6,6 +6,8 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import { createManagementClient } from './util.js'
 
+const PORT = process.env.PORT || 3001
+
 const app = express();
 const jsonParser = bodyParser.json();
 
@@ -92,7 +94,7 @@ post('/api/account_type', (req, res) => {
   });
 });
 
-app.listen(3001, () => {
-  console.log('Listening on port 3001');
+app.listen(PORT, () => {
+  console.log(`Listening on port ${PORT}`);
   console.log('---------------------------------------------');
 });
