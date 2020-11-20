@@ -3,8 +3,8 @@ import os from 'os';
 import qs from 'qs';
 
 // setup connections to backend.
-// backend is on same host (hence os.hostname()), post 3001.
-const BACKEND_PORT = process.env.PORT || 3001
+// backend is on same host (hence os.hostname()), post 5000.
+const BACKEND_PORT = process.env.PORT || 5000
 const HOST = os.hostname();
 const PROTOCOL = window.location.protocol;
 const BACKEND = `${PROTOCOL}//${HOST}:${BACKEND_PORT}/`
@@ -20,7 +20,7 @@ export const GetCurrentUserID = () => {
 }
 
 export const makeBackendRequest = (endpoint, body={}) => {
-  return fetch(new URL(endpoint, BACKEND), {
+  return fetch(endpoint, {
     method: 'POST',
     headers: {
       'Accept': 'application/json',

@@ -1,9 +1,0 @@
-#!/usr/bin/env bash
-
-cd backend
-node app.js &
-P1=$!
-cd ../frontend
-npm start &
-P2=$!
-wait $P1 $P2
