@@ -104,15 +104,13 @@ if (process.env.RUN_MODE === "HEROKU") {
   console.log("Running on Heroku. Frontend should have been built already.")
   console.log("Serving frontend...")
 
-  console.log(process.env.PWD)
-
   // Serve frontend
-  app.use(express.static('../frontend/build'))
+  app.use(express.static('/app/frontend/build'))
 
-  // // 404 --> homepage
-  // app.get('*', (req, res) => {
-  //   res.sendFile('../frontend/build/index.html')
-  // })
+  // 404 --> homepage
+  app.get('*', (req, res) => {
+    res.sendFile('/app/frontend/build/index.html')
+  })
 
   console.log('Frontend served.')
 } else {
