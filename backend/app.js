@@ -46,6 +46,33 @@ post('/api/search', (req, res) => {
   res.send(JSON.stringify({searchResults: dummy_results}));
 });
 
+post('/api/favorites', (req, res) => {
+  // TODO: implement search!!
+  const category = req.body.category;
+  let dummy_results = [];
+  if (category === "employee") {
+    dummy_results = [
+      {name: "Alice", location: "Kingston", job: "Electrician"},
+      {name: "Bob", location: "Providence", job: "Roofer"},
+      {name: "Charlie", location: "Providence", job: "Construction Worker"}
+    ]
+  } else if (category === "job") {
+    dummy_results = [
+      {name: "Company A", location: "Kingston", job: "Electrician"},
+      {name: "Company B", location: "Providence", job: "Roofer"},
+      {name: "Company C", location: "Providence", job: "Construction Worker"}
+    ]
+  } else if (category === "company") {
+    dummy_results = [
+      {name: "Company A", location: "Kingston"},
+      {name: "Company B", location: "Providence"},
+      {name: "Company C", location: "Providence"}
+    ]
+  }
+
+  res.send(JSON.stringify({favorites: dummy_results}));
+});
+
 post('/api/account_type', (req, res) => {
   const userID = req.body.userID;
   let result = null;
