@@ -10,6 +10,7 @@ import Signup from './components/signup';
 import Search from './components/search';
 import Favorites from './components/favorites'
 import Login from './components/login'
+import CreateJob from './components/createjob'
 
 const Main = () => {
   return (<Switch>
@@ -19,6 +20,7 @@ const Main = () => {
     <Route exact path='/login' component={Login}></Route>
     <Route exact path='/search' component={Search}></Route>
     <Route exact path='/favorites' component={Favorites}></Route>
+    <Route exact path='/createjob' component={CreateJob}></Route>
   </Switch>);
 }
 
