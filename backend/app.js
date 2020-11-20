@@ -1,3 +1,6 @@
+import dotenv from 'dotenv';
+dotenv.config()
+
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
@@ -7,6 +10,8 @@ const app = express();
 const jsonParser = bodyParser.json();
 
 app.use(cors());
+
+console.log(process.env)
 
 const managementClient = createManagementClient();
 
