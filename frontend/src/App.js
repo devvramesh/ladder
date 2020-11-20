@@ -8,9 +8,12 @@ import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 import Home from './components/homepage';
 import Signup from './components/signup';
 import Search from './components/search';
-import Favorites from './components/favorites'
-import Login from './components/login'
-import CreateJob from './components/createjob'
+import Favorites from './components/favorites';
+import Login from './components/login';
+import CreateJob from './components/createjob';
+import EmployeeProfile from './components/employee_profile';
+import EmployerProfile from './components/employer_profile';
+import Jobs from './components/jobs';
 
 const Main = () => {
   return (<Switch>
@@ -21,6 +24,9 @@ const Main = () => {
     <Route exact path='/search' component={Search}></Route>
     <Route exact path='/favorites' component={Favorites}></Route>
     <Route exact path='/createjob' component={CreateJob}></Route>
+    <Route exact path='/employee-profile' component={EmployeeProfile}></Route>
+    <Route exact path='/employer-profile' component={EmployerProfile}></Route>
+    <Route exact path='/jobs' component={Jobs}></Route>
   </Switch>);
 }
 
