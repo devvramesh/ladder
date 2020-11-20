@@ -1,8 +1,8 @@
 import { useAuth0 } from "@auth0/auth0-react";
 
-const BACKEND = "http://localhost:3001"
-
 const qs = require('qs')
+
+const BACKEND = "http://localhost:3001"
 
 export const GetCurrentUserID = () => {
   const { user } = useAuth0();
