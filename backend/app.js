@@ -11,8 +11,6 @@ const jsonParser = bodyParser.json();
 
 app.use(cors());
 
-console.log(process.env)
-
 const managementClient = createManagementClient();
 
 // NOTE(jake): set this to true to print out request bodies when they arrive
