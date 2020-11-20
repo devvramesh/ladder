@@ -99,7 +99,6 @@ post('/api/account_type', (req, res) => {
 if (process.env.RUN_MODE === "HEROKU") {
   console.log("Running on Heroku. Frontend should have been built already. Serving frontend...")
 
-  const fs = require('fs');
   fs.readdirSync('..').forEach(file => {
     console.log(file);
   });
