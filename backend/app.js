@@ -5,6 +5,7 @@ import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
+import fs from 'fs';
 import { createManagementClient } from './util.js'
 
 const PORT = process.env.PORT || 5000
@@ -96,12 +97,19 @@ post('/api/account_type', (req, res) => {
 });
 
 if (process.env.RUN_MODE === "HEROKU") {
+  console.log("Running on Heroku. Frontend should have been built already. Serving frontend...")
+
+  const fs = require('fs');
+  fs.readdirSync('..').forEach(file => {
+    console.log(file);
+  });
+
   // Serve frontend
-  app.use(express.static('../frontend/build')))
+  app.use(express.static('../frontend/build'))
 
   // 404 --> homepage
   app.get('*', (req, res) => {
-    res.sendFile('../frontend/build/index.html'))
+    res.sendFile('../frontend/build/index.html')
   })
 }
 
