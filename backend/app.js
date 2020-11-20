@@ -4,6 +4,7 @@ dotenv.config()
 import express from 'express';
 import cors from 'cors';
 import bodyParser from 'body-parser';
+import path from 'path';
 import { createManagementClient } from './util.js'
 
 const PORT = process.env.PORT || 5000
@@ -93,6 +94,14 @@ post('/api/account_type', (req, res) => {
     }
   });
 });
+
+// Serve fronted
+app.use(express.static(path.join(__dirname, 'frontend/build')))
+
+// 404 --> homepage
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname + '/frontend/build/index.html'))
+})
 
 app.listen(PORT, () => {
   console.log(`Listening on port ${PORT}`);
