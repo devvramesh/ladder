@@ -48,7 +48,7 @@ export default class Jobs extends React.Component {
       <Navbar searchType={"this.searchType"}></Navbar>
       <h2>Jobs</h2>
       <Link to="/createjob">
-        <button>+</button>
+        <button>New Job</button>
       </Link>
       <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
       { 
