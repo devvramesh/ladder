@@ -107,7 +107,7 @@ if (process.env.RUN_MODE === "HEROKU") {
   // Serve frontend
   app.use(express.static('/app/frontend/build'))
 
-  // 404 --> homepage
+  // Necessary for paths with query string
   app.get('*', (req, res) => {
     res.sendFile('/app/frontend/build/index.html')
   })
