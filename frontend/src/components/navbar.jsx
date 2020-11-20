@@ -3,7 +3,6 @@ import {Link} from "react-router-dom";
 import LoginButton from "./login_button"
 import AuthenticationButton from "./authentication_button"
 import querystring from "querystring"
-import os from 'os';
 
 // NOTE(jake):
 // props:
@@ -16,8 +15,6 @@ export default class Navbar extends React.Component {
     this.state = {
       searchType: this.props.searchType
     }
-
-    console.log("hostname: " + os.hostname());
   }
 
   doSearch = () => {
