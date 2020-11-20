@@ -2,12 +2,13 @@ import logo from './logo.svg';
 import './App.css';
 
 import React from 'react';
-import {BrowserRouter, Switch, Route, withRouter} from 'react-router-dom';
+import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
 
 import Home from './components/homepage';
 import Signup from './components/signup';
 import Search from './components/search';
+import Favorites from './components/favorites'
 
 const Main = () => {
   return (<Switch>
@@ -15,6 +16,7 @@ const Main = () => {
     <Route exact path='/' component={Home}></Route>
     <Route exact path='/signup' component={Signup}></Route>
     <Route exact path='/search' component={Search}></Route>
+    <Route exact path='/favorites' component={Favorites}></Route>
   </Switch>);
 }
 
