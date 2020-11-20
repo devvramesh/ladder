@@ -20,6 +20,8 @@ const managementClient = createManagementClient();
 // NOTE(jake): set this to true to print out request bodies when they arrive
 const DEBUG = true;
 
+console.log('Serving backend...')
+
 const post = (route, callback) => {
   return app.post(route, jsonParser, (req, res) => {
     if (DEBUG) {
@@ -96,23 +98,21 @@ post('/api/account_type', (req, res) => {
   });
 });
 
-if (process.env.RUN_MODE === "HEROKU") {
-  console.log("Running on Heroku. Frontend should have been built already. Serving frontend...")
+console.log('Backend served.')
 
-  fs.readdirSync('..').forEach(file => {
-    console.log(file);
-  });
+if (process.env.RUN_MODE === "HEROKU") {
+  console.log("Running on Heroku. Frontend should have been built already.")
+  console.log("Serving frontend...")
 
   // Serve frontend
   app.use(express.static('../frontend/build'))
 
-  // 404 --> homepage
-  app.get('*', (req, res) => {
-    res.sendFile('../frontend/build/index.html')
-  })
+  console.log('Frontend served.')
+} else {
+  console.log("Running locally. Start frontend with [cd frontend; npm start]")
 }
 
 app.listen(PORT, () => {
-  console.log(`Listening on port ${PORT}`);
+  console.log(`Backend server listening on port ${PORT}`);
   console.log('---------------------------------------------');
 });
