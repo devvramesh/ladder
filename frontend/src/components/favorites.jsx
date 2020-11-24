@@ -67,9 +67,9 @@ export default class Favorites extends React.Component {
     console.log('rendering valid')
     console.log(this.state)
     return (<div>
-      <Navbar searchType={this.searchType} initialSearchBarText={params.query}></Navbar>
+      <Navbar></Navbar>
       <h2>Favorites</h2>
-      <label for="favoritesType">Favorites category:</label>
+      <label htmlFor="favoritesType">Favorites category:</label>
         <select name="favoritesType" id="favoritesType" onChange={this.switchType} value={this.searchType}>
           <option value="employee">employee</option>
           <option value="job">job</option>

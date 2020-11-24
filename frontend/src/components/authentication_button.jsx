@@ -1,28 +1,21 @@
 import {React, useState, useEffect} from "react";
 
 import { useAuth0 } from "@auth0/auth0-react";
-import { GetCurrentUserID } from "../util"
-import { GetCurrentUserAccountType } from "../util"
+import { GetCurrentUserID, GetCurrentUserInfo } from "../util"
 import LoginButton from "./login_button"
 import LogoutButton from "./logout_button"
 
 const AuthenticationButton = () => {
   const { isAuthenticated, user } = useAuth0();
-  const [accountType, setAccountType] = useState('N/A');
-  const _accountType = GetCurrentUserAccountType();
-
-  let name = "";
-  if (user) {
-    console.log(user)
-    name = user.name;
-  }
+  const [ userInfo, setUserInfo ] = useState(null);
+  const _userInfo = GetCurrentUserInfo();
 
   useEffect(() => {
-    if (!_accountType) {
+    if (!_userInfo) {
       return;
     }
-    _accountType.then(setAccountType)
-  }, [_accountType]);
+    _userInfo.then(setUserInfo)
+  }, [_userInfo]);
 
   const goToProfile = () => {
     window.location.href = "/profile"
@@ -43,6 +36,17 @@ const AuthenticationButton = () => {
     return (<LoginButton redirectUri={window.location.href}></LoginButton>)
   }
 
+  const showUser = () => {
+    if (userInfo) {
+      return (<div>
+        <div>Account type: {userInfo.accountType}</div>
+        <div>Username: {userInfo.username}</div>
+      </div>)
+    } else {
+      return (<div></div>)
+    }
+  }
+
 
   return (<div>
     <p>
@@ -50,12 +54,12 @@ const AuthenticationButton = () => {
     </p>
     {createButtons()}
     <p>
-      logged in as: {name}
+      logged in as: {user ? user.name : null}
     </p>
     <p>
       Current user ID/token: {(GetCurrentUserID() || "N/A")}
     </p>
-    <div>Account type: {accountType}</div>
+    {showUser()}
    </div>);
 };
 

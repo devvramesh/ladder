@@ -13,7 +13,7 @@ export default class Navbar extends React.Component {
     super(props);
 
     this.state = {
-      searchType: this.props.searchType
+      searchType: this.props.searchType || "job"
     }
   }
 

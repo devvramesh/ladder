@@ -82,7 +82,7 @@ post('/api/favorites', (req, res) => {
   res.send(JSON.stringify({favorites: dummy_results}));
 });
 
-post('/api/account_type', (req, res) => {
+post('/api/user_info', (req, res) => {
   const userID = req.body.userID;
   let result = null;
   if (!userID) {
@@ -91,7 +91,10 @@ post('/api/account_type', (req, res) => {
   }
   managementClient.getUser({ id: userID }, function (err, user) {
     if (user) {
-      res.send(JSON.stringify({accountType: user.user_metadata.accountType}));
+      res.send(JSON.stringify({
+        username: user.username,
+        accountType: user.user_metadata.accountType
+      }));
     } else {
       res.send(JSON.stringify({accountType: null}));
     }

@@ -30,16 +30,12 @@ export const makeBackendRequest = (endpoint, body={}) => {
   }).then(res => res.json())
 }
 
-export const GetCurrentUserAccountType = async () => {
+export const GetCurrentUserInfo = async () => {
   const userID = GetCurrentUserID();
   if (!userID) {
     return null;
   }
-  return await makeBackendRequest('/api/account_type', {userID: userID})
-    .then((result) => {
-      console.log(result)
-      return result.accountType
-    });
+  return await makeBackendRequest('/api/user_info', {userID: userID});
 }
 
 export const getUrlParams = (component) => {
