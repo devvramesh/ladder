@@ -72,7 +72,7 @@ export async function dbInit() {
 
     await client.query(
       `CREATE TABLE IF NOT EXISTS jobs(
-        post_id SERIAL NOT NULL PRIMARY KEY,
+        job_id SERIAL NOT NULL PRIMARY KEY,
         employer_auth0_user_id TEXT NOT NULL UNIQUE,
         job_title TEXT NOT NULL,
         description TEXT,
@@ -81,6 +81,39 @@ export async function dbInit() {
         job_image_url TEXT,
 
         FOREIGN KEY (employer_auth0_user_id) REFERENCES employers(auth0_user_id)
+      )`
+    )
+
+    await client.query(
+      `CREATE TABLE IF NOT EXISTS favorite_employees(
+        favorite_id SERIAL NOT NULL PRIMARY KEY,
+        favoritor_auth0_user_id TEXT NOT NULL,
+        favoritee_auth0_user_id TEXT NOT NULL,
+
+        FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
+        FOREIGN KEY (favoritee_auth0_user_id) REFERENCES employees(auth0_user_id)
+      )`
+    )
+
+    await client.query(
+      `CREATE TABLE IF NOT EXISTS favorite_employers(
+        favorite_id SERIAL NOT NULL PRIMARY KEY,
+        favoritor_auth0_user_id TEXT NOT NULL,
+        favoritee_auth0_user_id TEXT NOT NULL,
+
+        FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
+        FOREIGN KEY (favoritee_auth0_user_id) REFERENCES employers(auth0_user_id)
+      )`
+    )
+
+    await client.query(
+      `CREATE TABLE IF NOT EXISTS favorite_jobs(
+        favorite_id SERIAL NOT NULL PRIMARY KEY,
+        favoritor_auth0_user_id TEXT NOT NULL,
+        favoritee_job_id INT NOT NULL,
+
+        FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
+        FOREIGN KEY (favoritee_job_id) REFERENCES jobs(job_id)
       )`
     )
   })
@@ -102,7 +135,7 @@ export async function logDBInfo() {
     console.log("DB SCHEMA:")
     console.log("----------------------------------------------------------------------------------------------------")
     schema.rows.forEach((row) => {
-      console.log(`${fixedWidthString(row.table_name, 9)} | ${row.columns}`)
+      console.log(`${fixedWidthString(row.table_name, 18)} | ${row.columns}`)
     })
     console.log("----------------------------------------------------------------------------------------------------")
   })
