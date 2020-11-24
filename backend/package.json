@@ -16,7 +16,9 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "fs": "0.0.1-security"
+    "fixed-width-string": "^2.0.0",
+    "fs": "0.0.1-security",
+    "pg": "^8.5.1"
   },
   "engines": {
     "node": "14.15.x"
