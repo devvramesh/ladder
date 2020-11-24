@@ -22,11 +22,11 @@ export async function withDB(fn) {
   const client = await pool.connect()
   let result = null;
   try {
-    await client.query('BEGIN')
+    await client.query('BEGIN;')
     result = await fn(client)
-    await client.query('COMMIT')
+    await client.query('COMMIT;')
   } catch (e) {
-    await client.query('ROLLBACK')
+    await client.query('ROLLBACK;')
     throw e
   } finally {
     client.release()
@@ -46,7 +46,7 @@ export async function dbInit() {
         phone TEXT UNIQUE,
         location TEXT,
         profile_img_url TEXT
-      )`
+      );`
     )
 
     await client.query(
@@ -57,7 +57,7 @@ export async function dbInit() {
         looking_for TEXT,
 
         FOREIGN KEY (auth0_user_id) REFERENCES users(auth0_user_id)
-      )`
+      );`
     )
 
     await client.query(
@@ -67,7 +67,7 @@ export async function dbInit() {
         logistics TEXT,
 
         FOREIGN KEY (auth0_user_id) REFERENCES users(auth0_user_id)
-      )`
+      );`
     )
 
     await client.query(
@@ -79,9 +79,10 @@ export async function dbInit() {
         qualifications TEXT,
         logistics TEXT,
         job_image_url TEXT,
+        published BOOLEAN NOT NULL,
 
         FOREIGN KEY (employer_auth0_user_id) REFERENCES employers(auth0_user_id)
-      )`
+      );`
     )
 
     await client.query(
@@ -92,7 +93,7 @@ export async function dbInit() {
 
         FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
         FOREIGN KEY (favoritee_auth0_user_id) REFERENCES employees(auth0_user_id)
-      )`
+      );`
     )
 
     await client.query(
@@ -103,7 +104,7 @@ export async function dbInit() {
 
         FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
         FOREIGN KEY (favoritee_auth0_user_id) REFERENCES employers(auth0_user_id)
-      )`
+      );`
     )
 
     await client.query(
@@ -114,7 +115,7 @@ export async function dbInit() {
 
         FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
         FOREIGN KEY (favoritee_job_id) REFERENCES jobs(job_id)
-      )`
+      );`
     )
   })
 }
@@ -139,6 +140,77 @@ export async function logDBInfo() {
     })
     console.log("----------------------------------------------------------------------------------------------------")
   })
+}
+
+export class Employee {
+  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=null, qualifications=null, about=null, looking_for=null) {
+    this.auth0_user_id = auth0_user_id;
+    this.username = username;
+    this.name = name;
+    this.email = email;
+    this.phone = phone;
+    this.location = location;
+    this.profile_img_url = profile_img_url;
+    this.qualifications = qualifications;
+    this.about = about;
+    this.looking_for = looking_for;
+  }
+
+  async upsert(client) {
+    await client.query(`
+      INSERT INTO
+        users(type, auth0_user_id, username, name, email, phone, location, profile_img_url)
+      VALUES
+        ('employee', $1, $2, $3, $4, $5, $6, $7)
+      ON CONFLICT (auth0_user_id)
+        DO UPDATE SET
+          type = EXCLUDED.type,
+          auth0_user_id = EXCLUDED.auth0_user_id,
+          username = EXCLUDED.username,
+          name = EXCLUDED.name,
+          email = EXCLUDED.email,
+          phone = EXCLUDED.phone,
+          location = EXCLUDED.location,
+          profile_img_url = EXCLUDED.profile_img_url
+      ;`,
+      [this.auth0_user_id, this.username, this.name, this.email, this.phone, this.location, this.profile_img_url]
+    )
+
+    await client.query(`
+      INSERT INTO
+        employees(auth0_user_id, qualifications, about, looking_for)
+      VALUES
+        ($1, $2, $3, $4)
+      ON CONFLICT (auth0_user_id)
+        DO UPDATE SET
+          auth0_user_id = EXCLUDED.auth0_user_id,
+          qualifications = EXCLUDED.qualifications,
+          about = EXCLUDED.about,
+          looking_for = EXCLUDED.looking_for
+      ;`,
+      [this.auth0_user_id, this.qualifications, this.about, this.looking_for]
+    )
+  }
+
+  static async find(client, auth0_user_id) {
+    const result = await client.query(`
+      SELECT u.auth0_user_id, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.qualifications, e.about, e.looking_for
+      FROM
+        users AS u
+        JOIN employees AS e
+        ON u.auth0_user_id = e.auth0_user_id
+      WHERE
+        u.auth0_user_id = $1
+      ;`,
+      [auth0_user_id]
+    )
+
+    return result ? Employee.ofRow(result.rows[0]) : null;
+  }
+
+  static ofRow(row) {
+    return new Employee(row.auth0_user_id, row.username, row.name, row.email, row.phone, row.location, row.profile_img_url, row.qualifications, row.about, row.looking_for)
+  }
 }
 
 

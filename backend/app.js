@@ -7,7 +7,7 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import fs from 'fs';
 import { createManagementClient } from './util.js'
-import { dbInit, withDB, logDBInfo } from './db.js'
+import { dbInit, withDB, logDBInfo, Employee } from './db.js'
 
 const PORT = process.env.PORT || 5000
 const DEBUG = true;
@@ -95,6 +95,28 @@ function serveApp() {
         }));
       } else {
         res.send(JSON.stringify({accountType: null}));
+      }
+    });
+  });
+
+  post('/api/login_successful', (req, res) => {
+    const userID = req.body.userID;
+    let result = null;
+    if (!userID) {
+      res.send(JSON.stringify({}));
+      return;
+    }
+    managementClient.getUser({ id: userID }, function (err, user) {
+      if (user) {
+        if (user.user_metadata.accountType === "employee") {
+          // TODO: insert employee into DB
+        } else if (user.user_metadata.accountType === "employer") {
+          // TODO: insert employer into DB
+        } else {
+          res.send(JSON.stringify({}));
+        }
+      } else {
+        res.send(JSON.stringify({}));
       }
     });
   });
