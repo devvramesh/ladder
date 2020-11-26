@@ -18,18 +18,20 @@ class AuthenticationButton extends React.Component {
   }
 
   loadUserInfo = async () => {
-    const { isLoading, user } = this.props.auth0;
-    if (isLoading || !user) {
-      this.setState({ userInfo: null });
-    } else {
-      await makeBackendRequest('/api/user_info', {userID:user.sub}).then((info) => {
-        if (this.mounted) {
-          console.log(info)
-          this.setState({
-            userInfo: info,
-            ready: true
-          })
-        }
+    const { user, isLoading } = this.props.auth0;
+    let userInfo = null;
+    if (user) {
+      userInfo = await makeBackendRequest('/api/user_info', {userID:user.sub})
+      console.log('got user')
+      console.log(user)
+      console.log('got userInfo')
+      console.log(userInfo)
+    }
+    if (this.mounted) {
+      console.log(userInfo)
+      this.setState({
+        userInfo: userInfo,
+        ready: !isLoading
       })
     }
   }
@@ -66,7 +68,7 @@ class AuthenticationButton extends React.Component {
   showUser = () => {
     if (this.state.userInfo) {
       return (<div>
-        <div>Account type: {this.state.userInfo.accountType}</div>
+        <div>Account type: {this.state.userInfo.account_type}</div>
         <div>Username: {this.state.userInfo.username}</div>
       </div>)
     } else {
@@ -75,20 +77,22 @@ class AuthenticationButton extends React.Component {
   }
 
   render() {
-    console.log('authbutton render')
     const { isAuthenticated, user } = this.props.auth0;
+    console.log('authbutton render')
 
     if (isAuthenticated && !this.state.userInfo) {
       console.log('authbutton render1')
       this.loadUserInfo();
-      return null
+      return null;
     }
-
 
     if (!this.state.ready) {
       console.log('authbutton render2')
       return null;
     }
+
+    console.log('authbutton render3')
+    console.log(this.state)
 
     return (<div>
       <p>
@@ -96,7 +100,7 @@ class AuthenticationButton extends React.Component {
       </p>
       {this.createButtons(isAuthenticated)}
       <p>
-        logged in as: {user ? user.name : null}
+        logged in as: {isAuthenticated ? this.state.userInfo.name : null}
       </p>
       <p>
         Current user ID/token: {(user ? user.sub : "N/A")}

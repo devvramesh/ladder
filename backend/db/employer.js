@@ -1,5 +1,7 @@
+const DEFAULT_PROFILE_IMG = 'https://www.pngfind.com/pngs/m/665-6659827_enterprise-comments-default-company-logo-png-transparent-png.png'
+
 export default class Employer {
-  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=null, about=null, logistics=null) {
+  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=DEFAULT_PROFILE_IMG, about=null, logistics=null) {
     this.auth0_user_id = auth0_user_id;
     this.username = username;
     this.name = name;
@@ -11,55 +13,36 @@ export default class Employer {
     this.logistics = logistics;
   }
 
-  async createInDB(client) {
-    console.log('creating employer')
-    console.log(this)
-
+  async updateInDB(client) {
     await client.query(`
       INSERT INTO
-        users(type, auth0_user_id, username, name, email)
+        users(account_type, auth0_user_id, username, name, email, phone, location, profile_img_url)
       VALUES
-        ('employer', $1, $2, $3, $4)
+        ('employer', $1, $2, $3, $4, $5, $6, $7)
       ON CONFLICT (auth0_user_id)
         DO UPDATE SET
-          type = EXCLUDED.type,
+          account_type = EXCLUDED.account_type,
           auth0_user_id = EXCLUDED.auth0_user_id,
           username = EXCLUDED.username,
           name = EXCLUDED.name,
-          email = EXCLUDED.email
+          email = EXCLUDED.email,
+          phone = EXCLUDED.phone,
+          location = EXCLUDED.location,
+          profile_img_url = EXCLUDED.profile_img_url
       ;`,
-      [this.auth0_user_id, this.username, this.name, this.email]
+      [this.auth0_user_id, this.username, this.name, this.email, this.phone, this.location, this.profile_img_url]
     )
 
     await client.query(`
       INSERT INTO
-        employers(auth0_user_id)
+        employers(auth0_user_id, about, logistics)
       VALUES
-        ($1)
-      ON CONFLICT DO NOTHING
-      ;`,
-      [this.auth0_user_id]
-    )
-  }
-
-  async updateInDB(client) {
-    await client.query(`
-      UPDATE users
-      SET
-        phone = $2,
-        location = $3,
-        profile_img_url = $4
-      WHERE auth0_user_id = $1
-      ;`,
-      [this.auth0_user_id, this.name, this.phone, this.location, this.profile_img_url]
-    )
-
-    await client.query(`
-      UPDATE employers
-      SET
-        about = $2,
-        logistics = $3
-      WHERE auth0_user_id = $1
+        ($1, $2, $3)
+      ON CONFLICT (auth0_user_id)
+        DO UPDATE SET
+        auth0_user_id = EXCLUDED.auth0_user_id,
+        about = EXCLUDED.about,
+        logistics = EXCLUDED.logistics
       ;`,
       [this.auth0_user_id, this.about, this.logistics]
     )
@@ -71,7 +54,7 @@ export default class Employer {
     }
 
     const result = await client.query(`
-      SELECT u.auth0_user_id, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.logistics
+      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.logistics
       FROM
         users AS u
         JOIN employers AS e

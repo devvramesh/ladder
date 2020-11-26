@@ -13,16 +13,11 @@ export default class EmployerProfile extends React.Component {
     console.log("VIEWING EMPLOYER PROFILE " + this.props.id)
 
     this.state = {
-      name: "",
-      image_src: "",
-      contact: "",
-      website: "",
-      about: "",
-      logistics: "",
-      location: ""
+      userInfo: null,
+      ready: false
     }
 
-    this.state = {
+    this.SAMPLE = {
       name: "Construction Company",
       image_src: "https://images.template.net/wp-content/uploads/2015/04/Stylized-Construction-Company-Logo.jpg",
       contact: "",
@@ -31,6 +26,31 @@ export default class EmployerProfile extends React.Component {
       logistics: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices a leo eget blandit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat scelerisque enim, convallis vulputate ipsum dapibus vulputate. Etiam vel molestie quam. Proin quis lacus et dui pulvinar aliquam non id odio.",
       location: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices a leo eget blandit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat scelerisque enim, convallis vulputate ipsum dapibus vulputate. Etiam vel molestie quam. Proin quis lacus et dui pulvinar aliquam non id odio."
     }
+  }
+
+  loadUserInfo = async () => {
+    const userInfo = await makeBackendRequest(
+      '/api/user_info',
+      { userID: this.props.id }
+    )
+
+    if (this.mounted) {
+      this.setState({
+        userInfo: userInfo,
+        ready: true
+      })
+    }
+  }
+
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+    await this.loadUserInfo();
+  }
+
+  componentWillUnmount() {
+    console.log('unmount')
+    this.mounted = false;
   }
 
   createEditButton = () => {
@@ -42,13 +62,23 @@ export default class EmployerProfile extends React.Component {
   }
 
   render() {
+    if (!this.state.userInfo) {
+      this.loadUserInfo();
+      return null;
+    }
+
+    if (!this.state.ready) {
+      return null;
+    }
+
+    console.log(this.state.userInfo)
 
     return (<div>
       <Navbar searchType={this.searchType}></Navbar>
-      <h2>{this.state.name}</h2>
-      <h3>{this.state.category}</h3>
+      <h2>{this.state.userInfo.name}</h2>
+      <h3>{this.state.userInfo.category}</h3>
 
-      <img src={this.state.image_src} id="profile-image" alt="Profile Image"/>
+      <img src={this.state.userInfo.profile_img_url} id="profile-image" alt="Profile Image"/>
 
       {this.createEditButton()}
       <Link to="/favorites">
@@ -65,13 +95,13 @@ export default class EmployerProfile extends React.Component {
 
 
       <h3>About: </h3>
-      <p>{this.state.about}</p>
+      <p>{this.state.userInfo.about}</p>
 
       <h3>Logistics: </h3>
-      <p>{this.state.logistics}</p>
+      <p>{this.state.userInfo.logistics}</p>
 
       <h3>Location: </h3>
-      <p>{this.state.location}</p>
+      <p>{this.state.userInfo.location}</p>
 
 
     </div>)

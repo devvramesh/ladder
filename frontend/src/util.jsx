@@ -30,6 +30,7 @@ export const makeBackendRequest = (endpoint, body={}) => {
     },
     body: JSON.stringify(body)
   }).then((res) => res.json())
+  .then((x) => {console.log('back from ' + endpoint); console.log(x); return x})
 }
 
 export const getUserInfo = async (identifier) => {

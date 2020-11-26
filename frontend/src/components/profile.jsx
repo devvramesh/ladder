@@ -26,8 +26,8 @@ class Profile extends React.Component {
   }
 
   loadUserInfo = async () => {
-    const { user } = this.props.auth0;
-    console.log('important')
+    const { user, isLoading } = this.props.auth0;
+    console.log('loaduserinfo')
     console.log(user)
 
     let currUserInfo = null;
@@ -38,19 +38,23 @@ class Profile extends React.Component {
       )
     }
 
+    console.log('h2')
+    console.log(currUserInfo)
+
     let viewUserInfo = null;
     if (this.userToView) {
       viewUserInfo = await makeBackendRequest('/api/user_info', { username: this.userToView })
     }
 
-    console.log('before setting state!')
     if (this.mounted) {
       console.log('setting state!')
       console.log(currUserInfo)
+      console.log(user)
+      console.log(isLoading)
       this.setState({
         currUserInfo: currUserInfo,
         viewUserInfo: viewUserInfo,
-        ready: true
+        ready: !isLoading
       })
     }
   }
@@ -69,15 +73,15 @@ class Profile extends React.Component {
   render() {
     console.log('rendering')
 
-    const { isAuthenticated} = this.props.auth0;
+    const { isAuthenticated } = this.props.auth0;
 
     if (isAuthenticated && !this.state.currUserInfo) {
+      console.log('load info needed')
       this.loadUserInfo();
       return null;
     }
 
     if (!this.state.ready) {
-      console.log('unready')
       return null;
     }
 
@@ -93,34 +97,36 @@ class Profile extends React.Component {
       console.log('authenticated')
       console.log(this.state)
 
-      if (this.state.currUserInfo.accountType === "employee") {
-        return (<EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>)
-      } else if (this.state.currUserInfo.accountType === "employer") {
-        return (<EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>)
-      } else {
-        return (<div>Error. Please try again.</div>)
+      if (!this.state.currUserInfo) {
+        return null;
       }
+
+      if (this.state.currUserInfo.account_type === "employee") {
+        return (<EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>)
+      } else if (this.state.currUserInfo.account_type === "employer") {
+        return (<EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>)
+      }
+
+      return (<div>Error. Please try again.</div>)
     }
 
     // case 2: user vists (ex.) /profile/johnsmith1. will be shown
     // johnsmith1's profile, non-editable
-    if (this.loading) {
-      return null;
-    }
+    console.log('case 2')
 
-    if (!this.state.viewUserInfo.accountType) {
+    if (!this.state.viewUserInfo.account_type) {
       return (<div>Error: user {this.userToView} not found.</div>)
     }
 
     console.log(this.state)
 
-    if (this.state.viewUserInfo.accountType === "employee") {
+    if (this.state.viewUserInfo.account_type === "employee") {
       return (<EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>)
-    } else if (this.state.viewUserInfo.accountType === "employer") {
+    } else if (this.state.viewUserInfo.account_type === "employer") {
       return (<EmployerProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>)
-    } else {
-      return (<div>Error. Please try again.</div>)
     }
+
+    return (<div>Error. Please try again.</div>)
   }
 }
 

@@ -91,7 +91,7 @@ function serveApp() {
     withDB(async (client) => {
       let userID = req.body.userID;
       let username = req.body.username;
-      let accountType = null;
+      let account_type = null;
 
       if (!userID && !username) {
         sendBlank(res);
@@ -106,33 +106,29 @@ function serveApp() {
           user = await User.findByUsername(client, username)
         }
 
+        console.log('send 0')
         console.log(user)
 
         if (user) {
           userID = user.auth0_user_id
           username = user.username
-          accountType = user.type
+          account_type = user.account_type
         }
       }
 
-      console.log(userID)
-      console.log(username)
-      console.log(accountType)
-
-      if (accountType) {
+      if (account_type) {
         // user exists in DB. find and return
         let result;
-        if (accountType === "employee") {
+        if (account_type === "employee") {
           result = await Employee.findInDB(client, userID)
-        } else if (accountType === "employer") {
+        } else if (account_type === "employer") {
           result = await Employer.findInDB(client, userID)
         } else {
           sendBlank(res);
           return;
         }
-        // TODO: return specifics
-        result.accountType = accountType
         console.log('send 1')
+        console.log(result)
         res.send(JSON.stringify(result))
         return;
       } else {
@@ -149,27 +145,28 @@ function serveApp() {
         }
         userID = user_auth0.user_id
         username = user_auth0.username
-        accountType = user_auth0.user_metadata.accountType
+        account_type = user_auth0.user_metadata.account_type
 
-        if (accountType === "employee") {
+        console.log(user_auth0)
+
+        let result;
+        if (account_type === "employee") {
           await new Employee(
-            userID, username, user_auth0.name, user_auth0.email
-          ).createInDB(client)
-        } else if (accountType === "employer") {
+            user_auth0.user_id, user_auth0.username, user_auth0.name, user_auth0.email
+          ).updateInDB(client)
+          result = await Employee.findInDB(client, userID)
+        } else if (account_type === "employer") {
           await new Employer(
-            userID, username, user_auth0.name, user_auth0.email
-          ).createInDB(client)
+            user_auth0.user_id, user_auth0.username, user_auth0.name, user_auth0.email
+          ).updateInDB(client)
+          result = await Employer.findInDB(client, userID)
         } else {
           sendBlank(res);
           return;
         }
-        // TODO: return specifics
         console.log('send 2')
-        res.send(JSON.stringify({
-          userID: userID,
-          accountType: accountType,
-          username: username
-        }))
+        console.log(result)
+        res.send(JSON.stringify(result))
         return;
       }
     })
