@@ -17,28 +17,18 @@ class Profile extends React.Component {
     this.userToView = this.props.match.params.username || null;
 
     this.mounted = false;
-    this.loading = true;
 
     this.state = {
       currUserInfo: null,
       viewUserInfo: null,
+      ready: false
     }
   }
 
-  loadUserInfo = (userID) => {
-    makeBackendRequest('/api/user_info', { userID : userID }).then((info) => {
-      if (this.mounted) {
-        console.log(info)
-        this.setState({ userInfo: info })
-      }
-    })
-  }
-
-  async componentDidMount() {
-    console.log('didMount')
-    this.mounted = true;
-
+  loadUserInfo = async () => {
     const { user } = this.props.auth0;
+    console.log('important')
+    console.log(user)
 
     let currUserInfo = null;
     if (user) {
@@ -56,12 +46,19 @@ class Profile extends React.Component {
     console.log('before setting state!')
     if (this.mounted) {
       console.log('setting state!')
+      console.log(currUserInfo)
       this.setState({
         currUserInfo: currUserInfo,
-        viewUserInfo: viewUserInfo
+        viewUserInfo: viewUserInfo,
+        ready: true
       })
     }
-    this.loading = false;
+  }
+
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+    await this.loadUserInfo();
   }
 
   componentWillUnmount() {
@@ -70,17 +67,25 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log('rendering')
+
+    const { isAuthenticated} = this.props.auth0;
+
+    if (isAuthenticated && !this.state.currUserInfo) {
+      this.loadUserInfo();
+      return null;
+    }
+
+    if (!this.state.ready) {
+      console.log('unready')
+      return null;
+    }
+
+    console.log('ready')
+
     // case 1: user visits /profile. must be authenticated, then will
     // be shown own profile
     if (!this.userToView) {
-      const { isAuthenticated, user} = this.props.auth0;
-
-      if (isAuthenticated && !this.state.currUserInfo) {
-        console.log(user.sub)
-        this.loadUserInfo(user.sub);
-        return null;
-      }
-
       if (!isAuthenticated) {
         return (<div>Error: must log in to view your profile</div>)
       }

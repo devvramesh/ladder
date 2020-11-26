@@ -12,23 +12,12 @@ class AuthenticationButton extends React.Component {
     this.mounted = false;
 
     this.state = {
-      userInfo: null
+      userInfo: null,
+      ready: false
     }
   }
 
-  loadUserInfo = (userID) => {
-    makeBackendRequest('/api/user_info', { userID : userID }).then((info) => {
-      if (this.mounted) {
-        console.log(info)
-        this.setState({ userInfo: info })
-      }
-    })
-  }
-
-  async componentDidMount() {
-    console.log('didMount')
-    this.mounted = true;
-
+  loadUserInfo = async () => {
     const { isLoading, user } = this.props.auth0;
     if (isLoading || !user) {
       this.setState({ userInfo: null });
@@ -36,10 +25,19 @@ class AuthenticationButton extends React.Component {
       await makeBackendRequest('/api/user_info', {userID:user.sub}).then((info) => {
         if (this.mounted) {
           console.log(info)
-          this.setState({ userInfo: info })
+          this.setState({
+            userInfo: info,
+            ready: true
+          })
         }
       })
     }
+  }
+
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+    await this.loadUserInfo()
   };
 
   componentWillUnmount() {
@@ -77,9 +75,19 @@ class AuthenticationButton extends React.Component {
   }
 
   render() {
-    const { isAuthenticated, user} = this.props.auth0;
+    console.log('authbutton render')
+    const { isAuthenticated, user } = this.props.auth0;
+
     if (isAuthenticated && !this.state.userInfo) {
-      this.loadUserInfo(user.sub);
+      console.log('authbutton render1')
+      this.loadUserInfo();
+      return null
+    }
+
+
+    if (!this.state.ready) {
+      console.log('authbutton render2')
+      return null;
     }
 
     return (<div>
