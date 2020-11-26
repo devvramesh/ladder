@@ -87,17 +87,70 @@ function serveApp() {
     res.send(JSON.stringify({favorites: dummy_results}));
   });
 
-  post('/api/user_info', (req, res) => {
-    withDB(async (client) => {
-      let userID = req.body.userID;
-      let username = req.body.username;
-      let account_type = null;
+  post('/api/update_profile', (req, res) => {
+    const userID = req.body.userID;
 
-      if (!userID && !username) {
+    if (!userID) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      const user = await User.findByID(client, userID)
+      if (!user) {
         sendBlank(res);
         return;
       }
+      const account_type = user.account_type;
 
+      if (account_type === "employee") {
+        await new Employee(
+          req.body.userID,
+          req.body.username,
+          req.body.name,
+          req.body.email,
+          req.body.phone,
+          req.body.location,
+          req.body.profile_img_url,
+          req.body.category,
+          req.body.qualifications,
+          req.body.about,
+          req.body.looking_for
+        ).updateInDB(client)
+        sendBlank(res);
+        return;
+      } else if (account_type === "employer") {
+        await new Employer(
+          req.body.userID,
+          req.body.username,
+          req.body.name,
+          req.body.email,
+          req.body.phone,
+          req.body.location,
+          req.body.profile_img_url,
+          req.body.about,
+          req.body.logistics
+        ).updateInDB(client)
+        sendBlank(res);
+        return;
+      } else {
+        sendBlank(res);
+        return;
+      }
+    })
+  })
+
+  post('/api/user_info', (req, res) => {
+    let userID = req.body.userID;
+    let username = req.body.username;
+
+    if (!userID && !username) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      let account_type = null;
       {
         let user;
         if (userID) {
@@ -143,22 +196,19 @@ function serveApp() {
           sendBlank(res);
           return;
         }
+
         userID = user_auth0.user_id
         username = user_auth0.username
+        const name = user_auth0.user_metadata.name
         account_type = user_auth0.user_metadata.account_type
-
-        console.log(user_auth0)
+        const email = user_auth0.email
 
         let result;
         if (account_type === "employee") {
-          await new Employee(
-            user_auth0.user_id, user_auth0.username, user_auth0.name, user_auth0.email
-          ).updateInDB(client)
+          await new Employee(userID, username, name, email).updateInDB(client)
           result = await Employee.findInDB(client, userID)
         } else if (account_type === "employer") {
-          await new Employer(
-            user_auth0.user_id, user_auth0.username, user_auth0.name, user_auth0.email
-          ).updateInDB(client)
+          await new Employer(userID, username, name, email).updateInDB(client)
           result = await Employer.findInDB(client, userID)
         } else {
           sendBlank(res);

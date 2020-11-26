@@ -51,6 +51,7 @@ export async function dbInit() {
     await client.query(
       `CREATE TABLE IF NOT EXISTS employees(
         auth0_user_id TEXT NOT NULL PRIMARY KEY,
+        category TEXT,
         qualifications TEXT,
         about TEXT,
         looking_for TEXT,

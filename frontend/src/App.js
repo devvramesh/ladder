@@ -12,9 +12,8 @@ import Search from './components/search';
 import Favorites from './components/favorites';
 import Login from './components/login';
 import CreateJob from './components/createjob';
-import EmployeeProfile from './components/employee_profile';
-import EmployerProfile from './components/employer_profile';
 import Profile from './components/profile'
+import EditProfile from './components/edit_profile'
 import Jobs from './components/jobs';
 
 const Main = () => {
@@ -26,9 +25,8 @@ const Main = () => {
     <Route exact path='/search' component={Search}></Route>
     <Route exact path='/favorites' component={Favorites}></Route>
     <Route exact path='/createjob' component={CreateJob}></Route>
-    <Route exact path='/employee-profile' component={EmployeeProfile}></Route>
-    <Route exact path='/employer-profile' component={EmployerProfile}></Route>
     <Route exact path='/profile' component={Profile}></Route>
+    <Route exact path='/edit_profile' component={EditProfile}></Route>
     <Route exact path='/profile/:username' component={Profile}></Route>
     <Route exact path='/jobs' component={Jobs}></Route>
   </Switch>);

@@ -54,8 +54,12 @@ export default class EmployerProfile extends React.Component {
   }
 
   createEditButton = () => {
+    console.log('edit?')
+    console.log(this.props.editable)
     if (this.props.editable) {
-      return (<button>Edit</button>)
+      return (<Link to="/edit_profile">
+            <button>Edit</button>
+      </Link>)
     }
 
     return (<div></div>)
@@ -76,7 +80,6 @@ export default class EmployerProfile extends React.Component {
     return (<div>
       <Navbar searchType={this.searchType}></Navbar>
       <h2>{this.state.userInfo.name}</h2>
-      <h3>{this.state.userInfo.category}</h3>
 
       <img src={this.state.userInfo.profile_img_url} id="profile-image" alt="Profile Image"/>
 

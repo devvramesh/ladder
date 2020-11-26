@@ -55,8 +55,12 @@ class EmployeeProfile extends React.Component {
   }
 
   createEditButton = () => {
+    console.log('edit?')
+    console.log(this.props.editable)
     if (this.props.editable) {
-      return (<button>Edit</button>)
+      return (<Link to="/edit_profile">
+            <button>Edit</button>
+      </Link>)
     }
 
     return (<div></div>)

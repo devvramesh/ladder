@@ -2,7 +2,7 @@ const DEFAULT_PROFILE_IMG = 'https://icon-library.com/images/default-profile-ico
 
 
 export default class Employee {
-  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=DEFAULT_PROFILE_IMG, qualifications=null, about=null, looking_for=null) {
+  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=DEFAULT_PROFILE_IMG, category=null, qualifications=null, about=null, looking_for=null) {
     this.auth0_user_id = auth0_user_id;
     this.username = username;
     this.name = name;
@@ -10,6 +10,7 @@ export default class Employee {
     this.phone = phone;
     this.location = location;
     this.profile_img_url = profile_img_url;
+    this.category = category;
     this.qualifications = qualifications;
     this.about = about;
     this.looking_for = looking_for;
@@ -37,17 +38,18 @@ export default class Employee {
 
     await client.query(`
       INSERT INTO
-        employees(auth0_user_id, about, qualifications, looking_for)
+        employees(auth0_user_id, category, about, qualifications, looking_for)
       VALUES
-        ($1, $2, $3, $4)
+        ($1, $2, $3, $4, $5)
       ON CONFLICT (auth0_user_id)
         DO UPDATE SET
         auth0_user_id = EXCLUDED.auth0_user_id,
+        category = EXCLUDED.category,
         about = EXCLUDED.about,
         qualifications = EXCLUDED.qualifications,
         looking_for = EXCLUDED.looking_for
       ;`,
-      [this.auth0_user_id, this.about, this.qualifications, this.looking_for]
+      [this.auth0_user_id, this.category, this.about, this.qualifications, this.looking_for]
     )
   }
 
@@ -57,7 +59,7 @@ export default class Employee {
     }
 
     const result = await client.query(`
-      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.qualifications, e.about, e.looking_for
+      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.category, e.qualifications, e.about, e.looking_for
       FROM
         users AS u
         JOIN employees AS e
