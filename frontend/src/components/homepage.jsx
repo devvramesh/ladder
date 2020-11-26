@@ -7,12 +7,7 @@ export default class Home extends React.Component {
     render() {
         return (
             <div>
-                <Link to="/login">
-                    <button>Login</button>
-                </Link>
-                <Link to="/signup">
-                    <button>Sign Up</button>
-                </Link>
+                <LoginButton redirectUri={window.location.origin}></LoginButton>
                 <h1>Ladder</h1>
                 <Link to="/search?category=employee">
                     <button>Find Employees</button>

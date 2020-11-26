@@ -1,66 +1,101 @@
-import {React, useState, useEffect} from "react";
+import React from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
-import { GetCurrentUserID, GetCurrentUserInfo } from "../util"
+import { withAuth0 } from "@auth0/auth0-react";
+import { makeBackendRequest } from "../util"
 import LoginButton from "./login_button"
 import LogoutButton from "./logout_button"
 
-const AuthenticationButton = () => {
-  const { isAuthenticated, user } = useAuth0();
-  const [ userInfo, setUserInfo ] = useState(null);
-  const _userInfo = GetCurrentUserInfo();
+class AuthenticationButton extends React.Component {
+  constructor(props) {
+    super(props);
 
-  useEffect(() => {
-    if (!_userInfo) {
-      return;
+    this.mounted = false;
+
+    this.state = {
+      userInfo: null
     }
-    _userInfo.then(setUserInfo)
-  }, [_userInfo]);
+  }
 
-  const goToProfile = () => {
+  loadUserInfo = (userID) => {
+    makeBackendRequest('/api/user_info', { userID : userID }).then((info) => {
+      if (this.mounted) {
+        console.log(info)
+        this.setState({ userInfo: info })
+      }
+    })
+  }
+
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+
+    const { isLoading, user } = this.props.auth0;
+    if (isLoading || !user) {
+      this.setState({ userInfo: null });
+    } else {
+      await makeBackendRequest('/api/user_info', {userID:user.sub}).then((info) => {
+        if (this.mounted) {
+          console.log(info)
+          this.setState({ userInfo: info })
+        }
+      })
+    }
+  };
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  goToProfile = () => {
     window.location.href = "/profile"
   }
 
-  const createButtons = () => {
+  createButtons = (isAuthenticated) => {
     if (isAuthenticated) {
       return (<div>
         <LogoutButton redirectUri={window.location.href}></LogoutButton>
           <button
             className="btn btn-primary btn-block"
-            onClick={goToProfile}
+            onClick={this.goToProfile}
           >
             Go to Profile
           </button>
     </div>)
     }
-    return (<LoginButton redirectUri={window.location.href}></LoginButton>)
+    return (<LoginButton redirectUri={window.location.origin}></LoginButton>)
   }
 
-  const showUser = () => {
-    if (userInfo) {
+  showUser = () => {
+    if (this.state.userInfo) {
       return (<div>
-        <div>Account type: {userInfo.accountType}</div>
-        <div>Username: {userInfo.username}</div>
+        <div>Account type: {this.state.userInfo.accountType}</div>
+        <div>Username: {this.state.userInfo.username}</div>
       </div>)
     } else {
       return (<div></div>)
     }
   }
 
+  render() {
+    const { isAuthenticated, user} = this.props.auth0;
+    if (isAuthenticated && !this.state.userInfo) {
+      this.loadUserInfo(user.sub);
+    }
 
-  return (<div>
-    <p>
-      Authenticated: {isAuthenticated.toString()}
-    </p>
-    {createButtons()}
-    <p>
-      logged in as: {user ? user.name : null}
-    </p>
-    <p>
-      Current user ID/token: {(GetCurrentUserID() || "N/A")}
-    </p>
-    {showUser()}
-   </div>);
+    return (<div>
+      <p>
+        Authenticated: {isAuthenticated.toString()}
+      </p>
+      {this.createButtons(isAuthenticated)}
+      <p>
+        logged in as: {user ? user.name : null}
+      </p>
+      <p>
+        Current user ID/token: {(user ? user.sub : "N/A")}
+      </p>
+      {this.showUser()}
+     </div>);
+   }
 };
 
-export default AuthenticationButton;
+export default withAuth0(AuthenticationButton);

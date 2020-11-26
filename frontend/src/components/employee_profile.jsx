@@ -10,6 +10,8 @@ export default class EmployeeProfile extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log("VIEWING EMPLOYEE PROFILE " + this.props.id)
+
     this.state = {
       name: "",
       category: "",
@@ -31,8 +33,16 @@ export default class EmployeeProfile extends React.Component {
     }
   }
 
+  createEditButton = () => {
+    if (this.props.editable) {
+      return (<button>Edit</button>)
+    }
+
+    return (<div></div>)
+  }
+
   render() {
-    
+
     return (<div>
       <Navbar searchType={this.searchType}></Navbar>
       <h2>{this.state.name}</h2>
@@ -40,7 +50,7 @@ export default class EmployeeProfile extends React.Component {
 
       <img src={this.state.image_src} id="profile-image" alt="Profile Image"/>
 
-      <button>Edit</button>
+      {this.createEditButton()}
       <Link to="/favorites">
             <button>Favorites</button>
       </Link>

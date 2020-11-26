@@ -5,7 +5,10 @@ const LoginButton = (props) => {
   const { loginWithRedirect } = useAuth0();
 
   const login = () => {
+    console.log(props.redirectUri)
     loginWithRedirect({
+      // can't get this to work for anything but the homepage
+      // even though I'm doing everything auth0 says
       redirect_uri: props.redirectUri
     });
   }

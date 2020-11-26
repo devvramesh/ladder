@@ -4,6 +4,7 @@ import './App.css';
 import React from 'react';
 import {BrowserRouter, Switch, Route} from 'react-router-dom';
 import Auth0ProviderWithHistory from "./auth/auth0-provider-with-history";
+import { useAuth0 } from "@auth0/auth0-react";
 
 import Home from './components/homepage';
 import Signup from './components/signup';
@@ -13,6 +14,7 @@ import Login from './components/login';
 import CreateJob from './components/createjob';
 import EmployeeProfile from './components/employee_profile';
 import EmployerProfile from './components/employer_profile';
+import Profile from './components/profile'
 import Jobs from './components/jobs';
 
 const Main = () => {
@@ -26,16 +28,18 @@ const Main = () => {
     <Route exact path='/createjob' component={CreateJob}></Route>
     <Route exact path='/employee-profile' component={EmployeeProfile}></Route>
     <Route exact path='/employer-profile' component={EmployerProfile}></Route>
+    <Route exact path='/profile' component={Profile}></Route>
+    <Route exact path='/profile/:username' component={Profile}></Route>
     <Route exact path='/jobs' component={Jobs}></Route>
   </Switch>);
 }
 
 export default function App() {
   return (<div className="App">
-  <Auth0ProviderWithHistory>
-    <BrowserRouter>
-        <Main></Main>
-    </BrowserRouter>
+    <Auth0ProviderWithHistory>
+      <BrowserRouter>
+          <Main></Main>
+      </BrowserRouter>
     </Auth0ProviderWithHistory>
   </div>);
 }

@@ -7,7 +7,10 @@ import bodyParser from 'body-parser';
 import path from 'path';
 import fs from 'fs';
 import { createManagementClient } from './util.js'
-import { dbInit, withDB, logDBInfo, Employee } from './db.js'
+import { dbInit, withDB, logDBInfo } from './db/db.js'
+import User from './db/user.js'
+import Employee from './db/employee.js'
+import Employer from './db/employer.js'
 
 const PORT = process.env.PORT || 5000
 const DEBUG = true;
@@ -16,6 +19,10 @@ const app = express();
 const jsonParser = bodyParser.json();
 app.use(cors());
 const managementClient = createManagementClient();
+
+function sendBlank(res) {
+  res.send(JSON.stringify({}))
+}
 
 function serveApp() {
   console.log('Serving backend...')
@@ -81,44 +88,91 @@ function serveApp() {
   });
 
   post('/api/user_info', (req, res) => {
-    const userID = req.body.userID;
-    let result = null;
-    if (!userID) {
-      res.send(JSON.stringify({accountType: null}));
-      return;
-    }
-    managementClient.getUser({ id: userID }, function (err, user) {
-      if (user) {
-        res.send(JSON.stringify({
-          username: user.username,
-          accountType: user.user_metadata.accountType
-        }));
-      } else {
-        res.send(JSON.stringify({accountType: null}));
-      }
-    });
-  });
+    withDB(async (client) => {
+      let userID = req.body.userID;
+      let username = req.body.username;
+      let accountType = null;
 
-  post('/api/login_successful', (req, res) => {
-    const userID = req.body.userID;
-    let result = null;
-    if (!userID) {
-      res.send(JSON.stringify({}));
-      return;
-    }
-    managementClient.getUser({ id: userID }, function (err, user) {
-      if (user) {
-        if (user.user_metadata.accountType === "employee") {
-          // TODO: insert employee into DB
-        } else if (user.user_metadata.accountType === "employer") {
-          // TODO: insert employer into DB
-        } else {
-          res.send(JSON.stringify({}));
-        }
-      } else {
-        res.send(JSON.stringify({}));
+      if (!userID && !username) {
+        sendBlank(res);
+        return;
       }
-    });
+
+      {
+        let user;
+        if (userID) {
+          user = await User.findByID(client, userID)
+        } else {
+          user = await User.findByUsername(client, username)
+        }
+
+        console.log(user)
+
+        if (user) {
+          userID = user.auth0_user_id
+          username = user.username
+          accountType = user.type
+        }
+      }
+
+      console.log(userID)
+      console.log(username)
+      console.log(accountType)
+
+      if (accountType) {
+        // user exists in DB. find and return
+        let result;
+        if (accountType === "employee") {
+          result = await Employee.findInDB(client, userID)
+        } else if (accountType === "employer") {
+          result = await Employer.findInDB(client, userID)
+        } else {
+          sendBlank(res);
+          return;
+        }
+        // TODO: return specifics
+        result.accountType = accountType
+        console.log('send 1')
+        res.send(JSON.stringify(result))
+        return;
+      } else {
+        // user does not exist yet in DB. insert user and return
+        if (!userID) {
+          sendBlank(res)
+          return;
+        }
+
+        const user_auth0 = await managementClient.getUser({ id: userID })
+        if (!user_auth0) {
+          sendBlank(res);
+          return;
+        }
+        userID = user_auth0.user_id
+        username = user_auth0.username
+        accountType = user_auth0.user_metadata.accountType
+
+        if (accountType === "employee") {
+          await new Employee(
+            userID, username, user_auth0.name, user_auth0.email
+          ).createInDB(client)
+        } else if (accountType === "employer") {
+          await new Employer(
+            userID, username, user_auth0.name, user_auth0.email
+          ).createInDB(client)
+        } else {
+          sendBlank(res);
+          return;
+        }
+        // TODO: return specifics
+        console.log('send 2')
+        res.send(JSON.stringify({
+          userID: userID,
+          accountType: accountType,
+          username: username
+        }))
+        return;
+      }
+    })
   });
 
   console.log('Backend served.')
