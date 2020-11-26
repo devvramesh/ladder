@@ -74,7 +74,7 @@ export default class Employer {
       SELECT u.auth0_user_id, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.logistics
       FROM
         users AS u
-        JOIN employees AS e
+        JOIN employers AS e
         ON u.auth0_user_id = e.auth0_user_id
       WHERE
         u.auth0_user_id = $1
