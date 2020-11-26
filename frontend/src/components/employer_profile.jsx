@@ -91,7 +91,9 @@ export default class EmployerProfile extends React.Component {
             <button>Jobs</button>
       </Link>
       <button>Website</button>
-      <button>Contact</button>
+        <a href={`mailto:${this.state.userInfo.email}`}>
+          <button>Contact</button>
+        </a>
       <IconButton aria-label="Star">
         <StarIcon />
       </IconButton>

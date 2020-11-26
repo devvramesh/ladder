@@ -87,7 +87,9 @@ class EmployeeProfile extends React.Component {
       <Link to="/favorites">
             <button>Favorites</button>
       </Link>
-      <button>Contact</button>
+      <a href={`mailto:${this.state.userInfo.email}`}>
+        <button>Contact</button>
+      </a>
       <IconButton aria-label="Star">
         <StarIcon />
       </IconButton>
