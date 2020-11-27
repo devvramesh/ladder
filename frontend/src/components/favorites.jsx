@@ -3,45 +3,75 @@ import Navbar from "./navbar"
 import Sidebar from "./sidebar"
 import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
+import { withAuth0 } from "@auth0/auth0-react";
 
-export default class Favorites extends React.Component {
+class Favorites extends React.Component {
   constructor(props) {
     super(props);
 
-    const params = getUrlParams(this);
-    let searchType = params.category;
-    if (searchType) {
-      searchType = searchType.toLowerCase();
-      if (searchType !== "employee" && searchType !== "job" && searchType !== "company") {
-        searchType = "invalid";
-      }
-    } else {
-      searchType = "invalid"
-    }
-
-    this.searchType = searchType;
-    this.isValid = (searchType !== "invalid")
-
-    if (!this.isValid) {
-      window.location.href = ('/favorites?category=job');
-    }
+    this.mounted = false;
 
     this.state = {
+      category: "job",
       currSelectedIndex: 0,
-      favorites: []
+      favorites: [],
+      userInfo: null,
+      ready: false
     }
   }
 
-  componentDidMount() {
-    // get URL params (i.e. /search?query=roofer) --> {query: "roofer"}
-    const params = getUrlParams(this);
-    params["category"] = this.searchType;
+  loadUserInfo = async () => {
+    const { user, isLoading } = this.props.auth0;
 
-    makeBackendRequest('/api/favorites', params).then((result) => {
-      console.log('fetched')
-      console.log(result)
-      this.setState({favorites: result.favorites});
-    })
+    let userInfo = null;
+    let favorites = []
+    if (user) {
+      userInfo = await makeBackendRequest(
+        '/api/user_info',
+        { userID: user.sub }
+      )
+
+      favorites = await this.getFavorites(this.state.category)
+    }
+
+    console.log(userInfo)
+
+    if (this.mounted) {
+      console.log('setting state!')
+      this.setState({
+        userInfo: userInfo,
+        favorites: favorites,
+        ready: !isLoading
+      })
+    }
+  }
+
+  getFavorites = async (category) => {
+    const { user } = this.props.auth0;
+    let favorites = []
+
+    if (user) {
+      favorites = await makeBackendRequest(
+        '/api/favorites',
+        { userID: user.sub, category: category }
+      )
+    }
+
+    console.log('got favorites:')
+    console.log(favorites)
+    return favorites
+  }
+
+
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+    await this.loadUserInfo();
+  }
+
+  componentWillUnmount() {
+    console.log('unmount')
+    this.mounted = false;
   }
 
   displaySelection = (index) => {
@@ -52,25 +82,41 @@ export default class Favorites extends React.Component {
     return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
   }
 
-  switchType = (event) => {
+  switchType = async (event) => {
     const category = event.target.value;
-    window.location.href = `/favorites?category=${category}`;
+    const favorites = await this.getFavorites(category)
+
+    this.setState({
+      category: category,
+      favorites: favorites
+    })
   }
 
   render() {
-    console.log('rendering')
-    const params = getUrlParams(this);
+    const { isAuthenticated } = this.props.auth0;
 
-    if (!this.isValid) {
-      return (<div>Invalid search</div>)
+    if (isAuthenticated && !this.state.userInfo) {
+      this.loadUserInfo();
+      return null;
     }
-    console.log('rendering valid')
-    console.log(this.state)
+
+    if (!this.state.ready) {
+      return null;
+    }
+
+    if (!this.state.userInfo) {
+      return null;
+    }
+
+    if (!isAuthenticated) {
+      return (<div>Error: must log in to view your favorites</div>)
+    }
+
     return (<div>
       <Navbar></Navbar>
       <h2>Favorites</h2>
       <label htmlFor="favoritesType">Favorites category:</label>
-        <select name="favoritesType" id="favoritesType" onChange={this.switchType} value={this.searchType}>
+        <select name="favoritesType" id="favoritesType" onChange={this.switchType} value={this.state.category}>
           <option value="employee">employee</option>
           <option value="job">job</option>
           <option value="company">company</option>
@@ -80,3 +126,5 @@ export default class Favorites extends React.Component {
     </div>)
   }
 }
+
+export default withAuth0(Favorites)

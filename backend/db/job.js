@@ -59,7 +59,10 @@ export default class Job {
 
     const result = await client.query(`
       SELECT *
-      FROM jobs
+      FROM
+        jobs
+        JOIN employers
+        ON jobs.employer_auth0_user_id = employers.auth0_user_id
       WHERE
         job_id = $1
       ;`,
@@ -77,9 +80,12 @@ export default class Job {
     const andPublished = published ? "AND published = true" : ""
     const result = await client.query(`
       SELECT *
-      FROM jobs
+      FROM
+        jobs
+        JOIN employers
+        ON jobs.employer_auth0_user_id = employers.auth0_user_id
       WHERE
-        employer_auth0_user_id = $1
+        jobs.employer_auth0_user_id = $1
         ${andPublished}
       ORDER BY job_id ASC
       ;`,

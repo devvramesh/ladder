@@ -4,6 +4,7 @@ import { withAuth0 } from "@auth0/auth0-react";
 import { makeBackendRequest } from "../util"
 import LoginButton from "./login_button"
 import LogoutButton from "./logout_button"
+import {Link} from "react-router-dom";
 
 class AuthenticationButton extends React.Component {
   constructor(props) {
@@ -46,23 +47,20 @@ class AuthenticationButton extends React.Component {
     this.mounted = false;
   }
 
-  goToProfile = () => {
-    window.location.href = "/profile"
-  }
-
   createButtons = (isAuthenticated) => {
     if (isAuthenticated) {
       return (<div>
         <LogoutButton redirectUri={window.location.href}></LogoutButton>
-          <button
-            className="btn btn-primary btn-block"
-            onClick={this.goToProfile}
-          >
-            Go to Profile
-          </button>
-    </div>)
+        <Link to="/profile">
+          <button className="btn btn-primary btn-block">Go to Profile</button>
+        </Link>
+        <Link to="/favorites">
+          <button className="btn btn-primary btn-block">View Favorites</button>
+        </Link>
+      </div>)
+    } else {
+      return (<LoginButton redirectUri={window.location.origin}></LoginButton>)
     }
-    return (<LoginButton redirectUri={window.location.origin}></LoginButton>)
   }
 
   showUser = () => {

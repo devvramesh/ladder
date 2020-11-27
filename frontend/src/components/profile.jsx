@@ -6,7 +6,6 @@ import {makeBackendRequest, getUrlParams,} from "../util";
 import EmployeeProfile from "./employee_profile"
 import EmployerProfile from "./employer_profile"
 import { withAuth0 } from "@auth0/auth0-react";
-import { GetCurrentUserID } from "../util"
 
 class Profile extends React.Component {
   constructor(props) {

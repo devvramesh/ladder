@@ -12,6 +12,7 @@ import User from './db/user.js'
 import Employee from './db/employee.js'
 import Employer from './db/employer.js'
 import Job from './db/job.js'
+import Favorites from './db/favorites.js'
 
 const PORT = process.env.PORT || 5000
 const DEBUG = true;
@@ -137,32 +138,83 @@ function serveApp() {
     })
   })
 
+  post('/api/update_favorite', (req, res) => {
+    const userID = req.body.userID;
+    const category = req.body.category;
+    const favoritee_id = req.body.favoritee_id;
+    const favorite_status = req.body.favorite_status || false;
+
+    if (!userID || !category || !favoritee_id) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      let result = [];
+      if (category === "employee") {
+        result = await Favorites.updateFavoriteEmployee(client, userID, favoritee_id, favorite_status)
+      } else if (category === "job") {
+        result = await Favorites.updateFavoriteJob(client, userID, favoritee_id, favorite_status)
+      } else if (category === "company") {
+        result = await Favorites.updateFavoriteEmployer(client, userID, favoritee_id, favorite_status)
+      }
+
+      sendBlank(res);
+      return;
+    })
+  })
+
+  post ('/api/is_favorite', (req, res) => {
+    const userID = req.body.userID;
+    const category = req.body.category;
+    const favoritee_id = req.body.favoritee_id;
+
+    if (!userID || !category || !favoritee_id) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      if (category === "employee") {
+        const result = await Favorites.isFavoriteEmployee(client, userID, favoritee_id)
+        res.send(JSON.stringify({is_favorite: result}))
+      } else if (category === "job") {
+        const result = await Favorites.isFavoriteJob(client, userID, favoritee_id)
+        res.send(JSON.stringify({is_favorite: result}))
+      } else if (category === "company") {
+        const result = await Favorites.isFavoriteEmployer(client, userID, favoritee_id)
+        res.send(JSON.stringify({is_favorite: result}))
+      } else {
+        sendBlank(res);
+        return;
+      }
+    })
+  })
+
   post('/api/favorites', (req, res) => {
     // TODO: implement search!!
     const userID = req.body.userID;
     const category = req.body.category;
-    let dummy_results = [];
-    if (category === "employee") {
-      dummy_results = [
-        {name: "Alice", location: "Kingston", job: "Electrician"},
-        {name: "Bob", location: "Providence", job: "Roofer"},
-        {name: "Charlie", location: "Providence", job: "Construction Worker"}
-      ]
-    } else if (category === "job") {
-      dummy_results = [
-        {name: "Company A", location: "Kingston", job: "Electrician"},
-        {name: "Company B", location: "Providence", job: "Roofer"},
-        {name: "Company C", location: "Providence", job: "Construction Worker"}
-      ]
-    } else if (category === "company") {
-      dummy_results = [
-        {name: "Company A", location: "Kingston"},
-        {name: "Company B", location: "Providence"},
-        {name: "Company C", location: "Providence"}
-      ]
+    if (!userID || !category) {
+      sendBlank(res);
+      return;
     }
 
-    res.send(JSON.stringify({favorites: dummy_results}));
+    withDB(async (client) => {
+      let result = [];
+      if (category === "employee") {
+        result = await Favorites.getFavoriteEmployees(client, userID)
+      } else if (category === "job") {
+        result = await Favorites.getFavoriteJobs(client, userID)
+      } else if (category === "company") {
+        result = await Favorites.getFavoriteEmployers(client, userID)
+      } else {
+        sendBlank(res);
+        return;
+      }
+
+      res.send(JSON.stringify(result));
+    })
   });
 
   post('/api/update_profile', (req, res) => {
