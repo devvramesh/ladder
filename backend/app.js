@@ -11,6 +11,7 @@ import { dbInit, withDB, logDBInfo } from './db/db.js'
 import User from './db/user.js'
 import Employee from './db/employee.js'
 import Employer from './db/employer.js'
+import Job from './db/job.js'
 
 const PORT = process.env.PORT || 5000
 const DEBUG = true;
@@ -60,8 +61,85 @@ function serveApp() {
     res.send(JSON.stringify({searchResults: dummy_results}));
   });
 
+  post('/api/job_info', (req, res) => {
+    let jobID = req.body.job_id
+    if (!jobID) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      const result = await Job.findInDB(client, jobID)
+      res.send(JSON.stringify(result))
+      return;
+    })
+  })
+
+  post('/api/get_jobs', (req, res) => {
+    let userID = req.body.userID
+    const published = req.body.published || false
+    if (!userID) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      const result = await Job.findByEmployerInDB(client, userID, published)
+      res.send(JSON.stringify(result))
+      return;
+    })
+  })
+
+  post('/api/update_job', (req, res) => {
+    let jobID = req.body.job_id
+    if (!jobID) {
+      sendBlank(res);
+      return;
+    }
+
+    const job = new Job(
+      jobID,
+      req.body.employer_auth0_user_id,
+      req.body.job_title,
+      req.body.description,
+      req.body.qualifications,
+      req.body.logistics,
+      req.body.job_image_url,
+      req.body.published
+    )
+
+    withDB(async (client) => {
+      if (jobID === -1) {
+        // create new job
+        const newJobID = await job.createInDB(client)
+        res.send(JSON.stringify({job_id : newJobID}))
+        return
+      } else {
+        // update existing job
+        await job.updateInDB(client)
+        sendBlank(res);
+        return;
+      }
+    })
+  })
+
+  post ('/api/delete_job', (req, res) => {
+    let jobID = req.body.job_id
+    if (!jobID) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      const result = await Job.deleteFromDB(client, jobID)
+      sendBlank(res)
+      return;
+    })
+  })
+
   post('/api/favorites', (req, res) => {
     // TODO: implement search!!
+    const userID = req.body.userID;
     const category = req.body.category;
     let dummy_results = [];
     if (category === "employee") {

@@ -1,28 +1,134 @@
 import React from "react";
 import {makeBackendRequest} from "../util"
 import {Link} from "react-router-dom";
+import { withAuth0 } from "@auth0/auth0-react";
 
-export default class CreateJob extends React.Component {
+class CreateJob extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-        };
-        }
+        this.jobTitle = React.createRef();
+        this.description = React.createRef();
+        this.qualifications = React.createRef();
+        this.logistics = React.createRef();
 
-        render() {
-        return (
-            <div>
-                <input placeholder="Job Title"/>
-                <input placeholder="Job Description"/>
-                <input placeholder="Job Qualifications"/>
-                <input placeholder="Logistics"/>
-                <input type="button" value="Save" />
-                <input type="button" value="Save & Publish" />
-                <Link to="#PLACEHOLDER">
-                    Cancel
-                </Link>
-            </div>
+        this.mounted = false;
+
+        this.job_id = this.props.match.params.job_id || -1
+
+        this.state = {
+          userInfo: null,
+          jobInfo: null,
+          ready: false
+        }
+    }
+
+    loadUserInfo = async () => {
+      const { user, isLoading } = this.props.auth0;
+
+      let userInfo = null;
+      if (user) {
+        userInfo = await makeBackendRequest(
+          '/api/user_info',
+          { userID: user.sub }
         )
+      }
+
+      console.log(userInfo)
+
+      let jobInfo = null;
+      if (this.job_id >= 0) {
+        jobInfo = await makeBackendRequest(
+          '/api/job_info',
+          { job_id: this.job_id }
+        )
+      }
+
+      if (this.mounted) {
+        this.setState({
+          userInfo: userInfo,
+          jobInfo: jobInfo,
+          ready: !isLoading
+        })
+      }
+    }
+
+    async componentDidMount() {
+      console.log('didMount')
+      this.mounted = true;
+      await this.loadUserInfo();
+    }
+
+    componentWillUnmount() {
+      console.log('unmount')
+      this.mounted = false;
+    }
+
+    save = async (publish) => {
+      const {user} = this.props.auth0;
+
+      // TODO: if we want to add a save-without-exit option,
+      // we can use the return value of this as job_id
+      // and redirect to /jobs/{job_id}
+      await makeBackendRequest('/api/update_job', {
+        employer_auth0_user_id: user.sub,
+        job_id: this.job_id,
+        job_title: this.jobTitle.current.value,
+        description: this.description.current.value,
+        qualifications: this.qualifications.current.value,
+        logistics: this.logistics.current.value,
+        published: publish
+      })
+
+      window.location.href = '/jobs'
+    }
+
+    render() {
+      const { isAuthenticated, user } = this.props.auth0;
+
+      if (isAuthenticated && !this.state.userInfo) {
+        this.loadUserInfo();
+        return null;
+      }
+
+      if (!this.state.ready) {
+        return null;
+      }
+
+      if (!this.state.userInfo) {
+        return null;
+      }
+
+      if (!isAuthenticated) {
+        return (<div>Error: must log in to create a job post</div>)
+      }
+
+      if (this.state.userInfo.account_type !== "employer") {
+        return (<div>Error: must be logged in as an employer to create a job post</div>)
+      }
+
+      if (this.job_id >= 0 && !this.state.jobInfo) {
+        return (<div>Error: job [{this.job_id}] not found</div>)
+      }
+
+      if (this.state.jobInfo && this.state.jobInfo.employer_auth0_user_id !== user.sub) {
+        return (<div>Error: you can only edit your own job posting</div>)
+      }
+
+      return (
+          <div>
+              <input placeholder="Job Title" ref={this.jobTitle} defaultValue={this.state.jobInfo ? this.state.jobInfo.job_title : ""}/>
+              <input placeholder="Job Description" ref={this.description} defaultValue={this.state.jobInfo ? this.state.jobInfo.description : ""}/>
+              <input placeholder="Job Qualifications" ref={this.qualifications} defaultValue={this.state.jobInfo ? this.state.jobInfo.qualifications : ""}/>
+              <input placeholder="Logistics" ref={this.logistics} defaultValue={this.state.jobInfo ? this.state.jobInfo.logistics : ""}/>
+              <input type="button" value="Save & Exit" onClick={() => this.save(false)} />
+              <input type="button" value="Publish, Save & Exit" onClick={() => this.save(true)} />
+              <Link to="/jobs">
+                  <button>Cancel</button>
+              </Link>
+          </div>
+      )
     }
 }
+
+export default withAuth0(CreateJob)

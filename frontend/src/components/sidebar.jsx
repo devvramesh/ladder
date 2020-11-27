@@ -20,6 +20,9 @@ export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log('Sidebar:')
+    console.log(this.props)
+
     this.state = {
       selectedIndex: 0
     }

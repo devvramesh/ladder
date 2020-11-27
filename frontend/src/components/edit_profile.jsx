@@ -70,15 +70,15 @@ class EditProfile extends React.Component {
 
     console.log('ready')
 
-    if (!isAuthenticated) {
-      return (<div>Error: must log in to view your profile</div>)
-    }
-
     console.log('authenticated')
     console.log(this.state)
 
     if (!this.state.userInfo) {
       return null;
+    }
+
+    if (!isAuthenticated) {
+      return (<div>Error: must log in to view your profile</div>)
     }
 
     if (this.state.userInfo.account_type === "employee") {

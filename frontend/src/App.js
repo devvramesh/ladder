@@ -24,7 +24,8 @@ const Main = () => {
     <Route exact path='/login' component={Login}></Route>
     <Route exact path='/search' component={Search}></Route>
     <Route exact path='/favorites' component={Favorites}></Route>
-    <Route exact path='/createjob' component={CreateJob}></Route>
+    <Route exact path='/create_job' component={CreateJob}></Route>
+    <Route exact path='/edit_job/:job_id' component={CreateJob}></Route>
     <Route exact path='/profile' component={Profile}></Route>
     <Route exact path='/edit_profile' component={EditProfile}></Route>
     <Route exact path='/profile/:username' component={Profile}></Route>

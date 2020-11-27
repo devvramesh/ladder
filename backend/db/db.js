@@ -73,7 +73,7 @@ export async function dbInit() {
     await client.query(
       `CREATE TABLE IF NOT EXISTS jobs(
         job_id SERIAL NOT NULL PRIMARY KEY,
-        employer_auth0_user_id TEXT NOT NULL UNIQUE,
+        employer_auth0_user_id TEXT NOT NULL,
         job_title TEXT NOT NULL,
         description TEXT,
         qualifications TEXT,

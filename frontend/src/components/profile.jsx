@@ -90,15 +90,15 @@ class Profile extends React.Component {
     // case 1: user visits /profile. must be authenticated, then will
     // be shown own profile
     if (!this.userToView) {
-      if (!isAuthenticated) {
-        return (<div>Error: must log in to view your profile</div>)
-      }
-
       console.log('authenticated')
       console.log(this.state)
 
       if (!this.state.currUserInfo) {
         return null;
+      }
+
+      if (!isAuthenticated) {
+        return (<div>Error: must log in to view your profile</div>)
       }
 
       if (this.state.currUserInfo.account_type === "employee") {

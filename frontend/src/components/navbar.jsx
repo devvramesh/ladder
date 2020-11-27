@@ -12,15 +12,16 @@ export default class Navbar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.searchBar = React.createRef();
+
     this.state = {
       searchType: this.props.searchType || "job"
     }
   }
 
   doSearch = () => {
-    console.log(document.getElementById('searchInput'))
     window.location.href = (
-      `/search?category=${this.state.searchType}&query=${encodeURI(document.getElementById('searchInput').value)}
+      `/search?category=${this.state.searchType}&query=${encodeURI(this.searchBar.current.value)}
       `)
   }
 
@@ -32,7 +33,7 @@ export default class Navbar extends React.Component {
 
   createSearchBar = () => {
     return (<div className="">
-      [Search Bar] <input id="searchInput" type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput}></input>
+      [Search Bar] <input type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
     <button onClick={this.doSearch}>&#x1F50D;</button>
       search type:{this.state.searchType}
       <button>[Filter button (TODO)]</button>
