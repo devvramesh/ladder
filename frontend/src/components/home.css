@@ -1,18 +1,12 @@
-button {
-    padding: 15px 30px;
-	font-size: 30pt;
-}
-
-.column {
-	display: flex;
-	flex-direction: column;
-}
-
-.logo {
+#home-logo {
 	font-size: 80pt;
+	padding-top: 50px;
 }
 
 .large-button {
+	font-size: 30pt;
+	padding: 15px 30px;
+	background-color: #A96562;
 	width: 500px;
 	max-width: 80%;
 	height: 150px;

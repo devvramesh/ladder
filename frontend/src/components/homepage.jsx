@@ -11,12 +11,15 @@ export default class Home extends React.Component {
             width: '200px',
             alignSelf: 'flex-end',
             marginRight: '20px',
-            marginTop: '40px'
+            marginTop: '40px',
+            backgroundColor: '#A96562',
+            padding: '15px 30px',
+            fontSize: '30pt'
         };
         return (
             <div className="column">
                 <LoginButton style={style} redirectUri={window.location.origin}></LoginButton>
-                <h1 className="logo">Ladder</h1>
+                <h1 className="logo" id="home-logo">Ladder</h1>
                 <div>
                     <Link to="/search?category=employee">
                         <button className="large-button">Find Employees</button>

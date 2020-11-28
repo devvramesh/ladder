@@ -8,7 +8,6 @@ body {
 
 button {
     display: inline-block;
-    background-color: #A96562;
     border: none;
     font-family: 'Chivo', sans-serif;
 }
@@ -20,4 +19,9 @@ button {
 .logo {
     font-family: 'Special Elite', cursive;
     font-weight: 400;
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
 }

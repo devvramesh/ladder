@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import LoginButton from "./login_button"
 import AuthenticationButton from "./authentication_button"
 import querystring from "querystring"
+import "./navbar.css"
 
 // NOTE(jake):
 // props:
@@ -34,9 +35,9 @@ export default class Navbar extends React.Component {
   createSearchBar = () => {
     return (<div className="">
       [Search Bar] <input type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
-    <button onClick={this.doSearch}>&#x1F50D;</button>
+    <button id="search" onClick={this.doSearch}>&#x1F50D;</button>
       search type:{this.state.searchType}
-      <button>[Filter button (TODO)]</button>
+      <button id="filter">[Filter button (TODO)]</button>
       {this.createAlternateSearchButton()}
     </div>)
   }
@@ -58,8 +59,8 @@ export default class Navbar extends React.Component {
     return (<div className="border">[Navbar component]
       <div className="">
         <Link to="/">
-          <button variant="outlined">
-            [Ladder logo -- link to homepage]
+          <button class="homebutton">
+            <p className="logo">Ladder</p>
           </button>
         </Link>
       </div>
