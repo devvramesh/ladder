@@ -13,7 +13,6 @@ class Favorites extends React.Component {
 
     this.state = {
       category: "job",
-      currSelectedIndex: 0,
       favorites: [],
       userInfo: null,
       ready: false
@@ -83,12 +82,31 @@ class Favorites extends React.Component {
     this.mounted = false;
   }
 
-  displaySelection = (index) => {
-    this.setState({currSelectedIndex: index})
+  displayPreview = (entry) => {
+    if (this.state.category === "employee") {
+      return (<div>
+        <h3>{entry.name || "[Name unavailable]"}</h3>
+        <h4>{entry.category || "[Category unavailable]"}</h4>
+        <h4>{entry.location || "[Location unavailable]"}</h4>
+      </div>)
+    } else if (this.state.category === "job") {
+      return (<div>
+        <h3>{entry.job_title || "[Job title unavailable]"}</h3>
+        <h4>{entry.name || "[Employer unavailable]"}</h4>
+        <h4>{entry.location || "[Location unavailable]"}</h4>
+      </div>)
+    } else if (this.state.category === "company") {
+      return (<div>
+        <h3>{entry.name || "[Name unavailable]"}</h3>
+        <h4>{entry.location || "[Location unavailable]"}</h4>
+      </div>)
+    } else {
+      return null;
+    }
   }
 
-  displayPreview = (entry) => {
-    return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
+  displayEntry = (entry) => {
+    return (<div>{JSON.stringify(entry)}</div>)
   }
 
   switchType = async (event) => {
@@ -125,8 +143,7 @@ class Favorites extends React.Component {
           <option value="job">job</option>
           <option value="company">company</option>
         </select>
-      <Sidebar entries={this.state.favorites} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
-      <div className="border">[Current selected index: {this.state.currSelectedIndex}] Item: {JSON.stringify(this.state.favorites[this.state.currSelectedIndex])}</div>
+      <Sidebar entries={this.state.favorites} displayPreview={this.displayPreview} displayEntry={this.displayEntry}></Sidebar>
     </div>)
   }
 }

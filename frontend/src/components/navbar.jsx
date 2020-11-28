@@ -21,9 +21,10 @@ export default class Navbar extends React.Component {
   }
 
   doSearch = () => {
-    window.location.href = (
-      `/search?category=${this.state.searchType}&query=${encodeURI(this.searchBar.current.value)}
-      `)
+    const queryString = this.searchBar.current.value ? `&query=${encodeURI(this.searchBar.current.value)}` : "";
+
+    window.location.href =
+      `/search?category=${this.state.searchType}${queryString}`
   }
 
   handleSearchInput = (event) => {
