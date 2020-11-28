@@ -1,0 +1,28 @@
+.sidebar-outer {
+  display: flex;
+}
+
+/* this is the left pane with the selectable headers */
+.sidebar-preview-pane {
+  flex: 1;
+  border: 1px solid black;
+}
+
+/* this is the right pane which displays the full selected item */
+.sidebar-item-pane {
+  flex: 1;
+  border: 1px solid black;
+}
+
+/* this is a selectable header within the left pane */
+.sidebar-entry {
+  border: 1px solid black;
+}
+
+.sidebar-entry:hover:not(.sidebar-selected) {
+  background-color: lightgray;
+}
+
+.sidebar-selected {
+  background-color: gray;
+}

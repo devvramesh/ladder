@@ -1,88 +1,70 @@
 import React from "react";
 import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
-import IconButton from '@material-ui/core/IconButton';
-import StarIcon from '@material-ui/icons/StarBorder';
+import ProfileView from "./profile_view"
+import {Link} from "react-router-dom";
+import { withAuth0 } from "@auth0/auth0-react";
+import "./profile.css"
 
-export default class EmployerProfile extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isEditing: false,
-      name: "",
-      image_src: "",
-      contact: "",
-      website: "",
-      about: "",
-      logistics: "",
-      location: ""
-    }
-
-    this.state = {
-      name: "Construction Company",
-      image_src: "https://images.template.net/wp-content/uploads/2015/04/Stylized-Construction-Company-Logo.jpg",
-      contact: "",
-      website: "",
-      about: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices a leo eget blandit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat scelerisque enim, convallis vulputate ipsum dapibus vulputate. Etiam vel molestie quam. Proin quis lacus et dui pulvinar aliquam non id odio.",
-      logistics: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices a leo eget blandit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat scelerisque enim, convallis vulputate ipsum dapibus vulputate. Etiam vel molestie quam. Proin quis lacus et dui pulvinar aliquam non id odio.",
-      location: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ultrices a leo eget blandit. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nam volutpat scelerisque enim, convallis vulputate ipsum dapibus vulputate. Etiam vel molestie quam. Proin quis lacus et dui pulvinar aliquam non id odio."
-    }
+class EmployerProfile extends React.Component {
+  render() {
+    return (<ProfileView showProfile={this.showProfile} {...this.props} category="company"></ProfileView>)
   }
 
-  render() {
-    
-    return (<div>
-      <Navbar searchType={this.searchType}></Navbar>
-      <h2>{this.state.name}</h2>
-      <h3>{this.state.category}</h3>
+  createJobsButton = (ref) => {
+    let linkURL;
+    if (ref.props.editable) {
+      linkURL = "/jobs"
+    } else {
+      linkURL = `/jobs/${ref.state.viewUserInfo.username}`
+    }
+    return (<Link to={linkURL}><button>Jobs</button></Link>)
+  }
 
-      <img src={this.state.image_src} id="profile-image" alt="Profile Image"/>
+  showProfile(ref) {
+    function createJobsButton() {
+      let linkURL;
+      if (ref.props.editable) {
+        linkURL = "/jobs"
+      } else {
+        linkURL = `/jobs/${ref.state.viewUserInfo.username}`
+      }
+      return (<Link to={linkURL}><button>Jobs</button></Link>)
+    }
 
-      { this.state.isEditing ? <Save /> : <Edit /> }
-      <Link to="/favorites">
-            <button>Favorites</button>
-      </Link>
-      <Link to="/jobs">
-            <button>Jobs</button>
-      </Link>
-      <button>Website</button>
-      <button>Contact</button>
-      <IconButton aria-label="Star">
-        <StarIcon />
-      </IconButton>
+    return (<div className="column" id="profile-main">
+      <div id="profile">
+          <div id="top-section">
+              <h2>{ref.state.viewUserInfo.name}</h2>
+
+              <img src={ref.state.viewUserInfo.profile_img_url} id="profile-image" alt="Profile Image"/>
+
+                {ref.createEditButton()}
+                {ref.createFavoritesButtons()}
+          </div>
+          <div id="bottom-section">
+              {createJobsButton()}
+              <Link to={ref.state.websiteURL}>
+                <button>Website</button>
+              </Link>
+              <a href={`mailto:${ref.state.viewUserInfo.email}`}>
+                <button>Contact</button>
+              </a>
 
 
-      <h3>About: </h3>
-      <p>{this.state.about}</p>
+              <h3>About: </h3>
+              <p>{ref.state.viewUserInfo.about}</p>
 
-      <h3>Logistics: </h3>
-      <p>{this.state.logistics}</p>
+              <h3>Logistics: </h3>
+              <p>{ref.state.viewUserInfo.logistics}</p>
 
-      <h3>Location: </h3>
-      <p>{this.state.location}</p>
+              <h3>Location: </h3>
+              <p>{ref.state.viewUserInfo.location}</p>
+          </div>
+      </div>
 
 
     </div>)
   }
 }
 
-export class Edit extends React.Component {
-  render() {
-      return (
-        <button onClick={() => this.setState({isEditing: true})}>Edit</button>
-
-      );
-  }
-}
-
-export class Save extends React.Component {
-  render() {
-      return (
-        <button onClick={() => this.setState({isEditing: false})}>Save</button>
-
-      );
-  }
-}
+export default withAuth0(EmployerProfile)

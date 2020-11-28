@@ -1,43 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
+
+body {
+    background-color: #9EBC99;
+    font-family: 'Chivo', sans-serif;
+}
+
+textarea {
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
+}
+
+button {
+    display: inline-block;
+    border: none;
+    font-family: 'Chivo', sans-serif;
+}
+
+input {
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
+}
+
 .App {
-  text-align: center;
+    text-align: center;
+    font-family: 'Chivo', sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.logo {
+    font-family: 'Special Elite', cursive;
+    font-weight: 400;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.column {
+	display: flex;
+	flex-direction: column;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.row {
+    display: flex;
+    flex-direction: row;
 }
 
-.App-link {
-  color: #61dafb;
+.inlineblock {
+    display: inline-block;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.column-centered {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
-.border {
-  border: 1px solid black;
-  margin: 20px;
+Link, button, .pointer {
+  cursor: pointer;
 }

@@ -20,6 +20,8 @@ export const GetCurrentUserID = () => {
 }
 
 export const makeBackendRequest = (endpoint, body={}) => {
+  console.log('making request to ' + endpoint)
+  console.log(body)
   return fetch(endpoint, {
     method: 'POST',
     headers: {
@@ -27,19 +29,15 @@ export const makeBackendRequest = (endpoint, body={}) => {
       'Content-Type': 'application/json'
     },
     body: JSON.stringify(body)
-  }).then(res => res.json())
+  }).then((res) => res.json())
+  .then((x) => {console.log('back from ' + endpoint); console.log(x); return x})
 }
 
-export const GetCurrentUserAccountType = async () => {
-  const userID = GetCurrentUserID();
-  if (!userID) {
+export const getUserInfo = async (identifier) => {
+  if (!identifier.userID && !identifier.username) {
     return null;
   }
-  return await makeBackendRequest('/api/account_type', {userID: userID})
-    .then((result) => {
-      console.log(result)
-      return result.accountType
-    });
+  return await makeBackendRequest('/api/user_info', identifier);
 }
 
 export const getUrlParams = (component) => {

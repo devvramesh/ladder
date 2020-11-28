@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {makeBackendRequest} from "../util"
+import './sidebar.css'
 
 // NOTE(jake):
 // Required props:
@@ -10,15 +11,17 @@ import {makeBackendRequest} from "../util"
 //                    takes in an entry from [entries] and returns
 //                    the HTML display for its sidebar preview
 //
-//    onSelect:       a function within the parent component.
-//                    when a sidebar item is selected, its index
-//                    within the sidebar is passed to onSelect.
-//                    So, onSelect(index) will be called in the parent
-//                    component, which should then set its state
-//                    to render the new selection. see:Search.
+//    displayEntry:  a function within the parent component which
+//                    takes in an entry from [entries] and returns
+//                    the HTML display for it
+//
+//    ifEmpty:       a component to display in place of an empty sidebar
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
+
+    console.log('Sidebar:')
+    console.log(this.props)
 
     this.state = {
       selectedIndex: 0
@@ -26,26 +29,44 @@ export default class Sidebar extends React.Component {
   }
 
   select = (index) => {
-    return () => this.props.onSelect(index);
+    return () => this.setState({ selectedIndex: index })
   }
 
   createPreviews = () => {
     console.log(this.props)
     const entries = this.props.entries.map((entry, i) => {
+      const selected = (i === this.state.selectedIndex)
       return (
-        <li key={i} className="border" onClick={this.select(i)}>
+        <div
+          key={i}
+          className={`pointer border sidebar-entry
+            ${selected ? "sidebar-selected" : ""}`}
+          onClick={this.select(i)}>
           {this.props.displayPreview(entry)}
-        </li>);
+        </div>);
     });
 
-    return (<div>
-      <ul>{entries}</ul>
+    return (<div className="sidebar-preview-pane">
+      {entries}
+      <p>TODO: make this scroll if taller than the right (item) pane. see sidebar.jsx and sidebar.css</p>
     </div>);
   }
 
+  displaySelected = () => {
+    const selected = this.props.entries[this.state.selectedIndex]
+    return selected ? this.props.displayEntry(selected) : null;
+  }
+
   render() {
-    return (<div className="border">[Sidebar component]
-      <div>[Entries] {this.createPreviews()}</div>
+    // TODO: put these side-by-side instead of vertical.
+    // maybe introduce a max-height + scroll-on-overflow for the item pane
+    if (this.props.entries.length === 0) {
+      return this.props.ifEmpty;
+    }
+
+    return (<div className="sidebar-outer border">
+      {this.createPreviews()}
+      <div className="sidebar-item-pane">{this.displaySelected()}</div>
     </div>)
   }
 }

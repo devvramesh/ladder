@@ -1,62 +1,124 @@
-import {React, useState, useEffect} from "react";
+import React from "react";
 
-import { useAuth0 } from "@auth0/auth0-react";
-import { GetCurrentUserID } from "../util"
-import { GetCurrentUserAccountType } from "../util"
+import { withAuth0 } from "@auth0/auth0-react";
+import { makeBackendRequest } from "../util"
 import LoginButton from "./login_button"
 import LogoutButton from "./logout_button"
+import {Link} from "react-router-dom";
 
-const AuthenticationButton = () => {
-  const { isAuthenticated, user } = useAuth0();
-  const [accountType, setAccountType] = useState('N/A');
-  const _accountType = GetCurrentUserAccountType();
+class AuthenticationButton extends React.Component {
+  constructor(props) {
+    super(props);
 
-  let name = "";
-  if (user) {
-    console.log(user)
-    name = user.name;
+    this.mounted = false;
+
+    this.state = {
+      userInfo: null,
+      ready: false
+    }
   }
 
-  useEffect(() => {
-    if (!_accountType) {
+  load = async () => {
+    const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
       return;
     }
-    _accountType.then(setAccountType)
-  }, [_accountType]);
 
-  const goToProfile = () => {
-    window.location.href = "/profile"
+    if (this.state.ready) {
+      return;
+    }
+
+    let userInfo = null;
+    if (user) {
+      userInfo = await makeBackendRequest('/api/user_info', {userID:user.sub})
+      console.log('got user')
+      console.log(user)
+      console.log('got userInfo')
+      console.log(userInfo)
+    }
+    if (this.mounted) {
+      console.log(userInfo)
+      this.setState({
+        userInfo: userInfo,
+        ready: !isLoading
+      })
+    }
   }
 
-  const createButtons = () => {
+  async componentDidMount() {
+    console.log('didMount')
+    this.mounted = true;
+    await this.load()
+  };
+
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
+  createButtons = (isAuthenticated) => {
     if (isAuthenticated) {
       return (<div>
         <LogoutButton redirectUri={window.location.href}></LogoutButton>
-          <button
-            className="btn btn-primary btn-block"
-            onClick={goToProfile}
-          >
-            Go to Profile
-          </button>
-    </div>)
+        <Link to="/profile">
+          <button className="btn btn-primary btn-block">Go to Profile</button>
+        </Link>
+        <Link to="/favorites">
+          <button className="btn btn-primary btn-block">View Favorites</button>
+        </Link>
+      </div>)
+    } else {
+      const style = {
+          backgroundColor:"#A96562",
+          width:'80px',
+          padding:'15px 2px',
+          marginRight: '20px',
+          marginLeft: '0px',
+          fontSize: '12pt',
+          flexGrow: '0'
+      };
+      return (<LoginButton style={style} redirectUri={window.location.origin}></LoginButton>)
     }
-    return (<LoginButton redirectUri={window.location.href}></LoginButton>)
   }
 
+  showUser = () => {
+    if (this.state.userInfo) {
+      return (<div>
+        <div>Account type: {this.state.userInfo.account_type}</div>
+        <div>Username: {this.state.userInfo.username}</div>
+      </div>)
+    } else {
+      return (<div></div>)
+    }
+  }
 
-  return (<div>
-    <p>
-      Authenticated: {isAuthenticated.toString()}
-    </p>
-    {createButtons()}
-    <p>
-      logged in as: {name}
-    </p>
-    <p>
-      Current user ID/token: {(GetCurrentUserID() || "N/A")}
-    </p>
-    <div>Account type: {accountType}</div>
-   </div>);
+  render() {
+    const { isAuthenticated } = this.props.auth0;
+    console.log('authbutton render')
+
+    if (!this.state.ready) {
+      return (<div>Loading...</div>);
+    }
+
+    if (isAuthenticated && !this.state.userInfo && !this.state.userInfo.account_type) {
+      return (<div>Error: please try again.</div>);
+    }
+
+    return (<div>
+      {/*<p>
+        Authenticated: {isAuthenticated.toString()}
+      </p>*/}
+      {this.createButtons(isAuthenticated)}
+      {/*<p>
+        logged in as: {isAuthenticated ? this.state.userInfo.name : null}
+      </p>
+      <p>
+        Current user ID/token: {(user ? user.sub : "N/A")}
+      </p>
+      {this.showUser()}*/}
+     </div>);
+   }
 };
 
-export default AuthenticationButton;
+export default withAuth0(AuthenticationButton);

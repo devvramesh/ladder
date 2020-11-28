@@ -3,6 +3,7 @@ import {Link} from "react-router-dom";
 import LoginButton from "./login_button"
 import AuthenticationButton from "./authentication_button"
 import querystring from "querystring"
+import "./navbar.css"
 
 // NOTE(jake):
 // props:
@@ -12,16 +13,18 @@ export default class Navbar extends React.Component {
   constructor(props) {
     super(props);
 
+    this.searchBar = React.createRef();
+
     this.state = {
-      searchType: this.props.searchType
+      searchType: this.props.searchType || "job"
     }
   }
 
   doSearch = () => {
-    console.log(document.getElementById('searchInput'))
-    window.location.href = (
-      `/search?category=${this.state.searchType}&query=${encodeURI(document.getElementById('searchInput').value)}
-      `)
+    const queryString = this.searchBar.current.value ? `&query=${encodeURI(this.searchBar.current.value)}` : "";
+
+    window.location.href =
+      `/search?category=${this.state.searchType}${queryString}`
   }
 
   handleSearchInput = (event) => {
@@ -31,12 +34,20 @@ export default class Navbar extends React.Component {
   }
 
   createSearchBar = () => {
-    return (<div className="">
-      [Search Bar] <input id="searchInput" type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput}></input>
-    <button onClick={this.doSearch}>&#x1F50D;</button>
-      search type:{this.state.searchType}
-      <button>[Filter button (TODO)]</button>
-      {this.createAlternateSearchButton()}
+      const style0 = (this.state.searchType === "employee") ? {backgroundColor:'#CCB8A8'} : {backgroundColor:'#C1D1EA'};
+      const searchText = (this.state.searchType === "employee") ? "Search Employees" : "Search Jobs";
+
+    return (<div className="row" id="search-bar">
+      <div className="column" id="search-flexbox">
+      <div className="row">
+          <div id="search-wrapper">
+              <input type="text" placeholder={searchText} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
+              <button id="search-button" onClick={this.doSearch}>&#x1F50D;</button>
+          </div>
+          <button style={style0} id="filter">[FilterTODO]</button>
+      </div>
+          {this.createAlternateSearchButton()}
+      </div>
     </div>)
   }
 
@@ -48,23 +59,21 @@ export default class Navbar extends React.Component {
       }
 
       return (
-        <button onClick={goToAltSearch}>Search {altSearchType}s instead</button>
+        <button id="alt-search" onClick={goToAltSearch}>Search {altSearchType}s instead</button>
       )
 
   }
 
   render() {
-    return (<div className="border">[Navbar component]
-      <div className="">
+    return (<div className="row" id="navbar">
         <Link to="/">
-          <button variant="outlined">
-            [Ladder logo -- link to homepage]
+          <button id="homebutton">
+            <p className="logo">Ladder</p>
           </button>
         </Link>
-      </div>
-      {this.createSearchBar()}
-      <div>[Profile picture of current user, otherwise login/signup button (TODO)]</div>
-      <AuthenticationButton></AuthenticationButton>
+
+        {this.createSearchBar()}
+        <AuthenticationButton></AuthenticationButton>
     </div>)
   }
 }
