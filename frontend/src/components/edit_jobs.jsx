@@ -109,7 +109,12 @@ class EditJobs extends React.Component {
   }
 
   displayPreview = (entry) => {
-    return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
+    return (<div>
+      <h3>{entry.job_title}</h3>
+      <h4>{this.state.userInfo.name}</h4>
+      <h4>{this.state.userInfo.location}</h4>
+      <h5>{entry.published ? "Published" : "Unpublished"}</h5>
+    </div>)
   }
 
   displayJob = (job) => {

@@ -1,0 +1,11 @@
+.sidebar-entry {
+  border: 1px solid black;
+}
+
+.sidebar-entry:hover:not(.sidebar-selected) {
+  background-color: lightgray;
+}
+
+.sidebar-selected {
+  background-color: gray;
+}

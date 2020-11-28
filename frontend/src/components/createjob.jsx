@@ -112,27 +112,24 @@ class CreateJob extends React.Component {
         return (<div>Error: must be logged in as an employer to create a job post</div>)
       }
 
-      if (this.job_id >= 0 && !this.state.jobInfo) {
-        return (<div>Error: job [{this.job_id}] not found</div>)
-      }
-
-      if (this.state.jobInfo && this.state.jobInfo.employer_auth0_user_id !== user.sub) {
+      if ((this.job_id >= 0 && !this.state.jobInfo) ||
+      (this.state.jobInfo && this.state.jobInfo.employer_auth0_user_id && this.state.jobInfo.employer_auth0_user_id !== user.sub)) {
         return (<div>Error: you can only edit your own job posting</div>)
       }
 
       return (
-          <div class="column-centered">
-          <div class="column" id="create-job">
+          <div className="column-centered">
+          <div className="column" id="create-job">
               <h1 className="logo">Ladder</h1>
               <input placeholder="Job Title" ref={this.jobTitle} defaultValue={this.state.jobInfo ? this.state.jobInfo.job_title : ""}/>
               <textarea placeholder="Job Description" ref={this.description} defaultValue={this.state.jobInfo ? this.state.jobInfo.description : ""}/>
               <textarea placeholder="Job Qualifications" ref={this.qualifications} defaultValue={this.state.jobInfo ? this.state.jobInfo.qualifications : ""}/>
               <textarea placeholder="Logistics" ref={this.logistics} defaultValue={this.state.jobInfo ? this.state.jobInfo.logistics : ""}/>
-              <div class="row" id="job-submitexit">
+              <div className="row" id="job-submitexit">
                   <button onClick={() => this.save(false)} >Save & Exit</button>
                   <button onClick={() => this.save(true)} >Publish, Save & Exit</button>
               </div>
-              <div class="row">
+              <div className="row">
               <Link to="/jobs" id="job-link-cancel">
                   <button id="job-cancel">Cancel</button>
               </Link>

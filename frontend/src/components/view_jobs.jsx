@@ -93,7 +93,11 @@ class ViewJobs extends React.Component {
   }
 
   displayPreview = (entry) => {
-    return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
+    return (<div>
+      <h3>{entry.job_title}</h3>
+      <h4>{this.state.viewUserInfo.name}</h4>
+      <h4>{this.state.viewUserInfo.location}</h4>
+    </div>)
   }
 
   displayJob = (job) => {

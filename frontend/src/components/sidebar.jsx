@@ -1,6 +1,7 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import {makeBackendRequest} from "../util"
+import './sidebar.css'
 
 // NOTE(jake):
 // Required props:
@@ -29,26 +30,34 @@ export default class Sidebar extends React.Component {
   }
 
   select = (index) => {
-    return () => this.props.onSelect(index);
+    return () => {
+      this.setState({ selectedIndex: index })
+      this.props.onSelect(index);
+    }
   }
 
   createPreviews = () => {
     console.log(this.props)
     const entries = this.props.entries.map((entry, i) => {
+      const selected = (i === this.state.selectedIndex)
       return (
-        <li key={i} className="pointer border" onClick={this.select(i)}>
+        <div
+          key={i}
+          className={`pointer border sidebar-entry
+            ${selected ? "sidebar-selected" : ""}`}
+          onClick={this.select(i)}>
           {this.props.displayPreview(entry)}
-        </li>);
+        </div>);
     });
 
     return (<div>
-      <ul>{entries}</ul>
+      {entries}
     </div>);
   }
 
   render() {
-    return (<div className="border">[Sidebar component]
-      <div>[Entries] {this.createPreviews()}</div>
+    return (<div className="border">[Sidebar]
+      <div>{this.createPreviews()}</div>
     </div>)
   }
 }
