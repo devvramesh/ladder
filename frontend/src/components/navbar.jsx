@@ -33,12 +33,17 @@ export default class Navbar extends React.Component {
   }
 
   createSearchBar = () => {
-    return (<div className="">
-      [Search Bar] <input type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
-    <button id="search" onClick={this.doSearch}>&#x1F50D;</button>
-      search type:{this.state.searchType}
-      <button id="filter">[Filter button (TODO)]</button>
-      {this.createAlternateSearchButton()}
+      const style0 = (this.state.searchType === "employee") ? {backgroundColor:'#CCB8A8'} : {backgroundColor:'#C1D1EA'};
+
+    return (<div className="row">
+      <div class="column">
+          <div>
+          <input type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
+          <button id="search" onClick={this.doSearch}>&#x1F50D;</button>
+          </div>
+          {this.createAlternateSearchButton()}
+      </div>
+      <button style={style0} id="filter">[Filter button (TODO)]</button>
     </div>)
   }
 
@@ -50,23 +55,22 @@ export default class Navbar extends React.Component {
       }
 
       return (
-        <button onClick={goToAltSearch}>Search {altSearchType}s instead</button>
+        <button id="alt-search" onClick={goToAltSearch}>Search {altSearchType}s instead</button>
       )
 
   }
 
   render() {
-    return (<div className="border">[Navbar component]
-      <div className="">
+    return (<div className="row" id="navbar">
         <Link to="/">
-          <button class="homebutton">
+          <button id="homebutton">
             <p className="logo">Ladder</p>
           </button>
         </Link>
-      </div>
-      {this.createSearchBar()}
-      <div>[Profile picture of current user, otherwise login/signup button (TODO)]</div>
-      <AuthenticationButton></AuthenticationButton>
+
+        {this.createSearchBar()}
+        <div>[Profile picture of current user, otherwise login/signup button (TODO)]</div>
+        <AuthenticationButton></AuthenticationButton>
     </div>)
   }
 }

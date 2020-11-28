@@ -1,3 +1,21 @@
-.homebutton {
+#homebutton {
 	background-color: inherit;
+	font-size: 30px;
+}
+
+#navbar {
+	border-bottom: 1px solid black;
+	align-items: center;
+}
+
+#filter {
+	border: 1px solid black;
+	border-radius: 6px;
+	padding: 10px 10px;
+	font-size: 16pt;
+}
+
+#alt-search {
+	background-color:inherit;
+	align-self: flex-end;
 }
