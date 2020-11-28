@@ -5,7 +5,7 @@ import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
 
-class Jobs extends React.Component {
+class EditJobs extends React.Component {
   constructor(props) {
     super(props);
 
@@ -104,25 +104,26 @@ class Jobs extends React.Component {
   }
 
   displayJob = (job) => {
-    if (job) {
-      let publishButton;
-      if (job.published) {
-        publishButton = (<button onClick={() => this.setPublished(job, false)}>Unpublish</button>)
-      } else {
-        publishButton = (<button onClick={() => this.setPublished(job, true)}>Publish</button>)
-      }
-
-      return (
-        <div>
-          <Link to={`/edit_job/${job.job_id}`}>
-            <button>Edit</button>
-          </Link>
-          {publishButton}
-          <button onClick={() => this.deleteJob(job.job_id)}>Delete</button>
-          [Job] {JSON.stringify(job)}
-        </div>)
+    if (!job) {
+      return null;
+    }
+    ;
+    let publishButton;
+    if (job.published) {
+      publishButton = (<button onClick={() => this.setPublished(job, false)}>Unpublish</button>)
+    } else {
+      publishButton = (<button onClick={() => this.setPublished(job, true)}>Publish</button>)
     }
 
+    return (
+      <div>
+        <Link to={`/edit_job/${job.job_id}`}>
+          <button>Edit</button>
+        </Link>
+        {publishButton}
+        <button onClick={() => this.deleteJob(job.job_id)}>Delete</button>
+        [Job] {JSON.stringify(job)}
+      </div>)
   }
 
 
@@ -157,7 +158,7 @@ class Jobs extends React.Component {
 
     return (<div>
       <Navbar searchType={"this.searchType"}></Navbar>
-      <h2>Jobs</h2>
+      <h2>My Jobs</h2>
       <Link to="/create_job">
         <button>New Job</button>
       </Link>
@@ -169,4 +170,4 @@ class Jobs extends React.Component {
   }
 }
 
-export default withAuth0(Jobs)
+export default withAuth0(EditJobs)
