@@ -37,6 +37,9 @@
 #job-cancel {
 	background-color: inherit;
 	padding: 10px 10px;
-	margin-left: auto;
 	font-size: 14pt;
+}
+
+#job-link-cancel {
+	margin-left: auto;
 }

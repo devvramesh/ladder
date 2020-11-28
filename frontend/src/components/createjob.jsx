@@ -128,9 +128,11 @@ class CreateJob extends React.Component {
                   <button onClick={() => this.save(false)} >Save & Exit</button>
                   <button onClick={() => this.save(true)} >Publish, Save & Exit</button>
               </div>
-              <Link class="row" to="/jobs">
+              <div class="row">
+              <Link to="/jobs" id="job-link-cancel">
                   <button id="job-cancel">Cancel</button>
               </Link>
+              </div>
           </div>
           </div>
       )
