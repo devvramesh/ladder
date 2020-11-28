@@ -11,6 +11,7 @@ export default class EmployerProfile extends React.Component {
     super(props);
 
     this.state = {
+      isEditing: false,
       name: "",
       image_src: "",
       contact: "",
@@ -40,7 +41,7 @@ export default class EmployerProfile extends React.Component {
 
       <img src={this.state.image_src} id="profile-image" alt="Profile Image"/>
 
-      <button>Edit</button>
+      { this.state.isEditing ? <Save /> : <Edit /> }
       <Link to="/favorites">
             <button>Favorites</button>
       </Link>
@@ -65,5 +66,23 @@ export default class EmployerProfile extends React.Component {
 
 
     </div>)
+  }
+}
+
+export class Edit extends React.Component {
+  render() {
+      return (
+        <button onClick={() => this.setState({isEditing: true})}>Edit</button>
+
+      );
+  }
+}
+
+export class Save extends React.Component {
+  render() {
+      return (
+        <button onClick={() => this.setState({isEditing: false})}>Save</button>
+
+      );
   }
 }
