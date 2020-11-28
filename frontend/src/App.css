@@ -40,3 +40,7 @@ input {
 .inlineblock {
     display: inline-block;
 }
+
+Link, button, .pointer {
+  cursor: pointer;
+}

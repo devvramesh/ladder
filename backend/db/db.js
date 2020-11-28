@@ -42,7 +42,7 @@ export async function dbInit() {
         account_type TEXT NOT NULL CHECK(account_type = 'employee' OR account_type = 'employer'),
         name TEXT NOT NULL,
         email TEXT NOT NULL UNIQUE,
-        phone TEXT UNIQUE,
+        phone TEXT,
         location TEXT,
         profile_img_url TEXT
       );`,

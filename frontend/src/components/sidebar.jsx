@@ -36,7 +36,7 @@ export default class Sidebar extends React.Component {
     console.log(this.props)
     const entries = this.props.entries.map((entry, i) => {
       return (
-        <li key={i} className="border" onClick={this.select(i)}>
+        <li key={i} className="pointer border" onClick={this.select(i)}>
           {this.props.displayPreview(entry)}
         </li>);
     });

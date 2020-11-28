@@ -14,7 +14,8 @@ import Login from './components/login';
 import CreateJob from './components/createjob';
 import Profile from './components/profile'
 import EditProfile from './components/edit_profile'
-import Jobs from './components/jobs';
+import EditJobs from './components/edit_jobs';
+import ViewJobs from './components/view_jobs'
 
 const Main = () => {
   return (<Switch>
@@ -29,7 +30,8 @@ const Main = () => {
     <Route exact path='/profile' component={Profile}></Route>
     <Route exact path='/edit_profile' component={EditProfile}></Route>
     <Route exact path='/profile/:username' component={Profile}></Route>
-    <Route exact path='/jobs' component={Jobs}></Route>
+    <Route exact path='/jobs' component={EditJobs}></Route>
+    <Route exact path='/jobs/:username' component={ViewJobs}></Route>
   </Switch>);
 }
 
