@@ -46,15 +46,15 @@ export default class Search extends React.Component {
   displayPreview = (entry) => {
     if (this.searchType === "employee") {
       return (<div>
-        <h3>{entry.name}</h3>
-        <h4>{entry.job}</h4>
-        <h4>{entry.location}</h4>
+        <h3>{entry.name || "[Name unavailable]"}</h3>
+        <h4>{entry.category || "[Category unavailable]"}</h4>
+        <h4>{entry.location || "[Location unavailable]"}</h4>
       </div>)
     } else if (this.searchType === "job") {
       return (<div>
-        <h3>{entry.job_title}</h3>
-        <h4>{entry.name}</h4>
-        <h4>{entry.location}</h4>
+        <h3>{entry.job_title || "[Job title unavailable]"}</h3>
+        <h4>{entry.name || "[Employer unavailable]"}</h4>
+        <h4>{entry.location || "[Location unavailable]"}</h4>
       </div>)
     } else {
       return null;
