@@ -20,8 +20,17 @@ class Favorites extends React.Component {
     }
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let userInfo = null;
     let favorites = []
@@ -66,7 +75,7 @@ class Favorites extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -95,21 +104,16 @@ class Favorites extends React.Component {
   render() {
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated && !this.state.userInfo) {
-      this.loadUserInfo();
-      return null;
-    }
-
     if (!this.state.ready) {
-      return null;
+      return (<div>Loading...</div>);
     }
 
-    if (!this.state.userInfo) {
-      return null;
+    if (isAuthenticated && !this.state.userInfo && !this.state.userInfo.account_type) {
+      return (<div>Error: please try again.</div>);
     }
 
     if (!isAuthenticated) {
-      return (<div>Error: must log in to view your favorites</div>)
+      return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
     return (<div>

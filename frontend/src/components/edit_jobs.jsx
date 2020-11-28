@@ -19,8 +19,17 @@ class EditJobs extends React.Component {
     }
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let userInfo = null;
     let jobs = []
@@ -65,7 +74,7 @@ class EditJobs extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -132,29 +141,21 @@ class EditJobs extends React.Component {
 
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated && !this.state.userInfo) {
-      this.loadUserInfo();
-      return null;
-    }
-
     if (!this.state.ready) {
-      return null;
+      return (<div>Loading...</div>);
     }
 
-    if (!this.state.userInfo) {
-      return null;
+    if (isAuthenticated && !this.state.userInfo && !this.state.userInfo.account_type) {
+      return (<div>Error: please try again.</div>);
     }
 
     if (!isAuthenticated) {
-      return (<div>Error: must log in to view your job posts</div>)
+      return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
     if (this.state.userInfo.account_type !== "employer") {
       return (<div>Error: must be logged in as an employer to view your job posts</div>)
     }
-
-    console.log('rendering jobs:')
-    console.log(this.state.jobs)
 
     return (<div>
       <Navbar searchType={"this.searchType"}></Navbar>

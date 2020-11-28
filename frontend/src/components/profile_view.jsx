@@ -32,8 +32,17 @@ class ProfileView extends React.Component {
     }
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let currUserInfo = null;
     let isFavorited = false;
@@ -70,7 +79,7 @@ class ProfileView extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -132,13 +141,12 @@ class ProfileView extends React.Component {
   render() {
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated && !this.state.currUserInfo) {
-      this.loadUserInfo();
-      return null;
+    if (!this.state.ready) {
+      return (<div>Loading...</div>);
     }
 
-    if (!this.state.ready) {
-      return null;
+    if (isAuthenticated && !this.state.currUserInfo && !this.state.currUserInfo.account_type) {
+      return (<div>Error: please try again.</div>);
     }
 
     if (!this.state.viewUserInfo) {

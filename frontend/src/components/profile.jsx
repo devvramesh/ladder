@@ -24,10 +24,19 @@ class Profile extends React.Component {
     }
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
-    console.log('loaduserinfo')
+    console.log('load')
     console.log(user)
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let currUserInfo = null;
     if (user) {
@@ -61,7 +70,7 @@ class Profile extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -74,14 +83,8 @@ class Profile extends React.Component {
 
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated && !this.state.currUserInfo) {
-      console.log('load info needed')
-      this.loadUserInfo();
-      return null;
-    }
-
     if (!this.state.ready) {
-      return null;
+      return (<div>Loading...</div>);
     }
 
     console.log('ready')
@@ -92,12 +95,12 @@ class Profile extends React.Component {
       console.log('authenticated')
       console.log(this.state)
 
-      if (!this.state.currUserInfo) {
-        return null;
-      }
-
       if (!isAuthenticated) {
         return (<div>Error: must log in to view your profile</div>)
+      }
+
+      if (!this.state.currUserInfo || !this.state.currUserInfo.account_type) {
+        return (<div>Error: please try again.</div>);
       }
 
       if (this.state.currUserInfo.account_type === "employee") {
@@ -113,8 +116,12 @@ class Profile extends React.Component {
     // johnsmith1's profile, non-editable
     console.log('case 2')
 
-    if (!this.state.viewUserInfo.account_type) {
+    if (!this.state.viewUserInfo || !this.state.viewUserInfo.account_type) {
       return (<div>Error: user {this.userToView} not found.</div>)
+    }
+
+    if (isAuthenticated && (!this.state.currUserInfo || !this.state.currUserInfo.account_type)) {
+      return (<div>Error: please try again.</div>);
     }
 
     console.log(this.state)

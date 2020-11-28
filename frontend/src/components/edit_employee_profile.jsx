@@ -28,8 +28,17 @@ class EditableEmployeeProfile extends React.Component {
     this.location = React.createRef();
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let userInfo = null;
     if (user) {
@@ -53,7 +62,7 @@ class EditableEmployeeProfile extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -88,13 +97,18 @@ class EditableEmployeeProfile extends React.Component {
   }
 
   render() {
-    if (!this.state.userInfo) {
-      this.loadUserInfo();
-      return null;
-    }
+    const { isAuthenticated } = this.props.auth0;
 
     if (!this.state.ready) {
-      return null;
+      return (<div>Loading...</div>);
+    }
+
+    if (isAuthenticated && !this.state.userInfo && !this.state.userInfo.account_type) {
+      return (<div>Error: please try again.</div>);
+    }
+
+    if (!isAuthenticated) {
+      return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
     return (<div>

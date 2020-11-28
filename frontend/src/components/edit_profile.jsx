@@ -20,8 +20,17 @@ class EditProfile extends React.Component {
     }
   }
 
-  loadUserInfo = async () => {
+  load = async () => {
     const { user, isLoading } = this.props.auth0;
+
+    if (isLoading) {
+      setTimeout(this.load, 100)
+      return;
+    }
+
+    if (this.state.ready) {
+      return;
+    }
 
     let userInfo = null;
     if (user) {
@@ -45,7 +54,7 @@ class EditProfile extends React.Component {
   async componentDidMount() {
     console.log('didMount')
     this.mounted = true;
-    await this.loadUserInfo();
+    await this.load();
   }
 
   componentWillUnmount() {
@@ -58,27 +67,16 @@ class EditProfile extends React.Component {
 
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated && !this.state.userInfo) {
-      console.log('load info needed')
-      this.loadUserInfo();
-      return null;
-    }
-
     if (!this.state.ready) {
-      return null;
+      return (<div>Loading...</div>);
     }
 
-    console.log('ready')
-
-    console.log('authenticated')
-    console.log(this.state)
-
-    if (!this.state.userInfo) {
-      return null;
+    if (isAuthenticated && !this.state.userInfo && !this.state.userInfo.account_type) {
+      return (<div>Error: please try again.</div>);
     }
 
     if (!isAuthenticated) {
-      return (<div>Error: must log in to view your profile</div>)
+      return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
     if (this.state.userInfo.account_type === "employee") {
