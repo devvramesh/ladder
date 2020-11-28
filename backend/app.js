@@ -53,13 +53,28 @@ function serveApp() {
 
   post('/api/search', (req, res) => {
     // TODO: implement search!!
-    const dummy_results = [
-      {name: "Alice", location: "Kingston", job: "Electrician"},
-      {name: "Bob", location: "Providence", job: "Roofer"},
-      {name: "Charlie", location: "Providence", job: "Construction Worker"}
-    ]
+    const category = req.body.category;
+    const query = req.body.query || "";
 
-    res.send(JSON.stringify({searchResults: dummy_results}));
+    if (!category) {
+      sendBlank(res);
+      return;
+    }
+
+    withDB(async (client) => {
+      if (category === "employee") {
+        const result = await Employee.searchInDB(client, query)
+        res.send(JSON.stringify(result))
+        return;
+      } else if (category === "job") {
+        const result = await Job.searchInDB(client, query)
+        res.send(JSON.stringify(result))
+        return;
+      } else {
+        sendBlank(res);
+        return;
+      }
+    })
   });
 
   post('/api/job_info', (req, res) => {
@@ -192,7 +207,6 @@ function serveApp() {
   })
 
   post('/api/favorites', (req, res) => {
-    // TODO: implement search!!
     const userID = req.body.userID;
     const category = req.body.category;
     if (!userID || !category) {

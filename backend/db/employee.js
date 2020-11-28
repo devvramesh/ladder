@@ -73,7 +73,20 @@ export default class Employee {
     return (result.rowCount == 1) ? result.rows[0] : null;
   }
 
-  static ofRow(row) {
-    return new Employee(row.auth0_user_id, row.username, row.name, row.email, row.phone, row.location, row.profile_img_url, row.qualifications, row.about, row.looking_for)
+  static async searchInDB(client, query) {
+    // TODO: improve search. right now it's super basic
+    const result = await client.query(`
+      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.category, e.qualifications, e.about, e.looking_for
+      FROM
+        users AS u
+        JOIN employees AS e
+        ON u.auth0_user_id = e.auth0_user_id
+      WHERE
+        LOWER(CONCAT(u.username, u.name, u.email, u.phone, u.location, e.category, e.qualifications, e.about, e.looking_for)) LIKE LOWER($1)
+      ;`,
+      [`%${query}%`]
+    )
+
+    return result.rows
   }
 }

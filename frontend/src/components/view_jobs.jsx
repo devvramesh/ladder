@@ -14,7 +14,6 @@ class ViewJobs extends React.Component {
     this.userToView = this.props.match.params.username
 
     this.state = {
-      currSelectedIndex: 0,
       jobs: [],
       currUserInfo: null,
       viewUserInfo: null,
@@ -87,11 +86,6 @@ class ViewJobs extends React.Component {
     this.mounted = false;
   }
 
-  displaySelection = (index) => {
-    this.setState({currSelectedIndex: index})
-
-  }
-
   displayPreview = (entry) => {
     return (<div>
       <h3>{entry.job_title}</h3>
@@ -106,7 +100,7 @@ class ViewJobs extends React.Component {
     }
     return (
       <div>
-        [Job] {JSON.stringify(job)}
+        [Job]{JSON.stringify(job)}
       </div>)
   }
 
@@ -131,10 +125,8 @@ class ViewJobs extends React.Component {
     return (<div>
       <Navbar searchType={"this.searchType"}></Navbar>
       <h2>{`${this.state.viewUserInfo.name}'s`} Jobs</h2>
-      <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
-      {
-        this.displayJob(this.state.jobs[this.state.currSelectedIndex])
-      }
+      <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview}
+        displayEntry={this.displayJob}></Sidebar>
     </div>)
   }
 }

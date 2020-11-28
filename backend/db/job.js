@@ -94,4 +94,23 @@ export default class Job {
 
     return result.rows
   }
+  
+  static async searchInDB(client, query) {
+    // TODO: improve search. right now it's super basic
+    const result = await client.query(`
+      SELECT *
+      FROM
+        jobs AS j
+        JOIN employers AS e
+        ON j.employer_auth0_user_id = e.auth0_user_id
+        JOIN users AS u
+        ON u.auth0_user_id = e.auth0_user_id
+      WHERE
+        LOWER(CONCAT(u.username, u.name, u.email, u.phone, u.location, e.about, e.logistics, j.job_title, j.description, j.qualifications, j.logistics)) LIKE LOWER($1)
+      ;`,
+      [`%${query}%`]
+    )
+
+    return result.rows
+  }
 }

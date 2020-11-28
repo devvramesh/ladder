@@ -12,7 +12,6 @@ class EditJobs extends React.Component {
     this.mounted = false
 
     this.state = {
-      currSelectedIndex: 0,
       jobs: [],
       userInfo: null,
       ready: false
@@ -103,11 +102,6 @@ class EditJobs extends React.Component {
     })
   }
 
-  displaySelection = (index) => {
-    this.setState({currSelectedIndex: index})
-
-  }
-
   displayPreview = (entry) => {
     return (<div>
       <h3>{entry.job_title}</h3>
@@ -168,10 +162,8 @@ class EditJobs extends React.Component {
       <Link to="/create_job">
         <button>New Job</button>
       </Link>
-      <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
-      {
-        this.displayJob(this.state.jobs[this.state.currSelectedIndex])
-      }
+      <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview}
+        displayEntry={this.displayJob}></Sidebar>
     </div>)
   }
 }

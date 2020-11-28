@@ -27,8 +27,8 @@ export default class Search extends React.Component {
     }
 
     this.state = {
-      currSelectedIndex: 0,
-      searchResults: []
+      searchResults: [],
+      ready: false
     }
   }
 
@@ -39,32 +39,45 @@ export default class Search extends React.Component {
     makeBackendRequest('/api/search', params).then((result) => {
       console.log('fetched')
       console.log(result)
-      this.setState({searchResults: result.searchResults});
+      this.setState({searchResults: result, ready: true});
     })
   }
 
-  displaySelection = (index) => {
-    this.setState({currSelectedIndex: index})
+  displayPreview = (entry) => {
+    if (this.searchType === "employee") {
+      return (<div>
+        <h3>{entry.name}</h3>
+        <h4>{entry.job}</h4>
+        <h4>{entry.location}</h4>
+      </div>)
+    } else if (this.searchType === "job") {
+      return (<div>
+        <h3>{entry.job_title}</h3>
+        <h4>{entry.name}</h4>
+        <h4>{entry.location}</h4>
+      </div>)
+    } else {
+      return null;
+    }
   }
 
-  displayPreview = (entry) => {
-    return (<div>[Sidebar entry] {JSON.stringify(entry)}</div>)
+  displayEntry = (entry) => {
+    return (<div>{JSON.stringify(entry)}</div>)
   }
 
   render() {
     console.log('rendering')
     const params = getUrlParams(this);
 
-    if (!this.isValid) {
-      return (<div>Invalid search</div>)
+    if (!this.isValid || !this.state.ready) {
+      return (<div>Loading...</div>)
     }
     console.log('rendering valid')
     console.log(this.state)
     return (<div>
       <Navbar searchType={this.searchType} initialSearchBarText={params.query}></Navbar>
       <h2>Search Results</h2>
-      <Sidebar entries={this.state.searchResults} displayPreview={this.displayPreview} onSelect={this.displaySelection}></Sidebar>
-      <div className="border">[Current selected index: {this.state.currSelectedIndex}] Item: {JSON.stringify(this.state.searchResults[this.state.currSelectedIndex])}</div>
+      <Sidebar entries={this.state.searchResults} displayPreview={this.displayPreview} displayEntry={this.displayEntry}></Sidebar>
     </div>)
   }
 }

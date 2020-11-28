@@ -11,12 +11,9 @@ import './sidebar.css'
 //                    takes in an entry from [entries] and returns
 //                    the HTML display for its sidebar preview
 //
-//    onSelect:       a function within the parent component.
-//                    when a sidebar item is selected, its index
-//                    within the sidebar is passed to onSelect.
-//                    So, onSelect(index) will be called in the parent
-//                    component, which should then set its state
-//                    to render the new selection. see:Search.
+//    displayEntry:  a function within the parent component which
+//                    takes in an entry from [entries] and returns
+//                    the HTML display for it
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -30,10 +27,7 @@ export default class Sidebar extends React.Component {
   }
 
   select = (index) => {
-    return () => {
-      this.setState({ selectedIndex: index })
-      this.props.onSelect(index);
-    }
+    return () => this.setState({ selectedIndex: index })
   }
 
   createPreviews = () => {
@@ -55,9 +49,15 @@ export default class Sidebar extends React.Component {
     </div>);
   }
 
+  displaySelected = () => {
+    const selected = this.props.entries[this.state.selectedIndex]
+    return selected ? this.props.displayEntry(selected) : null;
+  }
+
   render() {
     return (<div className="border">[Sidebar]
       <div>{this.createPreviews()}</div>
+      <div>Selected: {this.displaySelected()}</div>
     </div>)
   }
 }
