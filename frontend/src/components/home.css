@@ -1,0 +1,18 @@
+button {
+    padding: 15px 30px;
+	font-size: 30pt;
+}
+
+.logo {
+	font-size: 70pt;
+}
+
+.large-button {
+	width: 500px;
+	height: 150px;
+	margin-left: 20px;
+	margin-right: 20px;
+	margin-top: 10px;
+	margin-bottom: 10px;
+
+}
