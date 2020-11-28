@@ -14,14 +14,12 @@ const LoginButton = (props) => {
   }
 
   return (
-    <div>
-      <button
+    <button style={props.style}
         className="btn btn-primary btn-block"
         onClick={login}
       >
         Log In
-      </button>
-    </div>
+    </button>
   );
 };
 

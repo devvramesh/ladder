@@ -3,16 +3,21 @@ button {
 	font-size: 30pt;
 }
 
+.column {
+	display: flex;
+	flex-direction: column;
+}
+
 .logo {
-	font-size: 70pt;
+	font-size: 80pt;
 }
 
 .large-button {
 	width: 500px;
+	max-width: 80%;
 	height: 150px;
 	margin-left: 20px;
 	margin-right: 20px;
 	margin-top: 10px;
 	margin-bottom: 10px;
-
 }
