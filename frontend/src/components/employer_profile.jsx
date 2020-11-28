@@ -31,8 +31,7 @@ class EmployerProfile extends React.Component {
       return (<Link to={linkURL}><button>Jobs</button></Link>)
     }
 
-    return (<div class="column" id="profile-main">
-      <Navbar searchType={ref.searchType}></Navbar>
+    return (<div className="column" id="profile-main">
       <div id="profile">
           <div id="top-section">
               <h2>{ref.state.viewUserInfo.name}</h2>

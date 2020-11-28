@@ -1,6 +1,7 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
+import EmployeeProfile from "./employee_profile"
 import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 
@@ -62,7 +63,15 @@ export default class Search extends React.Component {
   }
 
   displayEntry = (entry) => {
-    return (<div>{JSON.stringify(entry)}</div>)
+    if (this.searchType === "employee") {
+      return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
+    } else if (this.searchType === "job") {
+      return (<div>
+        {"SELECTED: " + JSON.stringify(entry)}
+      </div>)
+    } else {
+      return null;
+    }
   }
 
   render() {
@@ -77,7 +86,8 @@ export default class Search extends React.Component {
     return (<div>
       <Navbar searchType={this.searchType} initialSearchBarText={params.query}></Navbar>
       <h2>Search Results</h2>
-      <Sidebar entries={this.state.searchResults} displayPreview={this.displayPreview} displayEntry={this.displayEntry}></Sidebar>
+      <Sidebar entries={this.state.searchResults} displayPreview={this.displayPreview} displayEntry={this.displayEntry}
+        ifEmpty={<div>No results.</div>}></Sidebar>
     </div>)
   }
 }

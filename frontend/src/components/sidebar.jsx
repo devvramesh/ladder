@@ -14,6 +14,8 @@ import './sidebar.css'
 //    displayEntry:  a function within the parent component which
 //                    takes in an entry from [entries] and returns
 //                    the HTML display for it
+//
+//    ifEmpty:       a component to display in place of an empty sidebar
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
@@ -44,8 +46,9 @@ export default class Sidebar extends React.Component {
         </div>);
     });
 
-    return (<div>
+    return (<div className="sidebar-preview-pane">
       {entries}
+      <p>TODO: make this scroll if taller than the right (item) pane. see sidebar.jsx and sidebar.css</p>
     </div>);
   }
 
@@ -55,9 +58,15 @@ export default class Sidebar extends React.Component {
   }
 
   render() {
-    return (<div className="border">[Sidebar]
-      <div>{this.createPreviews()}</div>
-      <div>Selected: {this.displaySelected()}</div>
+    // TODO: put these side-by-side instead of vertical.
+    // maybe introduce a max-height + scroll-on-overflow for the item pane
+    if (this.props.entries.length === 0) {
+      return this.props.ifEmpty;
+    }
+
+    return (<div className="sidebar-outer border">
+      {this.createPreviews()}
+      <div className="sidebar-item-pane">{this.displaySelected()}</div>
     </div>)
   }
 }

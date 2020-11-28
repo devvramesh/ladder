@@ -14,7 +14,6 @@ export default class EmployeeProfile extends React.Component {
     // let me know if you want me to change it back though i definitely
     // wouldnt mind. -jake
     return (<div className="column" id="profile-main">
-      <Navbar searchType={ref.searchType}></Navbar>
       <div id="profile">
           <div id="top-section">
               <h2>{ref.state.viewUserInfo.name}</h2>
@@ -31,6 +30,7 @@ export default class EmployeeProfile extends React.Component {
 
           <div id="bottom-section">
               <table>
+                <tbody>
                   <tr>
                       <td><h3>About: </h3></td>
                       <td><p>{ref.state.viewUserInfo.about}</p></td>
@@ -43,10 +43,11 @@ export default class EmployeeProfile extends React.Component {
                        <td><h3>Looking For: </h3></td>
                        <td><p>{ref.state.viewUserInfo.looking_for}</p></td>
                   </tr>
-               </table>
+                </tbody>
+              </table>
             </div>
-      </div>
-      </div>
+          </div>
+        </div>
     )
   }
 }

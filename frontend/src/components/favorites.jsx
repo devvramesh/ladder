@@ -1,6 +1,8 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
+import EmployeeProfile from "./employee_profile"
+import EmployerProfile from "./employer_profile"
 import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
@@ -106,7 +108,17 @@ class Favorites extends React.Component {
   }
 
   displayEntry = (entry) => {
-    return (<div>{JSON.stringify(entry)}</div>)
+    if (this.state.category === "employee") {
+      return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
+    } else if (this.state.category === "job") {
+      return (<div>
+        {"SELECTED: " + JSON.stringify(entry)}
+      </div>)
+    } else if (this.state.category === "company") {
+      return (<EmployerProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployerProfile>)
+    } else {
+      return null;
+    }
   }
 
   switchType = async (event) => {
@@ -134,6 +146,9 @@ class Favorites extends React.Component {
       return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
+    console.log('rendering favorites')
+    console.log(this.state.favorites)
+
     return (<div>
       <Navbar></Navbar>
       <h2>Favorites</h2>
@@ -143,7 +158,8 @@ class Favorites extends React.Component {
           <option value="job">job</option>
           <option value="company">company</option>
         </select>
-      <Sidebar entries={this.state.favorites} displayPreview={this.displayPreview} displayEntry={this.displayEntry}></Sidebar>
+      <Sidebar key={this.state.category} entries={this.state.favorites} displayPreview={this.displayPreview} displayEntry={this.displayEntry}
+        ifEmpty={null}></Sidebar>
     </div>)
   }
 }

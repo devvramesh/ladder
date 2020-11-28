@@ -89,8 +89,8 @@ class ViewJobs extends React.Component {
   displayPreview = (entry) => {
     return (<div>
       <h3>{entry.job_title || "[Job title unavailable]"}</h3>
-      <h4>{this.state.userInfo.name || "[Employer unavailable]"}</h4>
-      <h4>{this.state.userInfo.location || "[Location unavailable]"}</h4>
+      <h4>{this.state.viewUserInfo.name || "[Employer unavailable]"}</h4>
+      <h4>{this.state.viewUserInfo.location || "[Location unavailable]"}</h4>
     </div>)
   }
 

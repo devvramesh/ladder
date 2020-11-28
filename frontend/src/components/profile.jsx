@@ -104,9 +104,15 @@ class Profile extends React.Component {
       }
 
       if (this.state.currUserInfo.account_type === "employee") {
-        return (<EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>)
+        return (<div>
+          <Navbar></Navbar>
+          <EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>
+        </div>)
       } else if (this.state.currUserInfo.account_type === "employer") {
-        return (<EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>)
+        return (<div>
+          <Navbar></Navbar>
+          <EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>
+        </div>)
       }
 
       return (<div>Error. Please try again.</div>)
@@ -127,9 +133,15 @@ class Profile extends React.Component {
     console.log(this.state)
 
     if (this.state.viewUserInfo.account_type === "employee") {
-      return (<EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>)
+      return (<div>
+        <Navbar></Navbar>
+        <EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>
+      </div>)
     } else if (this.state.viewUserInfo.account_type === "employer") {
-      return (<EmployerProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>)
+      return (<div>
+        <Navbar></Navbar>
+        <EmployerProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>
+      </div>)
     }
 
     return (<div>Error. Please try again.</div>)
