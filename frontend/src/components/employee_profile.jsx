@@ -13,30 +13,39 @@ export default class EmployeeProfile extends React.Component {
     // the auth code became very repetitive for this and EmployerProfile.
     // let me know if you want me to change it back though i definitely
     // wouldnt mind. -jake
-    return (<div>
+    return (<div className="column" id="profile-main">
       <Navbar searchType={ref.searchType}></Navbar>
-      <h2>{ref.state.viewUserInfo.name}</h2>
-      <h3>{ref.state.viewUserInfo.category}</h3>
+      <div id="profile">
+          <div id="top-section">
+              <h2>{ref.state.viewUserInfo.name}</h2>
+              <h3>{ref.state.viewUserInfo.category}</h3>
 
-      <img src={ref.state.viewUserInfo.profile_img_url} id="profile-image" alt="Profile Image"/>
+              <img src={ref.state.viewUserInfo.profile_img_url} id="profile-image" alt="Profile Image"/>
 
-      {ref.createEditButton()}
-      {ref.createFavoritesButtons()}
-      <a href={`mailto:${ref.state.viewUserInfo.email}`}>
-        <button>Contact</button>
-      </a>
+              {ref.createEditButton()}
+              {ref.createFavoritesButtons()}
+              <a href={`mailto:${ref.state.viewUserInfo.email}`}>
+                <button>Contact</button>
+              </a>
+          </div>
 
-
-      <h3>About: </h3>
-      <p>{ref.state.viewUserInfo.about}</p>
-
-      <h3>Qualifications: </h3>
-      <p>{ref.state.viewUserInfo.qualifications}</p>
-
-      <h3>Looking For: </h3>
-      <p>{ref.state.viewUserInfo.looking_for}</p>
-
-
+          <div id="bottom-section">
+              <table>
+                  <tr>
+                      <td><h3>About: </h3></td>
+                      <td><p>{ref.state.viewUserInfo.about}</p></td>
+                  </tr>
+                  <tr>
+                       <td><h3>Qualifications: </h3></td>
+                       <td><p>{ref.state.viewUserInfo.qualifications}</p></td>
+                  </tr>
+                  <tr>
+                       <td><h3>Looking For: </h3></td>
+                       <td><p>{ref.state.viewUserInfo.looking_for}</p></td>
+                  </tr>
+               </table>
+            </div>
+      </div>
       </div>
     )
   }

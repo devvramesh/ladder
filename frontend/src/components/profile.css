@@ -1,0 +1,54 @@
+#profile-image {
+	width: 160px;
+	height: 160px;
+	border: 1px solid black;
+	border-radius: 50%;
+}
+
+#profile {
+	background-color: white;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	height: 100%;
+	width: 100%;
+	flex-grow: 2;
+	flex: 1;
+}
+
+#top-section {
+	border-bottom: 1px solid black;
+	width: 100%;
+}
+
+#bottom-section {
+	width: 80%;
+	max-width: 800px;
+}
+
+#profile-main {
+	height: 100vh;
+}
+
+#top-section button {
+	background-color: #A96562;
+	height: 40px;
+	width: 120px;
+	border: 1px solid black;
+}
+
+table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+td, th {
+	text-align: left;
+	padding: 8px;
+	vertical-align: top;
+}
+
+td:first-child {
+	width: 20%;
+}
