@@ -37,14 +37,16 @@ export default class Navbar extends React.Component {
       const searchText = (this.state.searchType === "employee") ? "Search Employees" : "Search Jobs";
 
     return (<div className="row" id="search-bar">
-      <div class="column" id="search-flexbox">
+      <div className="column" id="search-flexbox">
+      <div className="row">
           <div id="search-wrapper">
               <input type="text" placeholder={searchText} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
               <button id="search-button" onClick={this.doSearch}>&#x1F50D;</button>
           </div>
+          <button style={style0} id="filter">[FilterTODO]</button>
+      </div>
           {this.createAlternateSearchButton()}
       </div>
-      <button style={style0} id="filter">[FilterTODO]</button>
     </div>)
   }
 
@@ -70,7 +72,6 @@ export default class Navbar extends React.Component {
         </Link>
 
         {this.createSearchBar()}
-        <div>[Profile/Login TODO]</div>
         <AuthenticationButton></AuthenticationButton>
     </div>)
   }

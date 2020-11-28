@@ -59,7 +59,16 @@ class AuthenticationButton extends React.Component {
         </Link>
       </div>)
     } else {
-      return (<LoginButton redirectUri={window.location.origin}></LoginButton>)
+      const style = {
+          backgroundColor:"#A96562",
+          width:'80px',
+          padding:'15px 2px',
+          marginRight: '20px',
+          marginLeft: '0px',
+          fontSize: '12pt',
+          flexGrow: '0'
+      };
+      return (<LoginButton style={style} redirectUri={window.location.origin}></LoginButton>)
     }
   }
 
@@ -93,17 +102,17 @@ class AuthenticationButton extends React.Component {
     console.log(this.state)
 
     return (<div>
-      <p>
+      {/*<p>
         Authenticated: {isAuthenticated.toString()}
-      </p>
+      </p>*/}
       {this.createButtons(isAuthenticated)}
-      <p>
+      {/*<p>
         logged in as: {isAuthenticated ? this.state.userInfo.name : null}
       </p>
       <p>
         Current user ID/token: {(user ? user.sub : "N/A")}
       </p>
-      {this.showUser()}
+      {this.showUser()}*/}
      </div>);
    }
 };
