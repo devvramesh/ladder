@@ -34,16 +34,17 @@ export default class Navbar extends React.Component {
 
   createSearchBar = () => {
       const style0 = (this.state.searchType === "employee") ? {backgroundColor:'#CCB8A8'} : {backgroundColor:'#C1D1EA'};
+      const searchText = (this.state.searchType === "employee") ? "Search Employees" : "Search Jobs";
 
-    return (<div className="row">
-      <div class="column">
-          <div>
-          <input type="text" defaultValue={this.props.initialSearchBarText || ""} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
-          <button id="search" onClick={this.doSearch}>&#x1F50D;</button>
+    return (<div className="row" id="search-bar">
+      <div class="column" id="search-flexbox">
+          <div id="search-wrapper">
+              <input type="text" placeholder={searchText} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
+              <button id="search-button" onClick={this.doSearch}>&#x1F50D;</button>
           </div>
           {this.createAlternateSearchButton()}
       </div>
-      <button style={style0} id="filter">[Filter button (TODO)]</button>
+      <button style={style0} id="filter">[FilterTODO]</button>
     </div>)
   }
 
@@ -69,7 +70,7 @@ export default class Navbar extends React.Component {
         </Link>
 
         {this.createSearchBar()}
-        <div>[Profile picture of current user, otherwise login/signup button (TODO)]</div>
+        <div>[Profile/Login TODO]</div>
         <AuthenticationButton></AuthenticationButton>
     </div>)
   }

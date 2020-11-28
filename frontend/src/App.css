@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Chivo&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Chivo:wght@300;400;700&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Special+Elite&display=swap');
 
 body {
@@ -12,8 +12,14 @@ button {
     font-family: 'Chivo', sans-serif;
 }
 
+input {
+    font-family: 'Chivo', sans-serif;
+    font-weight: 300;
+}
+
 .App {
     text-align: center;
+    font-family: 'Chivo', sans-serif;
 }
 
 .logo {
@@ -29,4 +35,8 @@ button {
 .row {
     display: flex;
     flex-direction: row;
+}
+
+.inlineblock {
+    display: inline-block;
 }
