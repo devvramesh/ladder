@@ -19,7 +19,7 @@ export function createManagementClient() {
 
 export function createAuthenticationClient() {
   return new auth0.AuthenticationClient({
-    domain: process.env.AUTH0_DOMAIN
+    domain: 'dev-o0dlw7sn.us.auth0.com'
   });
 }
 
