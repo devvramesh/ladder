@@ -6,7 +6,7 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import path from 'path';
 import fs from 'fs';
-import { createManagementClient } from './util.js'
+import { createManagementClient, createAuthenticationClient, verifyUser } from './auth.js'
 import { dbInit, withDB, logDBInfo } from './db/db.js'
 import User from './db/user.js'
 import Employee from './db/employee.js'
@@ -20,6 +20,9 @@ const DEBUG = true;
 const app = express();
 const jsonParser = bodyParser.json();
 app.use(cors());
+
+// auth0 clients to verify users and get their info
+const authenticationClient = createAuthenticationClient();
 const managementClient = createManagementClient();
 
 function sendBlank(res) {
@@ -29,30 +32,21 @@ function sendBlank(res) {
 function serveApp() {
   console.log('Serving backend...')
 
-  const post = (route, callback) => {
-    return app.post(route, jsonParser, (req, res) => {
+  function post(route, callback) {
+    return app.post(route, jsonParser, async (req, res) => {
       if (DEBUG) {
         console.log('---------------------------------------------');
         console.log(`DEBUG: [route: ${route}]`);
         console.log("Request body:");
         console.log(req.body);
       }
-      const result = callback(req, res);
+      const result = await callback(req, res);
       console.log('---------------------------------------------');
       return result;
     });
   };
 
-  post('/api/login', (req, res) => {
-    // TODO: implement login!!
-  });
-
-  post('/api/signup', (req, res) => {
-    // TODO: implement signup!!
-  });
-
   post('/api/search', (req, res) => {
-    // TODO: implement search!!
     const category = req.body.category;
     const query = req.body.query || "";
 
@@ -106,7 +100,14 @@ function serveApp() {
     })
   })
 
-  post('/api/update_job', (req, res) => {
+  post('/api/update_job', async (req, res) => {
+    let token = req.body.access_token
+    let userID = req.body.employer_auth0_user_id
+    if (!(await verifyUser(authenticationClient, token, userID))) {
+      sendBlank(res);
+      return;
+    }
+
     let jobID = req.body.job_id
     if (!jobID) {
       sendBlank(res);
@@ -115,7 +116,7 @@ function serveApp() {
 
     const job = new Job(
       jobID,
-      req.body.employer_auth0_user_id,
+      userID,
       req.body.job_title,
       req.body.description,
       req.body.qualifications,
@@ -139,27 +140,41 @@ function serveApp() {
     })
   })
 
-  post ('/api/delete_job', (req, res) => {
+  post ('/api/delete_job', async (req, res) => {
+    let token = req.body.access_token
+    let userID = req.body.userID
+
     let jobID = req.body.job_id
     if (!jobID) {
       sendBlank(res);
       return;
     }
 
+    if (!(await verifyUser(authenticationClient, token, userID))) {
+      sendBlank(res);
+      return;
+    }
+
     withDB(async (client) => {
-      const result = await Job.deleteFromDB(client, jobID)
+      const result = await Job.deleteFromDB(client, jobID, userID)
       sendBlank(res)
       return;
     })
   })
 
-  post('/api/update_favorite', (req, res) => {
+  post('/api/update_favorite', async (req, res) => {
     const userID = req.body.userID;
     const category = req.body.category;
     const favoritee_id = req.body.favoritee_id;
     const favorite_status = req.body.favorite_status || false;
+    const token = req.body.access_token;
 
     if (!userID || !category || !favoritee_id) {
+      sendBlank(res);
+      return;
+    }
+
+    if (!(await verifyUser(authenticationClient, token, userID))) {
       sendBlank(res);
       return;
     }
@@ -209,6 +224,8 @@ function serveApp() {
   post('/api/favorites', (req, res) => {
     const userID = req.body.userID;
     const category = req.body.category;
+    const token = req.body.token;
+    console.log('token: ' + token)
     if (!userID || !category) {
       sendBlank(res);
       return;
@@ -231,10 +248,16 @@ function serveApp() {
     })
   });
 
-  post('/api/update_profile', (req, res) => {
+  post('/api/update_profile', async (req, res) => {
     const userID = req.body.userID;
+    const token = req.body.access_token;
 
     if (!userID) {
+      sendBlank(res);
+      return;
+    }
+
+    if (!(await verifyUser(authenticationClient, token, userID))) {
       sendBlank(res);
       return;
     }

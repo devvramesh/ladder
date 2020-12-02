@@ -118,13 +118,14 @@ class ProfileView extends React.Component {
   }
 
   toggleFavorite = async () => {
-    const { user } = this.props.auth0;
+    const { user, getAccessTokenSilently } = this.props.auth0;
 
     await makeBackendRequest('/api/update_favorite', {
       userID: user.sub,
       category: this.props.category,
       favoritee_id: this.state.viewUserInfo.auth0_user_id,
-      favorite_status: !this.state.isFavorited
+      favorite_status: !this.state.isFavorited,
+      access_token: await getAccessTokenSilently()
     })
 
     const isFavorited = (await makeBackendRequest('/api/is_favorite', {

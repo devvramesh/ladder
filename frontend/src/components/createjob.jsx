@@ -75,7 +75,7 @@ class CreateJob extends React.Component {
     }
 
     save = async (publish) => {
-      const {user} = this.props.auth0;
+      const {user, getAccessTokenSilently} = this.props.auth0;
 
       // TODO: if we want to add a save-without-exit option,
       // we can use the return value of this as job_id
@@ -87,7 +87,8 @@ class CreateJob extends React.Component {
         description: this.description.current.value,
         qualifications: this.qualifications.current.value,
         logistics: this.logistics.current.value,
-        published: publish
+        published: publish,
+        access_token: await getAccessTokenSilently()
       })
 
       window.location.href = '/jobs'

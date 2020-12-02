@@ -61,10 +61,10 @@ class Favorites extends React.Component {
     let favorites = []
 
     if (user) {
-      favorites = await makeBackendRequest(
-        '/api/favorites',
-        { userID: user.sub, category: category }
-      )
+      favorites = await makeBackendRequest('/api/favorites', {
+        userID: user.sub,
+        category: category
+      })
     }
 
     console.log('got favorites:')
@@ -143,7 +143,7 @@ class Favorites extends React.Component {
     }
 
     if (!isAuthenticated) {
-      return (<div>Error: must be logged in to edit your profile.</div>)
+      return (<div>Error: must be logged in to view your favorites.</div>)
     }
 
     console.log('rendering favorites')

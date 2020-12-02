@@ -82,8 +82,11 @@ class EditJobs extends React.Component {
   }
 
   setPublished = async (job, publish) => {
+    const { getAccessTokenSilently } = this.props.auth0;
+
     let body = job;
     body.published = publish
+    body.access_token = await getAccessTokenSilently()
 
     await makeBackendRequest('/api/update_job', body)
     const jobs = await this.getJobs()
@@ -93,7 +96,13 @@ class EditJobs extends React.Component {
   }
 
   deleteJob = async (job_id) => {
-    await makeBackendRequest('/api/delete_job', {job_id : job_id})
+    const { user, getAccessTokenSilently } = this.props.auth0;
+
+    await makeBackendRequest('/api/delete_job', {
+      userID: user.sub,
+      job_id : job_id,
+      access_token: await getAccessTokenSilently()
+    })
     const jobs = await this.getJobs()
     console.log('job just deleted. setting state')
     console.log(jobs)

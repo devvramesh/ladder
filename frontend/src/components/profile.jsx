@@ -28,6 +28,7 @@ class Profile extends React.Component {
     const { user, isLoading } = this.props.auth0;
     console.log('load')
     console.log(user)
+    console.log(isLoading)
 
     if (isLoading) {
       setTimeout(this.load, 100)

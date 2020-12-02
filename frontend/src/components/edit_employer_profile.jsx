@@ -69,13 +69,14 @@ class EditableEmployerProfile extends React.Component {
   }
 
   save = async () => {
-    const { user } = this.props.auth0;
+    const { user, getAccessTokenSilently } = this.props.auth0;
     await makeBackendRequest('/api/update_profile', {
       // uneditable fields: use existing values
       userID: user.sub,
       email: user.email,
       username: this.state.userInfo.username,
-      account_type: 'employer',
+      account_type: 'employee',
+      access_token: await getAccessTokenSilently(),
 
       // editable fields: use text input values
       name: this.name.current.value,

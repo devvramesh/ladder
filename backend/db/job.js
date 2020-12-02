@@ -30,25 +30,24 @@ export default class Job {
     await client.query(`
       UPDATE jobs
       SET
-        employer_auth0_user_id = $2,
         job_title = $3,
         description = $4,
         qualifications = $5,
         logistics = $6,
         job_image_url = $7,
         published = $8
-      WHERE job_id = $1
+      WHERE job_id = $1 AND employer_auth0_user_id = $2
       ;`,
       [this.job_id, this.employer_auth0_user_id, this.job_title, this.description, this.qualifications, this.logistics, this.job_image_url, this.published]
     )
   }
 
-  static async deleteFromDB(client, job_id) {
+  static async deleteFromDB(client, job_id, auth0_user_id) {
     await client.query(`
       DELETE FROM jobs
-      WHERE job_id = $1
+      WHERE job_id = $1 AND employer_auth0_user_id = $2
       ;`,
-      [job_id]
+      [job_id, auth0_user_id]
     )
   }
 
@@ -94,7 +93,7 @@ export default class Job {
 
     return result.rows
   }
-  
+
   static async searchInDB(client, query) {
     // TODO: improve search. right now it's super basic
     const result = await client.query(`
