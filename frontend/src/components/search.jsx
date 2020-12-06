@@ -71,38 +71,7 @@ export default class Search extends React.Component {
     if (this.searchType === "employee") {
       return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
     } else if (this.searchType === "job") {
-<<<<<<< HEAD
       return (<JobView key={entry.auth0_user_id} job_id={entry.job_id}></JobView>)
-=======
-      return (<div className="job">
-        <h2>{entry.name}</h2>
-
-        <img src={entry.job_image_url} id="job-image" alt="Job Image" />
-
-        <Link to={"/profile/" + (entry.auth0_user_id === entry.username ? entry.username : entry.username )}>
-          <button>Profile</button>
-        </Link>
-
-        <a href={`mailto:${entry.email}`}>
-          <button>Contact</button>
-        </a>
-
-        <IconButton aria-label="Star" onClick={this.toggleFavorite}>
-          {false ? (<StarIcon />) : (<StarBorderIcon />)}
-        </IconButton>
-
-        <h3>Description: </h3>
-        <p>{entry.description}</p>
-
-        <h3>Qualifications: </h3>
-        <p>{entry.qualifications}</p>
-
-        <h3>Logistics: </h3>
-        <p>{entry.logistics}</p>
-
-      </div>)
-      //       <JobView key={entry.auth0_user_id} id={entry.auth0_user_id}></JobView>*/
->>>>>>> 83ce109cd9b192d7d1fdc6b6f0709a62be089f61
     } else {
       return null;
     }
