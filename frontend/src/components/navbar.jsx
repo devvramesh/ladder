@@ -44,7 +44,6 @@ export default class Navbar extends React.Component {
               <input type="text" placeholder={searchText} onKeyUp={this.handleSearchInput} ref={this.searchBar}></input>
               <button id="search-button" onClick={this.doSearch}>&#x1F50D;</button>
           </div>
-          <button style={style0} id="filter">[FilterTODO]</button>
       </div>
           {this.createAlternateSearchButton()}
       </div>
