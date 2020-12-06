@@ -177,7 +177,6 @@ class EditJobs extends React.Component {
       return (<div>Error: must be logged in as an employer to view your job posts</div>)
     }
 
-    this.getJobs()
 
     return (<div>
       <Navbar searchType={"this.searchType"}></Navbar>

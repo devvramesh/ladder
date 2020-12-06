@@ -71,13 +71,14 @@ export default class Search extends React.Component {
     if (this.searchType === "employee") {
       return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
     } else if (this.searchType === "job") {
-      return (<div>
-
+      return (<div className="job">
         <h2>{entry.name}</h2>
 
         <img src={entry.job_image_url} id="job-image" alt="Job Image" />
 
-        <button>Company</button>
+        <Link to={"/profile/" + (entry.auth0_user_id === entry.username ? entry.username : entry.username )}>
+          <button>Profile</button>
+        </Link>
 
         <a href={`mailto:${entry.email}`}>
           <button>Contact</button>
@@ -97,7 +98,7 @@ export default class Search extends React.Component {
         <p>{entry.logistics}</p>
         
       </div>)
-      //       <ViewJobs key={entry.auth0_user_id} id={entry.auth0_user_id}></ViewJobs>*/
+      //       <JobView key={entry.auth0_user_id} id={entry.auth0_user_id}></JobView>*/
     } else {
       return null;
     }
