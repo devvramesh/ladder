@@ -84,7 +84,7 @@ class JobView extends React.Component {
       <div id="profile">
           <h2>{this.state.viewJobInfo.name}</h2>
 
-          <img src={this.state.viewJobInfo.job_image_url} id="job-image" alt="Job Image" />
+           <img src={this.state.viewJobInfo.job_image_url} style={{height: "200px"}} id="job-image" alt="Job Image" />
 
           <Link to={"/profile/" + this.state.viewJobInfo.username}>
             <button>Profile</button>

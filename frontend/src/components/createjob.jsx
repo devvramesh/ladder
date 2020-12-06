@@ -12,6 +12,7 @@ class CreateJob extends React.Component {
         this.description = React.createRef();
         this.qualifications = React.createRef();
         this.logistics = React.createRef();
+        this.job_image_url = React.createRef();
 
         this.mounted = false;
 
@@ -86,6 +87,7 @@ class CreateJob extends React.Component {
         job_title: this.jobTitle.current.value,
         description: this.description.current.value,
         qualifications: this.qualifications.current.value,
+        job_image_url: this.job_image_url.current.value,
         logistics: this.logistics.current.value,
         published: publish,
         access_token: await getAccessTokenSilently()
@@ -126,6 +128,7 @@ class CreateJob extends React.Component {
               <textarea placeholder="Job Description" ref={this.description} defaultValue={this.state.jobInfo ? this.state.jobInfo.description : ""}/>
               <textarea placeholder="Job Qualifications" ref={this.qualifications} defaultValue={this.state.jobInfo ? this.state.jobInfo.qualifications : ""}/>
               <textarea placeholder="Logistics" ref={this.logistics} defaultValue={this.state.jobInfo ? this.state.jobInfo.logistics : ""}/>
+              <input placeholder="Job Image URL" ref={this.job_image_url} defaultValue={this.state.jobInfo ? this.state.jobInfo.job_image_url : ""}/>
               <div className="row" id="job-submitexit">
                   <button onClick={() => this.save(false)} >Save & Exit</button>
                   <button onClick={() => this.save(true)} >Publish, Save & Exit</button>
