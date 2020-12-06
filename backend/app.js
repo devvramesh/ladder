@@ -296,7 +296,8 @@ function serveApp() {
           req.body.location,
           req.body.profile_img_url,
           req.body.about,
-          req.body.logistics
+          req.body.logistics,
+          req.body.website_url
         ).updateInDB(client)
         sendBlank(res);
         return;

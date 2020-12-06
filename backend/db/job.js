@@ -76,7 +76,7 @@ export default class Job {
       return null;
     }
 
-    const andPublished = published ? "AND published = true" : ""
+    const andPublished = published ? 'AND jobs.published = TRUE' : ''
     const result = await client.query(`
       SELECT *
       FROM
@@ -84,7 +84,7 @@ export default class Job {
         JOIN employers
         ON jobs.employer_auth0_user_id = employers.auth0_user_id
       WHERE
-        jobs.employer_auth0_user_id = $1
+        jobs.employer_auth0_user_id LIKE $1
         ${andPublished}
       ORDER BY job_id ASC
       ;`,
@@ -105,6 +105,7 @@ export default class Job {
         JOIN users AS u
         ON u.auth0_user_id = e.auth0_user_id
       WHERE
+        j.published = TRUE AND
         LOWER(CONCAT(u.username, u.name, u.email, u.phone, u.location, e.about, e.logistics, j.job_title, j.description, j.qualifications, j.logistics)) LIKE LOWER($1)
       ;`,
       [`%${query}%`]

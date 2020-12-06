@@ -22,6 +22,7 @@ class EditableEmployerProfile extends React.Component {
     this.profile_img_url = React.createRef();
     this.about = React.createRef();
     this.logistics = React.createRef();
+    this.website_url = React.createRef();
     this.phone = React.createRef();
     this.location = React.createRef();
   }
@@ -69,6 +70,8 @@ class EditableEmployerProfile extends React.Component {
   }
 
   save = async () => {
+    console.log('saving')
+
     const { user, getAccessTokenSilently } = this.props.auth0;
     await makeBackendRequest('/api/update_profile', {
       // uneditable fields: use existing values
@@ -83,6 +86,7 @@ class EditableEmployerProfile extends React.Component {
       profile_img_url: this.profile_img_url.current.value,
       about: this.about.current.value,
       logistics: this.logistics.current.value,
+      website_url: this.website_url.current.value,
       phone: this.phone.current.value,
       location: this.location.current.value
     })
@@ -128,6 +132,11 @@ class EditableEmployerProfile extends React.Component {
       <div>
         <label htmlFor="logistics">Logistics:</label>
         <textarea name="logistics" ref={this.logistics} defaultValue={this.state.userInfo.logistics}></textarea>
+      </div>
+
+      <div>
+        <label htmlFor="website_url">Company Website URL:</label>
+        <textarea name="website_url" ref={this.website_url} defaultValue={this.state.userInfo.website_url}></textarea>
       </div>
 
       <div>

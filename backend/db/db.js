@@ -65,6 +65,7 @@ export async function dbInit() {
         auth0_user_id TEXT NOT NULL PRIMARY KEY,
         about TEXT,
         logistics TEXT,
+        website_url TEXT,
 
         FOREIGN KEY (auth0_user_id) REFERENCES users(auth0_user_id)
       );`
