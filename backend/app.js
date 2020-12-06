@@ -95,6 +95,9 @@ function serveApp() {
 
     withDB(async (client) => {
       const result = await Job.findByEmployerInDB(client, userID, published)
+      console.log('here!!!!!!')
+      console.log(published)
+      console.log(result)
       res.send(JSON.stringify(result))
       return;
     })

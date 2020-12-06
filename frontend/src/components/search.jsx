@@ -96,7 +96,7 @@ export default class Search extends React.Component {
 
         <h3>Logistics: </h3>
         <p>{entry.logistics}</p>
-        
+
       </div>)
       //       <JobView key={entry.auth0_user_id} id={entry.auth0_user_id}></JobView>*/
     } else {
