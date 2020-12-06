@@ -42,13 +42,19 @@ export default class Sidebar extends React.Component {
           className={`pointer border sidebar-entry
             ${selected ? "sidebar-selected" : ""}`}
           onClick={this.select(i)}>
-          {this.props.displayPreview(entry)}
+          <div className="sidebar-preview-outer">
+            <div className="sidebar-preview-inner">
+              {this.props.displayPreview(entry)}
+            </div>
+            <div className="sidebar-arrow">
+              &rarr;
+            </div>
+          </div>
         </div>);
     });
 
     return (<div className="sidebar-preview-pane">
       {entries}
-      <p>TODO: make this scroll if taller than the right (item) pane. see sidebar.jsx and sidebar.css</p>
     </div>);
   }
 
