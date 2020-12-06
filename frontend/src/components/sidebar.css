@@ -1,22 +1,29 @@
 .sidebar-outer {
   display: flex;
+  height: 100vh;
+  margin: 20px;
+  border: 1px solid black;
 }
 
 /* this is the left pane with the selectable headers */
 .sidebar-preview-pane {
   flex: 1;
-  border: 1px solid black;
+  border-right: 1px solid black;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: white;
 }
+
 
 /* this is the right pane which displays the full selected item */
 .sidebar-item-pane {
   flex: 1;
-  border: 1px solid black;
 }
 
 /* this is a selectable header within the left pane */
 .sidebar-entry {
-  border: 1px solid black;
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
 }
 
 .sidebar-entry:hover:not(.sidebar-selected) {
@@ -25,4 +32,22 @@
 
 .sidebar-selected {
   background-color: gray;
+}
+
+.sidebar-preview-outer {
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-preview-inner {
+  flex: 5;
+}
+
+.sidebar-arrow {
+  flex: 1;
+  font-size: 50px;
+}
+
+.sidebar-selected .sidebar-arrow {
+  color: white;
 }
