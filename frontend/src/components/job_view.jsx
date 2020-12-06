@@ -16,7 +16,7 @@ class JobView extends React.Component {
 
     this.state = {
       currUserInfo: null,
-      viewUserInfo: null,
+      viewJobInfo: null,
       isFavorited: false,
       ready: false
     }
@@ -44,14 +44,15 @@ class JobView extends React.Component {
 
       isFavorited = (await makeBackendRequest(
         '/api/is_favorite',
-        { userID: user.sub, category: "job", favoritee_id: this.props.id }
+        { userID: user.sub, category: "job", favoritee_id: this.props.job_id }
       )).is_favorite
     }
 
-    const viewUserInfo = await makeBackendRequest(
-      '/api/user_info',
-      { userID: this.props.id }
+    const viewJobInfo = await makeBackendRequest(
+      '/api/job_info',
+      { job_id: this.props.job_id }
     )
+
 
     console.log('favorite?')
     console.log(isFavorited)
@@ -59,7 +60,7 @@ class JobView extends React.Component {
     if (this.mounted) {
       this.setState({
         currUserInfo: currUserInfo,
-        viewUserInfo: viewUserInfo,
+        viewJobInfo: viewJobInfo,
         isFavorited: isFavorited,
         ready: !isLoading
       })
@@ -77,75 +78,35 @@ class JobView extends React.Component {
     this.mounted = false;
   }
 
-  createFavoritesButtons = () => {
-    const { isAuthenticated } = this.props.auth0;
-
-    if (isAuthenticated) {
-      return (<div>
-        <Link to="/favorites">
-          <button>Favorites</button>
-        </Link>
-        <IconButton aria-label="Star" onClick={this.toggleFavorite}>
-          {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
-        </IconButton>
-      </div>
-      )
-    } else {
-      return (<div></div>)
-    }
-  }
-
-  toggleFavorite = async () => {
-    const { user, getAccessTokenSilently } = this.props.auth0;
-
-    await makeBackendRequest('/api/update_favorite', {
-      userID: user.sub,
-      category: this.props.category,
-      favoritee_id: this.state.viewUserInfo.auth0_user_id,
-      favorite_status: !this.state.isFavorited,
-      access_token: await getAccessTokenSilently()
-    })
-
-    const isFavorited = (await makeBackendRequest('/api/is_favorite', {
-      userID: user.sub,
-      category: this.props.category,
-      favoritee_id: this.props.id
-    })).is_favorite
-
-    this.setState({
-      isFavorited: isFavorited
-    })
-  }
-
   showProfile() {
     return (
 
       <div id="profile">
-        <div className="job">
-          <h2>{this.viewUserInfo.name}</h2>
+          <h2>{this.state.viewJobInfo.name}</h2>
 
-          <img src={this.viewUserInfo.job_image_url} id="job-image" alt="Job Image" />
+          <img src={this.state.viewJobInfo.job_image_url} id="job-image" alt="Job Image" />
 
-          <Link to={"/profile/" + this.viewUserInfo.username}>
+          <Link to={"/profile/" + this.state.viewJobInfo.username}>
             <button>Profile</button>
           </Link>
 
-          <a href={`mailto:${this.viewUserInfo.email}`}>
+          <a href={`mailto:${this.state.viewJobInfo.email}`}>
             <button>Contact</button>
           </a>
 
-          {this.createFavoritesButtons()}
+          <IconButton aria-label="Star" onClick={this.toggleFavorite}>
+            {false ? (<StarIcon />) : (<StarBorderIcon />)}
+          </IconButton>
 
           <h3>Description: </h3>
-          <p>{this.viewUserInfo.description}</p>
+          <p>{this.state.viewJobInfo.description}</p>
 
           <h3>Qualifications: </h3>
-          <p>{this.viewUserInfo.qualifications}</p>
+          <p>{this.state.viewJobInfo.qualifications}</p>
 
           <h3>Logistics: </h3>
-          <p>{this.viewUserInfo.logistics}</p>
+          <p>{this.state.viewJobInfo.logistics}</p>
 
-        </div>
 
       </div>
     )
@@ -163,10 +124,10 @@ class JobView extends React.Component {
       return (<div>Error: please try again.</div>);
     }
 
-    if (!this.state.viewUserInfo) {
+    if (!this.state.viewJobInfo) {
       return (<div>Error: please try again.</div>);
     }
-
+    console.log("Job: " + JSON.stringify(this.state.viewJobInfo))
     return this.showProfile()
   }
 }
