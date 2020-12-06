@@ -139,7 +139,19 @@ class EditJobs extends React.Component {
         </Link>
         {publishButton}
         <button onClick={() => this.deleteJob(job.job_id)}>Delete</button>
-        [Job] {JSON.stringify(job)}
+        
+        <h2>{job.job_title}</h2>
+
+        <img src={job.job_image_url} id="job-image" alt="Job Image" />
+
+        <h3>Description: </h3>
+        <p>{job.description}</p>
+
+        <h3>Qualifications: </h3>
+        <p>{job.qualifications}</p>
+
+        <h3>Logistics: </h3>
+        <p>{job.logistics}</p>
       </div>)
   }
 
@@ -164,6 +176,8 @@ class EditJobs extends React.Component {
     if (this.state.userInfo.account_type !== "employer") {
       return (<div>Error: must be logged in as an employer to view your job posts</div>)
     }
+
+    this.getJobs()
 
     return (<div>
       <Navbar searchType={"this.searchType"}></Navbar>

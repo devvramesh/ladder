@@ -1,9 +1,12 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util"
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { makeBackendRequest, getUrlParams, } from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
+import IconButton from '@material-ui/core/IconButton';
+import StarIcon from '@material-ui/icons/Star';
+import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 class ViewJobs extends React.Component {
   constructor(props) {
@@ -53,8 +56,6 @@ class ViewJobs extends React.Component {
       valid = false;
     }
 
-    console.log(currUserInfo)
-
     if (this.mounted) {
       console.log('setting state!')
       this.setState({
@@ -95,12 +96,35 @@ class ViewJobs extends React.Component {
   }
 
   displayJob = (job) => {
+    console.log(this.state.viewUserInfo)
     if (!job) {
       return null;
     }
     return (
+
       <div>
-        [Job]{JSON.stringify(job)}
+        <h2>{job.name}</h2>
+
+        <img src={job.job_image_url} id="job-image" alt="Job Image" />
+
+        <button>Company</button>
+
+        <a href={`mailto:${job.email}`}>
+          <button>Contact</button>
+        </a>
+
+        <IconButton aria-label="Star" onClick={this.toggleFavorite}>
+          {false ? (<StarIcon />) : (<StarBorderIcon />)}
+        </IconButton>
+
+        <h3>Description: </h3>
+        <p>{job.description}</p>
+
+        <h3>Qualifications: </h3>
+        <p>{job.qualifications}</p>
+
+        <h3>Logistics: </h3>
+        <p>{job.logistics}</p>
       </div>)
   }
 
