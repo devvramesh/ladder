@@ -1,0 +1,66 @@
+#edit-profile {
+	width: 60%;
+	max-width: 700px;
+	justify-content: center;
+	margin-top: 0px;
+	margin-bottom: 25px;
+}
+
+#edit-profile div.edit-profile-section {
+	margin: 0 0;
+	padding: 0;
+	display: flex;
+	align-items: flex-start;
+}
+
+.edit-profile-section textarea, input {
+	margin-top : 20px;
+	margin-bottom : 20px;
+	font-size: 12pt;
+	flex: 40;
+}
+
+.edit-profile-section .separator {
+	flex: 1;
+}
+
+.edit-profile-section label {
+	margin-top : 25px;
+	margin-bottom : 20px;
+	font-size: 12pt;
+	flex: 7;
+}
+
+#edit-profile textarea {
+	height: 200px;
+	padding: 20px 20px;
+}
+
+#edit-profile input {
+	height: 35px;
+	padding: 2px 20px;
+}
+
+#edit-profile-save {
+	justify-content: space-between;
+	margin-top: 10px;
+}
+
+#edit-profile-save button {
+	background-color: #A96562;
+	width: 300px;
+	padding-top: 20px;
+	padding-bottom: 20px;
+	margin: 1px;
+	font-size: 14pt;
+}
+
+#edit-profile-cancel {
+	background-color: inherit;
+	padding: 10px 10px;
+	font-size: 14pt;
+}
+
+#edit-profile-link-cancel {
+	margin-left: auto;
+}

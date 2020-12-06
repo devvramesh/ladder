@@ -7,6 +7,7 @@ import EditableEmployeeProfile from "./edit_employee_profile"
 import EditableEmployerProfile from "./edit_employer_profile"
 import { withAuth0 } from "@auth0/auth0-react";
 import { GetCurrentUserID } from "../util"
+import "./editprofile.css"
 
 class EditProfile extends React.Component {
   constructor(props) {
@@ -62,6 +63,17 @@ class EditProfile extends React.Component {
     this.mounted = false;
   }
 
+  createProfile = () => {
+    if (this.state.userInfo.account_type === "employee") {
+      console.log('editing employee...')
+      return (<div className="column-centered"><EditableEmployeeProfile></EditableEmployeeProfile></div>)
+    } else if (this.state.userInfo.account_type === "employer") {
+      console.log('editing employer...')
+      return (<div className="column-centered"><EditableEmployerProfile></EditableEmployerProfile></div>)
+    }
+    return (<div>Error. Please try again.</div>);
+  }
+
   render() {
     console.log('rendering')
 
@@ -79,15 +91,13 @@ class EditProfile extends React.Component {
       return (<div>Error: must be logged in to edit your profile.</div>)
     }
 
-    if (this.state.userInfo.account_type === "employee") {
-      console.log('editing employee...')
-      return (<EditableEmployeeProfile></EditableEmployeeProfile>)
-    } else if (this.state.userInfo.account_type === "employer") {
-      console.log('editing employer...')
-      return (<EditableEmployerProfile></EditableEmployerProfile>)
-    }
-
-    return (<div>Error. Please try again.</div>)
+    return (
+      <div>
+        <Navbar></Navbar>
+        <h2>Edit Profile</h2>
+        {this.createProfile()}
+      </div>
+    )
   }
 }
 
