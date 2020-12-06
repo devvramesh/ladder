@@ -1,7 +1,7 @@
 const DEFAULT_PROFILE_IMG = 'https://www.pngfind.com/pngs/m/665-6659827_enterprise-comments-default-company-logo-png-transparent-png.png'
 
 export default class Employer {
-  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=DEFAULT_PROFILE_IMG, about=null, logistics=null) {
+  constructor(auth0_user_id, username, name, email, phone=null, location=null, profile_img_url=DEFAULT_PROFILE_IMG, about=null, logistics=null, website_url=null) {
     this.auth0_user_id = auth0_user_id;
     this.username = username;
     this.name = name;
@@ -11,6 +11,7 @@ export default class Employer {
     this.profile_img_url = profile_img_url;
     this.about = about;
     this.logistics = logistics;
+    this.website_url = website_url;
   }
 
   async updateInDB(client) {
@@ -35,16 +36,17 @@ export default class Employer {
 
     await client.query(`
       INSERT INTO
-        employers(auth0_user_id, about, logistics)
+        employers(auth0_user_id, about, logistics, website_url)
       VALUES
-        ($1, $2, $3)
+        ($1, $2, $3, $4)
       ON CONFLICT (auth0_user_id)
         DO UPDATE SET
         auth0_user_id = EXCLUDED.auth0_user_id,
         about = EXCLUDED.about,
-        logistics = EXCLUDED.logistics
+        logistics = EXCLUDED.logistics,
+        website_url = EXCLUDED.website_url
       ;`,
-      [this.auth0_user_id, this.about, this.logistics]
+      [this.auth0_user_id, this.about, this.logistics, this.website_url]
     )
   }
 
@@ -54,7 +56,7 @@ export default class Employer {
     }
 
     const result = await client.query(`
-      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.logistics
+      SELECT u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.logistics, e.website_url
       FROM
         users AS u
         JOIN employers AS e
@@ -66,9 +68,5 @@ export default class Employer {
     )
 
     return (result.rowCount == 1) ? result.rows[0] : null;
-  }
-
-  static ofRow(row) {
-    return new Employer(row.auth0_user_id, row.username, row.name, row.email, row.phone, row.location, row.profile_img_url, row.about, row.logistics)
   }
 }

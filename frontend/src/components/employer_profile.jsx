@@ -10,16 +10,6 @@ class EmployerProfile extends React.Component {
     return (<ProfileView showProfile={this.showProfile} {...this.props} category="company"></ProfileView>)
   }
 
-  createJobsButton = (ref) => {
-    let linkURL;
-    if (ref.props.editable) {
-      linkURL = "/jobs"
-    } else {
-      linkURL = `/jobs/${ref.state.viewUserInfo.username}`
-    }
-    return (<Link to={linkURL}><button>Jobs</button></Link>)
-  }
-
   showProfile(ref) {
     function createJobsButton() {
       let linkURL;
@@ -43,9 +33,9 @@ class EmployerProfile extends React.Component {
           </div>
           <div id="bottom-section">
               {createJobsButton()}
-              <Link to={ref.state.websiteURL}>
+              <a href={ref.state.viewUserInfo.website_url} target="_blank">
                 <button>Website</button>
-              </Link>
+              </a>
               <a href={`mailto:${ref.state.viewUserInfo.email}`}>
                 <button>Contact</button>
               </a>
