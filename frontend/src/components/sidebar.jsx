@@ -67,7 +67,7 @@ export default class Sidebar extends React.Component {
     // TODO: put these side-by-side instead of vertical.
     // maybe introduce a max-height + scroll-on-overflow for the item pane
     if (this.props.entries.length === 0) {
-      return this.props.ifEmpty;
+      return null;
     }
 
     return (<div className="sidebar-outer border">
