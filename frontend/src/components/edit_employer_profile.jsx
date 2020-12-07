@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { makeBackendRequest, getUrlParams, } from "../util";
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/StarBorder';
 import { withAuth0 } from "@auth0/auth0-react";
@@ -115,57 +115,57 @@ class EditableEmployerProfile extends React.Component {
 
     return (<div id="edit-profile" className="column">
 
-    <div className="edit-profile-section">
-      <label htmlFor="name">Name</label>
-      <div className="separator"></div>
-      <input name="name" placeholder="Name" ref={this.name} defaultValue={this.state.userInfo.name}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="name">Name</label>
+        <div className="separator"></div>
+        <input name="name" placeholder="Name" ref={this.name} defaultValue={this.state.userInfo.name} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="profile_img_url">Profile Image URL</label>
-      <div className="separator"></div>
-      <input name="profile_img_url" placeholder="Profile Image URL" ref={this.profile_img_url} defaultValue={this.state.userInfo.profile_img_url}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="profile_img_url">Profile Image URL</label>
+        <div className="separator"></div>
+        <input name="profile_img_url" placeholder="Profile Image URL" ref={this.profile_img_url} defaultValue={this.state.userInfo.profile_img_url} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="about">About</label>
-      <div name="about" className="separator"></div>
-      <textarea placeholder="About" ref={this.about} defaultValue={this.state.userInfo.about}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="about">About</label>
+        <div name="about" className="separator"></div>
+        <textarea placeholder="About" ref={this.about} defaultValue={this.state.userInfo.about} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="logistics">Logistics</label>
-      <div className="separator"></div>
-        <textarea name="logistics" placeholder="Logistics" ref={this.logistics} defaultValue={this.state.userInfo.logistics}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="logistics">Logistics</label>
+        <div className="separator"></div>
+        <textarea name="logistics" placeholder="Logistics" ref={this.logistics} defaultValue={this.state.userInfo.logistics} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="website_url">Company Website URL</label>
-      <div className="separator"></div>
-      <input name="website_url" placeholder="Company Website URL" ref={this.website_url} defaultValue={this.state.userInfo.website_url}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="website_url">Company Website URL</label>
+        <div className="separator"></div>
+        <input name="website_url" placeholder="Company Website URL" ref={this.website_url} defaultValue={this.state.userInfo.website_url} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="phone">Phone</label>
-      <div className="separator"></div>
-      <input name="phone" placeholder="Phone" ref={this.phone} defaultValue={this.state.userInfo.phone}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="phone">Phone</label>
+        <div className="separator"></div>
+        <input name="phone" placeholder="Phone" ref={this.phone} defaultValue={this.state.userInfo.phone} />
+      </div>
 
-    <div className="edit-profile-section">
-      <label htmlFor="location">Location</label>
-      <div className="separator"></div>
-      <input name="location" placeholder="Location" ref={this.location} defaultValue={this.state.userInfo.location}/>
-    </div>
+      <div className="edit-profile-section">
+        <label htmlFor="location">Location</label>
+        <div className="separator"></div>
+        <input name="location" placeholder="Location" ref={this.location} defaultValue={this.state.userInfo.location} />
+      </div>
 
-    <div className="row" id="edit-profile-save">
+      <div className="row" id="edit-profile-save">
         <button onClick={this.save} >Save & Continue Editing</button>
         <button onClick={this.saveExit} >Save & Exit</button>
-    </div>
-    <div className="row">
-    <Link to="/profile" id="edit-profile-link-cancel">
-        <button id="edit-profile-cancel">Cancel</button>
-    </Link>
-    </div>
+      </div>
+      <div className="row">
+        <Link to="/profile" id="edit-profile-link-cancel">
+          <button id="edit-profile-cancel">Cancel</button>
+        </Link>
+      </div>
     </div>)
   }
 }

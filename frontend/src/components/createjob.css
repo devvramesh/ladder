@@ -6,6 +6,11 @@
 	margin-bottom: 25px;
 }
 
+h4 {
+	text-align: left;
+	margin-bottom: 0px;
+}
+
 #create-job textarea, input {
 	margin-top : 20px;
 	margin-bottom : 20px;

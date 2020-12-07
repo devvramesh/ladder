@@ -128,6 +128,7 @@ class JobView extends React.Component {
       return (<div>Error: please try again.</div>);
     }
     console.log("Job: " + JSON.stringify(this.state.viewJobInfo))
+    console.log("User" + JSON.stringify(this.state.currUserInfo))
     return this.showProfile()
   }
 }
