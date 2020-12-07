@@ -4,12 +4,12 @@ import { useAuth0 } from "@auth0/auth0-react";
 const LoginButton = (props) => {
   const { loginWithRedirect } = useAuth0();
 
-  const login = () => {
+  const login = async () => {
     console.log(props.redirectUri)
-    loginWithRedirect({
+    await loginWithRedirect({
       // can't get this to work for anything but the homepage
       // even though I'm doing everything auth0 says
-      redirect_uri: props.redirectUri
+      redirectUri: props.redirectUri
     });
   }
 

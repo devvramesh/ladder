@@ -18,7 +18,7 @@ export default class Home extends React.Component {
         };
         return (
             <div className="column">
-                <LoginButton style={style} redirectUri={window.location.origin}></LoginButton>
+                <LoginButton style={style} redirectUri={`${window.location.origin}/profile`}></LoginButton>
                 <h1 className="logo" id="home-logo">Ladder</h1>
                 <div>
                     <Link to="/search?category=employee">

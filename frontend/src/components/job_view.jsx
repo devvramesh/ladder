@@ -85,9 +85,9 @@ class JobView extends React.Component {
 
   createProfileButton = () => {
     if (!this.props.editable) {
-      const { user, getAccessTokenSilently } = this.props.auth0;
+      const { user, isAuthenticated } = this.props.auth0;
       let link_addition = ""
-      if (user.sub !== this.state.viewJobInfo.auth0_user_id) {
+      if (!isAuthenticated || user.sub !== this.state.viewJobInfo.auth0_user_id) {
         link_addition = this.state.jobCompanyInfo.username
       }
 
@@ -220,7 +220,7 @@ class JobView extends React.Component {
             <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
             {
-              this.state.viewJobInfo.job_image_url === null ? 
+              this.state.viewJobInfo.job_image_url === null ?
               <img src={this.state.jobCompanyInfo.profile_img_url} id="profile-image" alt="Job Image"/> :
               <img src={this.state.viewJobInfo.job_image_url} id="profile-image" alt="Job Image"/>
             }

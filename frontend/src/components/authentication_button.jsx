@@ -78,7 +78,7 @@ class AuthenticationButton extends React.Component {
           fontSize: '12pt',
           flexGrow: '0'
       };
-      return (<LoginButton style={style} redirectUri={window.location.origin}></LoginButton>)
+      return (<LoginButton style={style} redirectUri={`${window.location.origin}/profile`}></LoginButton>)
     }
   }
 
