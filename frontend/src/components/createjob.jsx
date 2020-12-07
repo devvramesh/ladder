@@ -9,6 +9,7 @@ class CreateJob extends React.Component {
     super(props);
 
     this.jobTitle = React.createRef();
+    this.job_image_url = React.createRef();
     this.description = React.createRef();
     this.qualifications = React.createRef();
     this.logistics = React.createRef();
@@ -84,6 +85,7 @@ class CreateJob extends React.Component {
       employer_auth0_user_id: user.sub,
       job_id: this.job_id,
       job_title: this.jobTitle.current.value,
+      job_image_url: this.job_image_url.current.value,
       description: this.description.current.value,
       qualifications: this.qualifications.current.value,
       logistics: this.logistics.current.value,
