@@ -124,6 +124,8 @@ class CreateJob extends React.Component {
           <h2>Create a Job</h2>
           <h4>Job Title</h4>
           <input placeholder="Job Title" ref={this.jobTitle} defaultValue={this.state.jobInfo ? this.state.jobInfo.job_title : ""} />
+          <h4>Job Image URL</h4>
+          <input placeholder="Job Image URL" ref={this.job_image_url} defaultValue={this.state.jobInfo ? this.state.jobInfo.job_image_url : ""} />
           <h4>Job Description</h4>
           <textarea placeholder="Job Description" ref={this.description} defaultValue={this.state.jobInfo ? this.state.jobInfo.description : ""} />
           <h4>Job Qualifications</h4>
