@@ -198,41 +198,49 @@ class JobView extends React.Component {
 
     return (
 
-      <div id="profile">
-        {
-          this.props.editable ? <div>
-          <Link to={`/edit_job/${this.state.viewJobInfo.job_id}`}>
-            <button>Edit</button>
-          </Link>
-        {publishButton}
-        <button onClick={() => this.deleteJob(this.state.viewJobInfo.job_id)}>Delete</button>
+      <div className="column" id="profile-main">
+        <div id="profile">
+          <div id="top-section">
 
-        </div> : <div></div>
+            {
+              this.props.editable ? <div>
+                <Link to={`/edit_job/${this.state.viewJobInfo.job_id}`}>
+                  <button>Edit</button>
+                </Link>
+                {publishButton}
+                <button onClick={() => this.deleteJob(this.state.viewJobInfo.job_id)}>Delete</button>
 
-        }
+              </div> : <div></div>
 
-        <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
+            }
 
-        <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
+            <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
-        {this.createProfileButton()}
+            {this.state.viewJobInfo.job_image_url === null}
+            <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
 
-        <a href={`mailto:${this.state.viewJobInfo.email}`}>
-          <button>Contact</button>
-        </a>
-
-        {this.createFavoritesButton()}
-
-        <h3>Description: </h3>
-        <p>{this.state.viewJobInfo.description}</p>
-
-        <h3>Qualifications: </h3>
-        <p>{this.state.viewJobInfo.qualifications}</p>
-
-        <h3>Logistics: </h3>
-        <p>{this.state.viewJobInfo.logistics}</p>
+            {this.createProfileButton()}
 
 
+
+            <a href={`mailto:${this.state.viewJobInfo.email}`}>
+              <button>Contact</button>
+            </a>
+
+            {this.createFavoritesButton()}
+          </div>
+          <div id="bottom-section">
+
+            <h3>Description: </h3>
+            <p>{this.state.viewJobInfo.description}</p>
+
+            <h3>Qualifications: </h3>
+            <p>{this.state.viewJobInfo.qualifications}</p>
+
+            <h3>Logistics: </h3>
+            <p>{this.state.viewJobInfo.logistics}</p>
+          </div>
+        </div>
       </div>
     )
   }

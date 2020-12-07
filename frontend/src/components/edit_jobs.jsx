@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util"
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { makeBackendRequest, getUrlParams, } from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
 import JobView from "./job_view"
 
@@ -124,7 +124,9 @@ class EditJobs extends React.Component {
       <Navbar searchType={"this.searchType"}></Navbar>
       <h2>My Jobs</h2>
       <Link to="/create_job">
-        <button>New Job</button>
+        <div id="top-section">
+          <button>New Job</button>
+        </div>
       </Link>
       <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview}
         displayEntry={this.displayJob}></Sidebar>
