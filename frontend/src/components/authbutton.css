@@ -1,0 +1,28 @@
+.auth_image {
+	border-radius: 50%;
+	max-width: 50px;
+	max-height: 50px;
+}
+
+.toggle {
+	width: 100%;
+	height: 100%;
+}
+
+.dropdown-label-outer {
+	display: flex;
+	align-items: center;
+}
+
+.dropdown-label-outer span.dropdown-username {
+	flex: 5;
+}
+
+.dropdown-label-outer img {
+	flex: 5;
+	margin-right: 10px;
+}
+
+.dropdown-label-outer span.dropdown-arrow {
+	flex: 1;
+}
