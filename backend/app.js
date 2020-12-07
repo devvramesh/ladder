@@ -113,7 +113,6 @@ function serveApp() {
       sendBlank(res);
       return;
     }
-    console.log(JSON.stringify(job))
 
     const job = new Job(
       jobID,
