@@ -1,18 +1,12 @@
 import React from "react";
-import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
-import IconButton from '@material-ui/core/IconButton';
-import StarIcon from '@material-ui/icons/StarBorder';
+import { Link } from "react-router-dom";
+import {makeBackendRequest } from "../util";
 import { withAuth0 } from "@auth0/auth0-react";
 import "./editprofile.css"
 
 class EditableEmployeeProfile extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log('edit employee profile')
 
     this.state = {
       userInfo: null,
@@ -49,10 +43,7 @@ class EditableEmployeeProfile extends React.Component {
       )
     }
 
-    console.log(userInfo)
-
     if (this.mounted) {
-      console.log('setting state!')
       this.setState({
         userInfo: userInfo,
         ready: !isLoading
@@ -61,13 +52,11 @@ class EditableEmployeeProfile extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 

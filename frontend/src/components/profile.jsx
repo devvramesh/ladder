@@ -1,8 +1,6 @@
 import React from "react";
 import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
+import {makeBackendRequest} from "../util";
 import EmployeeProfile from "./employee_profile"
 import EmployerProfile from "./employer_profile"
 import { withAuth0 } from "@auth0/auth0-react";
@@ -26,9 +24,6 @@ class Profile extends React.Component {
 
   load = async () => {
     const { user, isLoading } = this.props.auth0;
-    console.log('load')
-    console.log(user)
-    console.log(isLoading)
 
     if (isLoading) {
       setTimeout(this.load, 100)
@@ -47,19 +42,12 @@ class Profile extends React.Component {
       )
     }
 
-    console.log('h2')
-    console.log(currUserInfo)
-
     let viewUserInfo = null;
     if (this.userToView) {
       viewUserInfo = await makeBackendRequest('/api/user_info', { username: this.userToView })
     }
 
     if (this.mounted) {
-      console.log('setting state!')
-      console.log(currUserInfo)
-      console.log(user)
-      console.log(isLoading)
       this.setState({
         currUserInfo: currUserInfo,
         viewUserInfo: viewUserInfo,
@@ -69,33 +57,24 @@ class Profile extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 
   render() {
-    console.log('rendering profile')
-
     const { isAuthenticated } = this.props.auth0;
 
     if (!this.state.ready) {
       return (<div>Loading...</div>);
     }
 
-    console.log('ready')
-
     // case 1: user visits /profile. must be authenticated, then will
     // be shown own profile
     if (!this.userToView) {
-      console.log('authenticated')
-      console.log(this.state)
-
       if (!isAuthenticated) {
         return (<div>Error: must log in to view your profile</div>)
       }
@@ -125,7 +104,6 @@ class Profile extends React.Component {
 
     // case 2: user vists (ex.) /profile/johnsmith1. will be shown
     // johnsmith1's profile, non-editable
-    console.log('case 2')
 
     if (!this.state.viewUserInfo || !this.state.viewUserInfo.account_type) {
       return (<div>Error: user {this.userToView} not found.</div>)
@@ -134,8 +112,6 @@ class Profile extends React.Component {
     if (isAuthenticated && (!this.state.currUserInfo || !this.state.currUserInfo.account_type)) {
       return (<div>Error: please try again.</div>);
     }
-
-    console.log(this.state)
 
     if (this.state.viewUserInfo.account_type === "employee") {
       return (<div>

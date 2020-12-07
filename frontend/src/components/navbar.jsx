@@ -1,8 +1,6 @@
 import React from "react";
 import {Link} from "react-router-dom";
-import LoginButton from "./login_button"
 import AuthenticationButton from "./authentication_button"
-import querystring from "querystring"
 import "./navbar.css"
 
 // NOTE(jake):
@@ -21,7 +19,6 @@ export default class Navbar extends React.Component {
   }
 
   doSearch = () => {
-    console.log('doSearch')
     const queryString = this.searchBar.current.value ? `&query=${encodeURI(this.searchBar.current.value)}` : "";
 
     window.location.href =
@@ -35,7 +32,6 @@ export default class Navbar extends React.Component {
   }
 
   createSearchBar = () => {
-      const style0 = (this.state.searchType === "employee") ? {backgroundColor:'#CCB8A8'} : {backgroundColor:'#C1D1EA'};
       const searchText = (this.state.searchType === "employee") ? "Search Employees" : "Search Jobs";
 
     return (<div className="row" id="search-bar">

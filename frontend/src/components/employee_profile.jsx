@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "./navbar"
 import ProfileView from "./profile_view"
 
 export default class EmployeeProfile extends React.Component {

@@ -1,8 +1,7 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { makeBackendRequest, getUrlParams, } from "../util"
+import { makeBackendRequest } from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
 import JobView from "./job_view"
 
@@ -55,7 +54,6 @@ class ViewJobs extends React.Component {
     }
 
     if (this.mounted) {
-      console.log('setting state!')
       this.setState({
         currUserInfo: currUserInfo,
         viewUserInfo: viewUserInfo,
@@ -75,13 +73,11 @@ class ViewJobs extends React.Component {
 
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 
@@ -99,8 +95,6 @@ class ViewJobs extends React.Component {
 
 
   render() {
-    console.log('rendering')
-
     const { isAuthenticated } = this.props.auth0;
 
     if (!this.state.ready) {

@@ -1,5 +1,4 @@
 import React from "react";
-import Navbar from "./navbar";
 import ProfileView from "./profile_view";
 import {Link} from "react-router-dom";
 import { withAuth0 } from "@auth0/auth0-react";

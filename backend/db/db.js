@@ -13,10 +13,6 @@ const pool = new Pool({
 
 let initialized = false;
 
-// NOTE(jake): delete eventually. just resets the DB each run
-// and fills it with dummy data.
-let TESTING = true;
-
 export async function withDB(fn) {
   const client = await pool.connect()
   let result = null;

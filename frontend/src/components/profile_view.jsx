@@ -1,8 +1,6 @@
 import React from "react";
-import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { makeBackendRequest, getUrlParams, } from "../util";
+import { Link } from "react-router-dom";
+import { makeBackendRequest } from "../util";
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -53,9 +51,6 @@ class ProfileView extends React.Component {
       { userID: this.props.id }
     )
 
-    console.log('favorite?')
-    console.log(isFavorited)
-
     if (this.mounted) {
       this.setState({
         currUserInfo: currUserInfo,
@@ -67,19 +62,15 @@ class ProfileView extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 
   createEditButton = () => {
-    console.log('edit?')
-    console.log(this.props.editable)
     if (this.props.editable) {
       return (<Link to="/edit_profile">
         <button>Edit</button>

@@ -1,12 +1,9 @@
 import React from "react";
 import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
+import {makeBackendRequest} from "../util";
 import EditableEmployeeProfile from "./edit_employee_profile"
 import EditableEmployerProfile from "./edit_employer_profile"
 import { withAuth0 } from "@auth0/auth0-react";
-import { GetCurrentUserID } from "../util"
 import "./editprofile.css"
 
 class EditProfile extends React.Component {

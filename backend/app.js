@@ -15,7 +15,7 @@ import Job from './db/job.js'
 import Favorites from './db/favorites.js'
 
 const PORT = process.env.PORT || 5000
-const DEBUG = true;
+const DEBUG = false;
 
 const app = express();
 const jsonParser = bodyParser.json();
@@ -41,6 +41,8 @@ function serveApp() {
         console.log(req.body);
       }
       const result = await callback(req, res);
+      console.log("Result:")
+      console.log(result)
       console.log('---------------------------------------------');
       return result;
     });
@@ -225,7 +227,6 @@ function serveApp() {
     const userID = req.body.userID;
     const category = req.body.category;
     const token = req.body.token;
-    console.log('token: ' + token)
     if (!userID || !category) {
       sendBlank(res);
       return;
@@ -327,9 +328,6 @@ function serveApp() {
           user = await User.findByUsername(client, username)
         }
 
-        console.log('send 0')
-        console.log(user)
-
         if (user) {
           userID = user.auth0_user_id
           username = user.username
@@ -348,8 +346,6 @@ function serveApp() {
           sendBlank(res);
           return;
         }
-        console.log('send 1')
-        console.log(result)
         res.send(JSON.stringify(result))
         return;
       } else {
@@ -382,15 +378,11 @@ function serveApp() {
           sendBlank(res);
           return;
         }
-        console.log('send 2')
-        console.log(result)
         res.send(JSON.stringify(result))
         return;
       }
     })
   });
-
-  console.log('Backend served.')
 
   if (process.env.RUN_MODE === "HEROKU") {
     console.log("Running on Heroku. Frontend should have been built already.")

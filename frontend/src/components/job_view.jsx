@@ -1,8 +1,6 @@
 import React from "react";
-import Navbar from "./navbar"
-import Sidebar from "./sidebar"
-import { Link, Redirect, withRouter } from "react-router-dom";
-import { makeBackendRequest, getUrlParams, } from "../util";
+import { Link } from "react-router-dom";
+import { makeBackendRequest } from "../util";
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -58,9 +56,6 @@ class JobView extends React.Component {
       { userID: viewJobInfo.auth0_user_id }
     )
 
-    console.log('favorite?')
-    console.log(isFavorited)
-
     if (this.mounted) {
       this.setState({
         currUserInfo: currUserInfo,
@@ -73,13 +68,11 @@ class JobView extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 
@@ -154,8 +147,6 @@ class JobView extends React.Component {
       )
     }
 
-    console.log('got jobs:')
-    console.log(jobs)
     return jobs
   }
 
@@ -182,8 +173,6 @@ class JobView extends React.Component {
       access_token: await getAccessTokenSilently()
     })
     const jobs = await this.getJobs()
-    console.log('job just deleted. setting state')
-    console.log(jobs)
     this.setState({
       jobs: jobs
     })
@@ -255,8 +244,6 @@ class JobView extends React.Component {
 
   render() {
     const { isAuthenticated } = this.props.auth0;
-
-    console.log('job view render')
 
     if (!this.state.ready) {
       return (<div>Loading...</div>);

@@ -1,6 +1,6 @@
+
 import React from "react";
 import {Link} from "react-router-dom";
-import {makeBackendRequest} from "../util"
 import LoginButton from "./login_button";
 import './home.css'
 

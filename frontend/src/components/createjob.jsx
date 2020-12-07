@@ -45,8 +45,6 @@ class CreateJob extends React.Component {
       )
     }
 
-    console.log(userInfo)
-
     let jobInfo = null;
     if (this.job_id >= 0) {
       jobInfo = await makeBackendRequest(
@@ -65,13 +63,11 @@ class CreateJob extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 

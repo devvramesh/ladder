@@ -1,6 +1,4 @@
 import React from "react";
-import {Link} from "react-router-dom";
-import {makeBackendRequest} from "../util"
 import './sidebar.css'
 
 // NOTE(jake):
@@ -19,9 +17,6 @@ import './sidebar.css'
 export default class Sidebar extends React.Component {
   constructor(props) {
     super(props);
-
-    console.log('Sidebar:')
-    console.log(this.props)
 
     this.state = {
       selectedIndex: 0,
@@ -59,7 +54,6 @@ export default class Sidebar extends React.Component {
   }
 
   displaySelected = () => {
-    console.log('displayselected')
     const index = this.state.selectedIndex
     const entries = this.state.entries.slice()
     const selected = entries[index]
@@ -70,8 +64,6 @@ export default class Sidebar extends React.Component {
         entries: entries
       })
     }
-
-    console.log(selected)
 
     return selected ? this.props.displayEntry(selected, deleteFn) : null;
   }

@@ -2,7 +2,6 @@ import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
 import EmployeeProfile from "./employee_profile"
-import { Link, Redirect, withRouter } from "react-router-dom";
 import { makeBackendRequest, getUrlParams, } from "../util"
 import JobView from "./job_view"
 
@@ -40,8 +39,6 @@ export default class Search extends React.Component {
     const params = getUrlParams(this);
 
     makeBackendRequest('/api/search', params).then((result) => {
-      console.log('fetched')
-      console.log(result)
       this.setState({ searchResults: result, ready: true });
     })
   }
@@ -75,14 +72,12 @@ export default class Search extends React.Component {
   }
 
   render() {
-    console.log('rendering')
     const params = getUrlParams(this);
 
     if (!this.isValid || !this.state.ready) {
       return (<div>Loading...</div>)
     }
-    console.log('rendering valid')
-    console.log(this.state)
+    
     return (<div>
       <Navbar searchType={this.searchType} initialSearchBarText={params.query}></Navbar>
       <h2>Search Results</h2>

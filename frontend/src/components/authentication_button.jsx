@@ -6,6 +6,8 @@ import LoginButton from "./login_button"
 import LogoutButton from "./logout_button"
 import {Link} from "react-router-dom";
 
+// based on example in Auth0 Documentation
+
 class AuthenticationButton extends React.Component {
   constructor(props) {
     super(props);
@@ -33,13 +35,8 @@ class AuthenticationButton extends React.Component {
     let userInfo = null;
     if (user) {
       userInfo = await makeBackendRequest('/api/user_info', {userID:user.sub})
-      console.log('got user')
-      console.log(user)
-      console.log('got userInfo')
-      console.log(userInfo)
     }
     if (this.mounted) {
-      console.log(userInfo)
       this.setState({
         userInfo: userInfo,
         ready: !isLoading
@@ -48,7 +45,6 @@ class AuthenticationButton extends React.Component {
   }
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load()
   };
@@ -95,7 +91,6 @@ class AuthenticationButton extends React.Component {
 
   render() {
     const { isAuthenticated } = this.props.auth0;
-    console.log('authbutton render')
 
     if (!this.state.ready) {
       return (<div>Loading...</div>);
@@ -106,17 +101,7 @@ class AuthenticationButton extends React.Component {
     }
 
     return (<div>
-      {/*<p>
-        Authenticated: {isAuthenticated.toString()}
-      </p>*/}
       {this.createButtons(isAuthenticated)}
-      {/*<p>
-        logged in as: {isAuthenticated ? this.state.userInfo.name : null}
-      </p>
-      <p>
-        Current user ID/token: {(user ? user.sub : "N/A")}
-      </p>
-      {this.showUser()}*/}
      </div>);
    }
 };

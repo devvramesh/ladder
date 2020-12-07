@@ -3,8 +3,7 @@ import Navbar from "./navbar"
 import Sidebar from "./sidebar"
 import EmployeeProfile from "./employee_profile"
 import EmployerProfile from "./employer_profile"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util"
+import {makeBackendRequest} from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
 import JobView from "./job_view"
 
@@ -46,10 +45,7 @@ class Favorites extends React.Component {
       favorites = await this.getFavorites(this.state.category)
     }
 
-    console.log(userInfo)
-
     if (this.mounted) {
-      console.log('setting state!')
       this.setState({
         userInfo: userInfo,
         favorites: favorites,
@@ -69,20 +65,16 @@ class Favorites extends React.Component {
       })
     }
 
-    console.log('got favorites:')
-    console.log(favorites)
     return favorites
   }
 
 
   async componentDidMount() {
-    console.log('didMount')
     this.mounted = true;
     await this.load();
   }
 
   componentWillUnmount() {
-    console.log('unmount')
     this.mounted = false;
   }
 
@@ -147,9 +139,6 @@ class Favorites extends React.Component {
     if (!isAuthenticated) {
       return (<div>Error: must be logged in to view your favorites.</div>)
     }
-
-    console.log('rendering favorites')
-    console.log(this.state.favorites)
 
     return (<div>
       <Navbar></Navbar>
