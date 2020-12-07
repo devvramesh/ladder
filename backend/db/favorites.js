@@ -140,11 +140,14 @@ export default class Favorites {
 
   static async getFavoriteJobs(client, auth0_user_id) {
     const result = await client.query(`
-      SELECT *
+      SELECT
+        u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.website_url, j.employer_auth0_user_id, j.job_id, j.job_title, j.description, j.qualifications, j.logistics, j.job_image_url, j.published
       FROM
         jobs AS j
         JOIN employers AS e
         ON j.employer_auth0_user_id = e.auth0_user_id
+        JOIN users AS u
+        ON u.auth0_user_id = e.auth0_user_id
         JOIN favorite_jobs AS f
         ON j.job_id = f.favoritee_job_id
       WHERE

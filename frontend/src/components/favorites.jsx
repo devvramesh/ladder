@@ -86,6 +86,7 @@ class Favorites extends React.Component {
         <h4>{entry.location || "[Location unavailable]"}</h4>
       </div>)
     } else if (this.state.category === "job") {
+      console.log(entry)
       return (<div>
         <h3>{entry.job_title || "[Job title unavailable]"}</h3>
         <h4>{entry.name || "[Employer unavailable]"}</h4>

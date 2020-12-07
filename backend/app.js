@@ -41,9 +41,9 @@ function serveApp() {
         console.log(req.body);
       }
       const result = await callback(req, res);
-      console.log("Result:")
-      console.log(result)
-      console.log('---------------------------------------------');
+      if (DEBUG) {
+        console.log('---------------------------------------------');
+      }
       return result;
     });
   };
