@@ -93,8 +93,8 @@ class ViewJobs extends React.Component {
     </div>)
   }
 
-  displayJob = (job) => {
-    return(<JobView key={job.job_id} job_id={job.job_id} editable={false}></JobView>)
+  displayJob = (job, deleteFn) => {
+    return(<JobView key={job.job_id} job_id={job.job_id} editable={false} delete={deleteFn}></JobView>)
   }
 
 
@@ -116,7 +116,7 @@ class ViewJobs extends React.Component {
     }
 
     return (<div>
-      <Navbar searchType={"this.searchType"}></Navbar>
+      <Navbar searchType={this.searchType}></Navbar>
       <h2>{`${this.state.viewUserInfo.name}'s`} Jobs</h2>
       <Sidebar entries={this.state.jobs} displayPreview={this.displayPreview}
         displayEntry={this.displayJob}></Sidebar>

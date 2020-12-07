@@ -201,14 +201,17 @@ class JobView extends React.Component {
       <div className="column" id="profile-main">
         <div id="profile">
           <div id="top-section">
-
             {
               this.props.editable ? <div>
                 <Link to={`/edit_job/${this.state.viewJobInfo.job_id}`}>
                   <button>Edit</button>
                 </Link>
                 {publishButton}
-                <button onClick={() => this.deleteJob(this.state.viewJobInfo.job_id)}>Delete</button>
+                <button onClick={() => {
+                  this.deleteJob(this.state.viewJobInfo.job_id);
+                  this.props.delete()
+                }}>
+                  Delete</button>
 
               </div> : <div></div>
 
@@ -216,12 +219,9 @@ class JobView extends React.Component {
 
             <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
-            {this.state.viewJobInfo.job_image_url === null}
             <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
 
             {this.createProfileButton()}
-
-
 
             <a href={`mailto:${this.state.viewJobInfo.email}`}>
               <button>Contact</button>
@@ -248,6 +248,8 @@ class JobView extends React.Component {
 
   render() {
     const { isAuthenticated } = this.props.auth0;
+
+    console.log('job view render')
 
     if (!this.state.ready) {
       return (<div>Loading...</div>);
