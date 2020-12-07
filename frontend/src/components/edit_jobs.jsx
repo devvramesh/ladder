@@ -83,36 +83,6 @@ class EditJobs extends React.Component {
     this.mounted = false;
   }
 
-  setPublished = async (job, publish) => {
-    const { getAccessTokenSilently } = this.props.auth0;
-
-    let body = job;
-    body.published = publish
-    body.access_token = await getAccessTokenSilently()
-
-    await makeBackendRequest('/api/update_job', body)
-    const jobs = await this.getJobs()
-    this.setState({
-      jobs: jobs
-    })
-  }
-
-  deleteJob = async (job_id) => {
-    const { user, getAccessTokenSilently } = this.props.auth0;
-
-    await makeBackendRequest('/api/delete_job', {
-      userID: user.sub,
-      job_id : job_id,
-      access_token: await getAccessTokenSilently()
-    })
-    const jobs = await this.getJobs()
-    console.log('job just deleted. setting state')
-    console.log(jobs)
-    this.setState({
-      jobs: jobs
-    })
-  }
-
   displayPreview = (entry) => {
     return (<div>
       <h3>{entry.job_title || "[Job title unavailable]"}</h3>
@@ -123,38 +93,8 @@ class EditJobs extends React.Component {
   }
 
   displayJob = (job) => {
-    if (!job) {
-      return null;
-    }
-    ;
-    let publishButton;
-    if (job.published) {
-      publishButton = (<button onClick={() => this.setPublished(job, false)}>Unpublish</button>)
-    } else {
-      publishButton = (<button onClick={() => this.setPublished(job, true)}>Publish</button>)
-    }
 
-    return (
-      <div>
-        <Link to={`/edit_job/${job.job_id}`}>
-          <button>Edit</button>
-        </Link>
-        {publishButton}
-        <button onClick={() => this.deleteJob(job.job_id)}>Delete</button>
-        
-        <h2>{job.job_title}</h2>
-
-        <img src={job.job_image_url} id="job-image" alt="Job Image" />
-
-        <h3>Description: </h3>
-        <p>{job.description}</p>
-
-        <h3>Qualifications: </h3>
-        <p>{job.qualifications}</p>
-
-        <h3>Logistics: </h3>
-        <p>{job.logistics}</p>
-      </div>)
+    return (<JobView key={job.job_id} job_id={job.job_id} editable={true}></JobView>)
   }
 
 

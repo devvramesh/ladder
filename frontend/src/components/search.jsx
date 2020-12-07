@@ -68,7 +68,7 @@ export default class Search extends React.Component {
     if (this.searchType === "employee") {
       return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
     } else if (this.searchType === "job") {
-      return (<JobView key={entry.job_id} job_id={entry.job_id}></JobView>)
+      return (<JobView key={entry.job_id} job_id={entry.job_id} editable={false}></JobView>)
     } else {
       return null;
     }

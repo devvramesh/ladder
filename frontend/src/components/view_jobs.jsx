@@ -94,7 +94,7 @@ class ViewJobs extends React.Component {
   }
 
   displayJob = (job) => {
-    return(<JobView key={this.state.currUserInfo.auth0_user_id} job_id={job.job_id}></JobView>)
+    return(<JobView key={job.job_id} job_id={job.job_id} editable={false}></JobView>)
   }
 
 

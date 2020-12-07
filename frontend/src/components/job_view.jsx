@@ -84,23 +84,28 @@ class JobView extends React.Component {
   }
 
   createProfileButton = () => {
-    const { user, getAccessTokenSilently } = this.props.auth0;
-    let link_addition = ""
-    if (user.sub !== this.state.viewJobInfo.auth0_user_id) {
-      link_addition = this.state.jobCompanyInfo.username
+    if (!this.props.editable) {
+      const { user, getAccessTokenSilently } = this.props.auth0;
+      let link_addition = ""
+      if (user.sub !== this.state.viewJobInfo.auth0_user_id) {
+        link_addition = this.state.jobCompanyInfo.username
+      }
+
+      return (
+        <Link to={"/profile/" + link_addition}>
+          <button>Profile</button>
+        </Link>
+      )
+    } else {
+      return (<div></div>)
     }
 
-    return (
-      <Link to={"/profile/" + link_addition}>
-        <button>Profile</button>
-      </Link>
-    )
   }
 
   createFavoritesButton = () => {
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated) {
+    if (isAuthenticated && !this.props.editable) {
       return (<div>
         <IconButton aria-label="Star" onClick={this.toggleFavorite}>
           {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
@@ -134,10 +139,78 @@ class JobView extends React.Component {
     })
   }
 
+  getJobs = async () => {
+    const { user } = this.props.auth0;
+    let jobs = []
+
+    if (user) {
+      jobs = await makeBackendRequest(
+        '/api/get_jobs',
+        { userID: user.sub, published: false }
+      )
+    }
+
+    console.log('got jobs:')
+    console.log(jobs)
+    return jobs
+  }
+
+  setPublished = async (job, publish) => {
+    const { getAccessTokenSilently } = this.props.auth0;
+
+    let body = job;
+    body.published = publish
+    body.access_token = await getAccessTokenSilently()
+
+    await makeBackendRequest('/api/update_job', body)
+    const jobs = await this.getJobs()
+    this.setState({
+      jobs: jobs
+    })
+  }
+
+  deleteJob = async (job_id) => {
+    const { user, getAccessTokenSilently } = this.props.auth0;
+
+    await makeBackendRequest('/api/delete_job', {
+      userID: user.sub,
+      job_id: job_id,
+      access_token: await getAccessTokenSilently()
+    })
+    const jobs = await this.getJobs()
+    console.log('job just deleted. setting state')
+    console.log(jobs)
+    this.setState({
+      jobs: jobs
+    })
+  }
+
   showProfile() {
+    let publishButton = <div></div>
+    if (this.props.editable) {
+      if (this.state.viewJobInfo.published) {
+        publishButton = (<button onClick={() => this.setPublished(this.state.viewJobInfo, false)}>Unpublish</button>)
+      } else {
+        publishButton = (<button onClick={() => this.setPublished(this.state.viewJobInfo, true)}>Publish</button>)
+      }
+    }
+
+
     return (
 
       <div id="profile">
+        {
+          this.props.editable ? <div>
+          <Link to={`/edit_job/${this.state.viewJobInfo.job_id}`}>
+            <button>Edit</button>
+          </Link>
+        {publishButton}
+        <button onClick={() => this.deleteJob(this.state.viewJobInfo.job_id)}>Delete</button>
+
+        </div> : <div></div>
+
+        }
+
         <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
         <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
