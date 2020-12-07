@@ -83,20 +83,25 @@ class ProfileView extends React.Component {
   createFavoritesButtons = () => {
     const { isAuthenticated } = this.props.auth0;
 
-    if (isAuthenticated) {
-      return (<div>
-        <IconButton className="favorite-button" aria-label="Star" onClick={this.toggleFavorite}>
-          {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
-        </IconButton>
-        { this.props.editable ?
-          (<Link to="/favorites">
-            <button>Favorites</button>
-          </Link>) : (<div></div>) }
-      </div>
-      )
-    } else {
-      return (<div></div>)
-    }
+    const starButton = (isAuthenticated) ?
+    (
+      <IconButton className="favorite-button" aria-label="Star" onClick={this.toggleFavorite}>
+        {this.state.isFavorited ?
+          (<StarIcon />) : (<StarBorderIcon />)}
+      </IconButton>
+    )
+      :
+      (<div></div>)
+
+    const favoritesLinkButton = (isAuthenticated && this.props.editable) ?
+    (
+      <Link to="/favorites">
+      <button>Favorites</button>
+      </Link>
+    )
+    : (<div></div>)
+
+    return (<div>{starButton}{favoritesLinkButton}</div>)
   }
 
   toggleFavorite = async () => {

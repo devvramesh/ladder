@@ -87,14 +87,14 @@ class Profile extends React.Component {
         return (<div>
           <Navbar></Navbar>
           <div className="column" id="profile-main">
-          <EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>
+          <EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true} key={this.state.currUserInfo.auth0_user_id}></EmployeeProfile>
           </div>
         </div>)
       } else if (this.state.currUserInfo.account_type === "employer") {
         return (<div>
           <Navbar></Navbar>
           <div className="column" id="profile-main">
-          <EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>
+          <EmployerProfile id={this.state.currUserInfo.auth0_user_id} key={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>
           </div>
         </div>)
       }
@@ -117,14 +117,14 @@ class Profile extends React.Component {
       return (<div>
         <Navbar></Navbar>
         <div className="column" id="profile-main">
-        <EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>
+        <EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} key={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>
         </div>
       </div>)
     } else if (this.state.viewUserInfo.account_type === "employer") {
       return (<div>
         <Navbar></Navbar>
         <div className="column" id="profile-main">
-        <EmployerProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>
+        <EmployerProfile id={this.state.viewUserInfo.auth0_user_id} key={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>
         </div>
       </div>)
     }

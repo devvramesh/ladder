@@ -7,7 +7,7 @@
 
 /* this is the left pane with the selectable headers */
 .sidebar-preview-pane {
-  flex: 1;
+  flex: 4;
   border-right: 1px solid black;
   height: 100%;
   overflow-y: scroll;
@@ -17,7 +17,7 @@
 
 /* this is the right pane which displays the full selected item */
 .sidebar-item-pane {
-  flex: 1;
+  flex: 7;
   height: 100%;
   overflow-y: scroll;
   background-color: white;

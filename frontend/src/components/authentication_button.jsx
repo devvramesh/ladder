@@ -57,9 +57,9 @@ class AuthenticationButton extends React.Component {
     if (isAuthenticated) {
       return (<div>
         <LogoutButton redirectUri={window.location.href}></LogoutButton>
-        <Link to="/profile">
+        <a href="\profile">
           <button className="btn btn-primary btn-block">Go to Profile</button>
-        </Link>
+        </a>
         <Link to="/favorites">
           <button className="btn btn-primary btn-block">View Favorites</button>
         </Link>
