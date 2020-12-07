@@ -219,7 +219,11 @@ class JobView extends React.Component {
 
             <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
-            <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
+            {
+              this.state.viewJobInfo.job_image_url === null ? 
+              <img src={this.state.jobCompanyInfo.profile_img_url} id="profile-image" alt="Job Image"/> :
+              <img src={this.state.viewJobInfo.job_image_url} id="profile-image" alt="Job Image"/>
+            }
 
             {this.createProfileButton()}
 
