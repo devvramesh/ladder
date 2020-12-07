@@ -5,11 +5,6 @@
 	border-radius: 50%;
 }
 
-#profile-main {
-	margin: 20px;
-	border: 1px solid black;
-}
-
 #profile {
 	background-color: white;
 	display: flex;
@@ -38,9 +33,11 @@
 
 #profile-main {
 	height: 100vh;
+	margin: 20px;
+	border: 1px solid black;
 }
 
-#top-section button {
+#top-section button:not(.favorites-button) {
 	background-color: #A96562;
 	margin: 5px;
 	height: 40px;

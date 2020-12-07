@@ -80,7 +80,7 @@ class Profile extends React.Component {
   }
 
   render() {
-    console.log('rendering')
+    console.log('rendering profile')
 
     const { isAuthenticated } = this.props.auth0;
 
@@ -107,12 +107,16 @@ class Profile extends React.Component {
       if (this.state.currUserInfo.account_type === "employee") {
         return (<div>
           <Navbar></Navbar>
+          <div className="column" id="profile-main">
           <EmployeeProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployeeProfile>
+          </div>
         </div>)
       } else if (this.state.currUserInfo.account_type === "employer") {
         return (<div>
           <Navbar></Navbar>
+          <div className="column" id="profile-main">
           <EmployerProfile id={this.state.currUserInfo.auth0_user_id} editable={true}></EmployerProfile>
+          </div>
         </div>)
       }
 

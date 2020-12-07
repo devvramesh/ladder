@@ -94,7 +94,7 @@ class ProfileView extends React.Component {
 
     if (isAuthenticated) {
       return (<div>
-        <IconButton aria-label="Star" onClick={this.toggleFavorite}>
+        <IconButton className="favorites-button" aria-label="Star" onClick={this.toggleFavorite}>
           {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
         </IconButton>
         { this.props.editable ?
