@@ -137,6 +137,10 @@ class JobView extends React.Component {
     this.setState({
       isFavorited: isFavorited
     })
+
+    if (!isFavorited && this.props.deleteFromSidebar) {
+      this.props.deleteFromSidebar()
+    }
   }
 
   getJobs = async () => {
@@ -209,7 +213,9 @@ class JobView extends React.Component {
                 {publishButton}
                 <button onClick={() => {
                   this.deleteJob(this.state.viewJobInfo.job_id);
-                  this.props.delete()
+                  if (this.props.deleteFromSidebar) {
+                    this.props.deleteFromSidebar()
+                  }
                 }}>
                   Delete</button>
 
@@ -224,14 +230,14 @@ class JobView extends React.Component {
               <img src={this.state.jobCompanyInfo.profile_img_url} id="profile-image" alt="Job Image"/> :
               <img src={this.state.viewJobInfo.job_image_url} id="profile-image" alt="Job Image"/>
             }
-            
+
             {this.createProfileButton()}
             {this.createFavoritesButton()}
             <a href={`mailto:${this.state.viewJobInfo.email}`}>
               <button>Contact</button>
             </a>
 
-            
+
           </div>
           <div id="bottom-section">
 

@@ -42,9 +42,11 @@ class ProfileView extends React.Component {
         { userID: user.sub }
       )
 
+      const category = currUserInfo.account_type === "employer" ? "company" : currUserInfo.account_type
+
       isFavorited = (await makeBackendRequest(
         '/api/is_favorite',
-        { userID: user.sub, category: "employee", favoritee_id: this.props.id }
+        { userID: user.sub, category: category, favoritee_id: this.props.id }
       )).is_favorite
     }
 
@@ -128,6 +130,10 @@ class ProfileView extends React.Component {
     this.setState({
       isFavorited: isFavorited
     })
+
+    if (!isFavorited && this.props.deleteFromSidebar) {
+      this.props.deleteFromSidebar()
+    }
   }
 
   render() {
