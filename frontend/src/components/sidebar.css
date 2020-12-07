@@ -42,10 +42,11 @@
 .sidebar-preview-inner {
   flex: 5;
   margin-bottom: 20px;
+  margin-left: 20px;
 }
 
 .sidebar-preview-inner * {
-  text-align: center;
+  text-align: left;
 }
 
 .sidebar-arrow {
