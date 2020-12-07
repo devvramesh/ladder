@@ -136,12 +136,16 @@ class Profile extends React.Component {
     if (this.state.viewUserInfo.account_type === "employee") {
       return (<div>
         <Navbar></Navbar>
+        <div className="column" id="profile-main">
         <EmployeeProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployeeProfile>
+        </div>
       </div>)
     } else if (this.state.viewUserInfo.account_type === "employer") {
       return (<div>
         <Navbar></Navbar>
+        <div className="column" id="profile-main">
         <EmployerProfile id={this.state.viewUserInfo.auth0_user_id} editable={false}></EmployerProfile>
+        </div>
       </div>)
     }
 

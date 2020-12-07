@@ -57,13 +57,14 @@ export default class Job {
     }
 
     const result = await client.query(`
-      SELECT *
+      SELECT
+        e.auth0_user_id, e.about, e.website_url, j.employer_auth0_user_id, j.job_id, j.job_title, j.description, j.qualifications, j.logistics, j.job_image_url, j.published
       FROM
-        jobs
-        JOIN employers
-        ON jobs.employer_auth0_user_id = employers.auth0_user_id
+        jobs as j
+        JOIN employers as e
+        ON j.employer_auth0_user_id = e.auth0_user_id
       WHERE
-        job_id = $1
+        j.job_id = $1
       ;`,
       [job_id]
     )
@@ -76,15 +77,15 @@ export default class Job {
       return null;
     }
 
-    const andPublished = published ? 'AND jobs.published = TRUE' : ''
+    const andPublished = published ? 'AND j.published = TRUE' : ''
     const result = await client.query(`
-      SELECT *
+      SELECT e.auth0_user_id, e.about, e.website_url, j.employer_auth0_user_id, j.job_id, j.job_title, j.description, j.qualifications, j.logistics, j.job_image_url, j.published
       FROM
-        jobs
-        JOIN employers
-        ON jobs.employer_auth0_user_id = employers.auth0_user_id
+        jobs as j
+        JOIN employers as e
+        ON j.employer_auth0_user_id = e.auth0_user_id
       WHERE
-        jobs.employer_auth0_user_id LIKE $1
+        j.employer_auth0_user_id LIKE $1
         ${andPublished}
       ORDER BY job_id ASC
       ;`,
@@ -97,7 +98,8 @@ export default class Job {
   static async searchInDB(client, query) {
     // TODO: improve search. right now it's super basic
     const result = await client.query(`
-      SELECT *
+      SELECT
+        u.auth0_user_id, u.account_type, u.username, u.name, u.email, u.phone, u.location, u.profile_img_url, e.about, e.website_url, j.employer_auth0_user_id, j.job_id, j.job_title, j.description, j.qualifications, j.logistics, j.job_image_url, j.published
       FROM
         jobs AS j
         JOIN employers AS e

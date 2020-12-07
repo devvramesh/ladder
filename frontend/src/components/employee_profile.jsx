@@ -13,7 +13,7 @@ export default class EmployeeProfile extends React.Component {
     // the auth code became very repetitive for this and EmployerProfile.
     // let me know if you want me to change it back though i definitely
     // wouldnt mind. -jake
-    return (<div className="column" id="profile-main">
+    return (
       <div id="profile">
           <div id="top-section">
               <h2>{ref.state.viewUserInfo.name}</h2>
@@ -47,7 +47,6 @@ export default class EmployeeProfile extends React.Component {
               </table>
             </div>
           </div>
-        </div>
     )
   }
 }

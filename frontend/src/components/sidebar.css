@@ -18,6 +18,9 @@
 /* this is the right pane which displays the full selected item */
 .sidebar-item-pane {
   flex: 1;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: white;
 }
 
 /* this is a selectable header within the left pane */

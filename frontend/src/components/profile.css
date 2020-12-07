@@ -5,6 +5,11 @@
 	border-radius: 50%;
 }
 
+#profile-main {
+	margin: 20px;
+	border: 1px solid black;
+}
+
 #profile {
 	background-color: white;
 	display: flex;

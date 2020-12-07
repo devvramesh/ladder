@@ -21,7 +21,7 @@ class EmployerProfile extends React.Component {
       return (<Link to={linkURL}><button>Jobs</button></Link>)
     }
 
-    return (<div className="column" id="profile-main">
+    return (
       <div id="profile">
           <div id="top-section">
               <h2>{ref.state.viewUserInfo.name}</h2>
@@ -51,9 +51,7 @@ class EmployerProfile extends React.Component {
               <p>{ref.state.viewUserInfo.location}</p>
           </div>
       </div>
-
-
-    </div>)
+    )
   }
 }
 

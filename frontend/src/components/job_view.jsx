@@ -201,8 +201,6 @@ class JobView extends React.Component {
 
 
     return (
-
-      <div className="column" id="profile-main">
         <div id="profile">
           <div id="top-section">
             {
@@ -251,7 +249,6 @@ class JobView extends React.Component {
             <p>{this.state.viewJobInfo.logistics}</p>
           </div>
         </div>
-      </div>
     )
   }
 
