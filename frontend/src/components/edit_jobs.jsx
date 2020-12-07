@@ -92,9 +92,9 @@ class EditJobs extends React.Component {
     </div>)
   }
 
-  displayJob = (job) => {
+  displayJob = (job, deleteFn) => {
 
-    return (<JobView key={job.job_id} job_id={job.job_id} editable={true}></JobView>)
+    return (<JobView key={job.job_id} job_id={job.job_id} editable={true} delete={deleteFn}></JobView>)
   }
 
 
@@ -121,7 +121,7 @@ class EditJobs extends React.Component {
 
 
     return (<div>
-      <Navbar searchType={"this.searchType"}></Navbar>
+      <Navbar searchType={this.searchType}></Navbar>
       <h2>My Jobs</h2>
       <Link to="/create_job">
         <button>New Job</button>

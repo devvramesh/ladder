@@ -109,12 +109,12 @@ class Favorites extends React.Component {
     }
   }
 
-  displayEntry = (entry) => {
+  displayEntry = (entry, deleteFn) => {
     if (this.state.category === "employee") {
       return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
     } else if (this.state.category === "job") {
       return (<div>
-        {<JobView key={entry.job_id} job_id={entry.job_id} editable={false}></JobView>}
+        {<JobView key={entry.job_id} job_id={entry.job_id} editable={false} delete={deleteFn}></JobView>}
       </div>)
     } else if (this.state.category === "company") {
       return (<EmployerProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployerProfile>)

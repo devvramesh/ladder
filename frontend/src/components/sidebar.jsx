@@ -24,7 +24,8 @@ export default class Sidebar extends React.Component {
     console.log(this.props)
 
     this.state = {
-      selectedIndex: 0
+      selectedIndex: 0,
+      entries: this.props.entries
     }
   }
 
@@ -33,8 +34,7 @@ export default class Sidebar extends React.Component {
   }
 
   createPreviews = () => {
-    console.log(this.props)
-    const entries = this.props.entries.map((entry, i) => {
+    const entries = this.state.entries.map((entry, i) => {
       const selected = (i === this.state.selectedIndex)
       return (
         <div
@@ -59,14 +59,27 @@ export default class Sidebar extends React.Component {
   }
 
   displaySelected = () => {
-    const selected = this.props.entries[this.state.selectedIndex]
-    return selected ? this.props.displayEntry(selected) : null;
+    console.log('displayselected')
+    const index = this.state.selectedIndex
+    const entries = this.state.entries.slice()
+    const selected = entries[index]
+
+    const deleteFn = () => {
+      entries.splice(index, index + 1)
+      this.setState({
+        entries: entries
+      })
+    }
+
+    console.log(selected)
+
+    return selected ? this.props.displayEntry(selected, deleteFn) : null;
   }
 
   render() {
     // TODO: put these side-by-side instead of vertical.
     // maybe introduce a max-height + scroll-on-overflow for the item pane
-    if (this.props.entries.length === 0) {
+    if (this.state.entries.length === 0) {
       return null;
     }
 

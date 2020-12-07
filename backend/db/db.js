@@ -115,7 +115,7 @@ export async function dbInit() {
         favoritee_job_id INT NOT NULL,
 
         FOREIGN KEY (favoritor_auth0_user_id) REFERENCES users(auth0_user_id),
-        FOREIGN KEY (favoritee_job_id) REFERENCES jobs(job_id)
+        FOREIGN KEY (favoritee_job_id) REFERENCES jobs(job_id) ON DELETE CASCADE
       );`
     )
   })

@@ -205,7 +205,11 @@ class JobView extends React.Component {
             <button>Edit</button>
           </Link>
         {publishButton}
-        <button onClick={() => this.deleteJob(this.state.viewJobInfo.job_id)}>Delete</button>
+        <button onClick={() => {
+              this.deleteJob(this.state.viewJobInfo.job_id);
+              this.props.delete()
+            }}>
+            Delete</button>
 
         </div> : <div></div>
 
@@ -240,6 +244,8 @@ class JobView extends React.Component {
 
   render() {
     const { isAuthenticated } = this.props.auth0;
+
+    console.log('job view render')
 
     if (!this.state.ready) {
       return (<div>Loading...</div>);
