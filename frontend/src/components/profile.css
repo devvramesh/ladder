@@ -37,7 +37,7 @@
 	border: 1px solid black;
 }
 
-#top-section button:not(.favorites-button) {
+#top-section button:not(.favorite-button) {
 	background-color: #A96562;
 	margin: 5px;
 	height: 40px;
