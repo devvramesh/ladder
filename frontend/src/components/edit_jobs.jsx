@@ -85,9 +85,9 @@ class EditJobs extends React.Component {
     </div>)
   }
 
-  displayJob = (job, deleteFn) => {
+  displayJob = (job, deleteFn, updateFn) => {
 
-    return (<JobView key={job.job_id} job_id={job.job_id} editable={true} deleteFromSidebar={deleteFn}></JobView>)
+    return (<JobView key={job.job_id} job_id={job.job_id} editable={true} deleteFromSidebar={deleteFn} updateSidebar={updateFn}></JobView>)
   }
 
 

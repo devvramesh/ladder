@@ -65,7 +65,18 @@ export default class Sidebar extends React.Component {
       })
     }
 
-    return selected ? this.props.displayEntry(selected, deleteFn) : null;
+    const updateFn = (entry) => {
+      entries[index] = entry
+      this.setState({
+        entries: entries
+      })
+
+      console.log('updating')
+      console.log(entry.published)
+      this.forceUpdate()
+    }
+
+    return selected ? this.props.displayEntry(selected, deleteFn, updateFn) : null;
   }
 
   render() {

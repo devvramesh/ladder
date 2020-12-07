@@ -136,20 +136,6 @@ class JobView extends React.Component {
     }
   }
 
-  getJobs = async () => {
-    const { user } = this.props.auth0;
-    let jobs = []
-
-    if (user) {
-      jobs = await makeBackendRequest(
-        '/api/get_jobs',
-        { userID: user.sub, published: false }
-      )
-    }
-
-    return jobs
-  }
-
   setPublished = async (job, publish) => {
     const { getAccessTokenSilently } = this.props.auth0;
 
@@ -158,10 +144,18 @@ class JobView extends React.Component {
     body.access_token = await getAccessTokenSilently()
 
     await makeBackendRequest('/api/update_job', body)
-    const jobs = await this.getJobs()
-    this.setState({
-      jobs: jobs
+
+    const viewJobInfo = await makeBackendRequest('/api/job_info', {
+      job_id: this.props.job_id
     })
+
+    if (this.props.updateSidebar) {
+      console.log('calling updatesidebar')
+      console.log(viewJobInfo)
+      this.props.updateSidebar(viewJobInfo)
+    }
+
+    this.setState({viewJobInfo: viewJobInfo})
   }
 
   deleteJob = async (job_id) => {
@@ -171,10 +165,6 @@ class JobView extends React.Component {
       userID: user.sub,
       job_id: job_id,
       access_token: await getAccessTokenSilently()
-    })
-    const jobs = await this.getJobs()
-    this.setState({
-      jobs: jobs
     })
   }
 
