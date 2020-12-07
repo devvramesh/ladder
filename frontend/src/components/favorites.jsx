@@ -6,6 +6,8 @@ import EmployerProfile from "./employer_profile"
 import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
+import JobView from "./job_view"
+
 
 class Favorites extends React.Component {
   constructor(props) {
@@ -112,7 +114,7 @@ class Favorites extends React.Component {
       return (<EmployeeProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployeeProfile>)
     } else if (this.state.category === "job") {
       return (<div>
-        {"SELECTED: " + JSON.stringify(entry)}
+        {<JobView key={entry.auth0_user_id} job_id={entry.job_id}></JobView>}
       </div>)
     } else if (this.state.category === "company") {
       return (<EmployerProfile key={entry.auth0_user_id} id={entry.auth0_user_id} editable={false}></EmployerProfile>)

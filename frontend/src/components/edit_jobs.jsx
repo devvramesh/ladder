@@ -4,6 +4,8 @@ import Sidebar from "./sidebar"
 import {Link, Redirect, withRouter} from "react-router-dom";
 import {makeBackendRequest, getUrlParams,} from "../util"
 import { withAuth0 } from "@auth0/auth0-react";
+import JobView from "./job_view"
+
 
 class EditJobs extends React.Component {
   constructor(props) {

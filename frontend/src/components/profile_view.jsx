@@ -1,8 +1,8 @@
 import React from "react";
 import Navbar from "./navbar"
 import Sidebar from "./sidebar"
-import {Link, Redirect, withRouter} from "react-router-dom";
-import {makeBackendRequest, getUrlParams,} from "../util";
+import { Link, Redirect, withRouter } from "react-router-dom";
+import { makeBackendRequest, getUrlParams, } from "../util";
 import IconButton from '@material-ui/core/IconButton';
 import StarIcon from '@material-ui/icons/Star';
 import StarBorderIcon from '@material-ui/icons/StarBorder';
@@ -44,7 +44,7 @@ class ProfileView extends React.Component {
 
       isFavorited = (await makeBackendRequest(
         '/api/is_favorite',
-        {userID: user.sub, category: "employee", favoritee_id: this.props.id}
+        { userID: user.sub, category: "employee", favoritee_id: this.props.id }
       )).is_favorite
     }
 
@@ -82,7 +82,7 @@ class ProfileView extends React.Component {
     console.log(this.props.editable)
     if (this.props.editable) {
       return (<Link to="/edit_profile">
-            <button>Edit</button>
+        <button>Edit</button>
       </Link>)
     }
 
@@ -94,12 +94,13 @@ class ProfileView extends React.Component {
 
     if (isAuthenticated) {
       return (<div>
-        <Link to="/favorites">
-              <button>Favorites</button>
-        </Link>
         <IconButton aria-label="Star" onClick={this.toggleFavorite}>
           {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
         </IconButton>
+        { this.props.editable ?
+          (<Link to="/favorites">
+            <button>Favorites</button>
+          </Link>) : (<div></div>) }
       </div>
       )
     } else {

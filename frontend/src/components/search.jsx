@@ -5,9 +5,6 @@ import EmployeeProfile from "./employee_profile"
 import { Link, Redirect, withRouter } from "react-router-dom";
 import { makeBackendRequest, getUrlParams, } from "../util"
 import JobView from "./job_view"
-import IconButton from '@material-ui/core/IconButton';
-import StarIcon from '@material-ui/icons/Star';
-import StarBorderIcon from '@material-ui/icons/StarBorder';
 
 
 export default class Search extends React.Component {

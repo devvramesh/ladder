@@ -17,6 +17,7 @@ class JobView extends React.Component {
     this.state = {
       currUserInfo: null,
       viewJobInfo: null,
+      jobCompanyInfo: null,
       isFavorited: false,
       ready: false
     }
@@ -52,7 +53,10 @@ class JobView extends React.Component {
       '/api/job_info',
       { job_id: this.props.job_id }
     )
-
+    const jobCompanyInfo = await makeBackendRequest(
+      '/api/user_info',
+      { userID: viewJobInfo.auth0_user_id }
+    )
 
     console.log('favorite?')
     console.log(isFavorited)
@@ -61,6 +65,7 @@ class JobView extends React.Component {
       this.setState({
         currUserInfo: currUserInfo,
         viewJobInfo: viewJobInfo,
+        jobCompanyInfo: jobCompanyInfo,
         isFavorited: isFavorited,
         ready: !isLoading
       })
@@ -78,34 +83,81 @@ class JobView extends React.Component {
     this.mounted = false;
   }
 
+  createProfileButton = () => {
+    const { user, getAccessTokenSilently } = this.props.auth0;
+    let link_addition = ""
+    if (user.sub !== this.state.viewJobInfo.auth0_user_id) {
+      link_addition = this.state.jobCompanyInfo.username
+    }
+
+    return (
+      <Link to={"/profile/" + link_addition}>
+        <button>Profile</button>
+      </Link>
+    )
+  }
+
+  createFavoritesButton = () => {
+    const { isAuthenticated } = this.props.auth0;
+
+    if (isAuthenticated) {
+      return (<div>
+        <IconButton aria-label="Star" onClick={this.toggleFavorite}>
+          {this.state.isFavorited ? (<StarIcon />) : (<StarBorderIcon />)}
+        </IconButton>
+      </div>
+      )
+    } else {
+      return (<div></div>)
+    }
+  }
+
+  toggleFavorite = async () => {
+    const { user, getAccessTokenSilently } = this.props.auth0;
+
+    await makeBackendRequest('/api/update_favorite', {
+      userID: user.sub,
+      category: "job",
+      favoritee_id: this.state.viewJobInfo.job_id,
+      favorite_status: !this.state.isFavorited,
+      access_token: await getAccessTokenSilently()
+    })
+
+    const isFavorited = (await makeBackendRequest('/api/is_favorite', {
+      userID: user.sub,
+      category: "job",
+      favoritee_id: this.state.viewJobInfo.job_id
+    })).is_favorite
+
+    this.setState({
+      isFavorited: isFavorited
+    })
+  }
+
   showProfile() {
     return (
 
       <div id="profile">
-          <h2>{this.state.viewJobInfo.name}</h2>
+        <h2>{this.state.jobCompanyInfo.name + ": " + this.state.viewJobInfo.job_title}</h2>
 
-           <img src={this.state.viewJobInfo.job_image_url} style={{height: "200px"}} id="job-image" alt="Job Image" />
+        <img src={this.state.viewJobInfo.job_image_url} style={{ height: "200px" }} id="job-image" alt="Job Image" />
 
-          <Link to={"/profile/" + this.state.viewJobInfo.username}>
-            <button>Profile</button>
-          </Link>
+        {this.createProfileButton()}
 
-          <a href={`mailto:${this.state.viewJobInfo.email}`}>
-            <button>Contact</button>
-          </a>
+        <a href={`mailto:${this.state.viewJobInfo.email}`}>
+          <button>Contact</button>
+        </a>
 
-          <IconButton aria-label="Star" onClick={this.toggleFavorite}>
-            {false ? (<StarIcon />) : (<StarBorderIcon />)}
-          </IconButton>
+        {this.createFavoritesButton()}
 
-          <h3>Description: </h3>
-          <p>{this.state.viewJobInfo.description}</p>
+        <h3>Description: </h3>
+        <p>{this.state.viewJobInfo.description}</p>
 
-          <h3>Qualifications: </h3>
-          <p>{this.state.viewJobInfo.qualifications}</p>
+        <h3>Qualifications: </h3>
+        <p>{this.state.viewJobInfo.qualifications}</p>
 
-          <h3>Logistics: </h3>
-          <p>{this.state.viewJobInfo.logistics}</p>
+        <h3>Logistics: </h3>
+        <p>{this.state.viewJobInfo.logistics}</p>
 
 
       </div>
@@ -127,8 +179,6 @@ class JobView extends React.Component {
     if (!this.state.viewJobInfo) {
       return (<div>Error: please try again.</div>);
     }
-    console.log("Job: " + JSON.stringify(this.state.viewJobInfo))
-    console.log("User" + JSON.stringify(this.state.currUserInfo))
     return this.showProfile()
   }
 }
