@@ -224,14 +224,14 @@ class JobView extends React.Component {
               <img src={this.state.jobCompanyInfo.profile_img_url} id="profile-image" alt="Job Image"/> :
               <img src={this.state.viewJobInfo.job_image_url} id="profile-image" alt="Job Image"/>
             }
-
+            
             {this.createProfileButton()}
-
+            {this.createFavoritesButton()}
             <a href={`mailto:${this.state.viewJobInfo.email}`}>
               <button>Contact</button>
             </a>
 
-            {this.createFavoritesButton()}
+            
           </div>
           <div id="bottom-section">
 

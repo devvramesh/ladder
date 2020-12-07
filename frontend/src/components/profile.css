@@ -18,6 +18,10 @@
 }
 
 #top-section {
+	display: flex;
+	flex-flow: column nowrap;
+	justify-content: center;
+	align-items: center;
 	border-bottom: 1px solid black;
 	width: 100%;
 }
@@ -32,6 +36,14 @@
 }
 
 #top-section button {
+	background-color: #A96562;
+	margin: 5px;
+	height: 40px;
+	width: 120px;
+	border: 1px solid black;
+}
+
+#bottom-section button {
 	background-color: #A96562;
 	margin: 5px;
 	height: 40px;
